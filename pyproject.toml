@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "leporem-art"
+version = "0.1.0"
+description = "backend for leporem art"
+authors = ["jshong0907 <jshong0907@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.10.0"
+Django = "^4.2.2"
+djangorestframework = "^3.14.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
