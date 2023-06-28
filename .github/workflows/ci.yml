@@ -19,6 +19,12 @@ jobs:
           pip install poetry
           poetry install --only dev
 
+      - name: Run linters
+        run: |
+          poetry run flake8
+          poetry run black --check .
+          poetry run isort --check .
+
       - name: Run tests
         run: |
           poetry run pytest tests/*

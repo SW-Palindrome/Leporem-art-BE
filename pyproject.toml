@@ -14,7 +14,19 @@ djangorestframework = "^3.14.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
 black = "^23.3.0"
+flake8 = "^6.0.0"
+isort = "^5.12.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+exclude = '''
+    \.git
+    | ^.*\b(migrations)\b.*$
+'''
+
+[tool.isort]
+profile = "black"
+skip = [".git", "migrations"]
