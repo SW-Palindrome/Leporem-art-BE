@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "backend for leporem art"
 authors = ["jshong0907 <jshong0907@gmail.com>"]
 readme = "README.md"
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "~3.10.0"
