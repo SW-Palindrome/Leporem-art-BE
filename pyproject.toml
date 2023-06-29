@@ -26,6 +26,7 @@ build-backend = "poetry.core.masonry.api"
 exclude = '''
     \.git
     | ^.*\b(migrations)\b.*$
+    | ^.*\b(settings)\b.*$
 '''
 
 [tool.isort]
