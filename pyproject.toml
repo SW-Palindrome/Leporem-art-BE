@@ -27,6 +27,8 @@ exclude = '''
     \.git
     | ^.*\b(migrations)\b.*$
 '''
+line-length = 120
+skip-string-normalization = true
 
 [tool.isort]
 profile = "black"
