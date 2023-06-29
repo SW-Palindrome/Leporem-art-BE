@@ -4,3 +4,4 @@ exclude =
     */migrations/*,
     __pycache__,
     */settings/*,
+max-line-length = 120
