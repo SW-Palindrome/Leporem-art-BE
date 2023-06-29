@@ -11,6 +11,7 @@ python = "~3.10.0"
 Django = "^4.2.2"
 djangorestframework = "^3.14.0"
 drf-yasg = "^1.21.6"
+sentry-sdk = "^1.26.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
@@ -26,6 +27,7 @@ build-backend = "poetry.core.masonry.api"
 exclude = '''
     \.git
     | ^.*\b(migrations)\b.*$
+    | ^.*\b(settings)\b.*$
 '''
 line-length = 120
 skip-string-normalization = true
