@@ -26,7 +26,7 @@ router = routers.DefaultRouter()
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Statchung API",
+        title="Swpd-swagger API",
         default_version='v1',
         description="Test description",
         terms_of_service="https://www.google.com/policies/terms/",
@@ -39,7 +39,6 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin', admin.site.urls),
-    path('api/', include(('leporemart_swagger.urls', 'api')))
 ]
 
 if settings.DEBUG:
