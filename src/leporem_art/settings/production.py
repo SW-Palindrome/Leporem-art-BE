@@ -4,6 +4,7 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 DEBUG = False
+ALLOWED_HOSTS = ['*']
 
 # Sentry 설정
 sentry_sdk.init(
