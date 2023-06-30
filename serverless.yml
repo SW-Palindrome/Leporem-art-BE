@@ -12,7 +12,8 @@ functions:
     handler: leporem_art/asgi.handler
     events:
       - httpApi: '*'
-
+    environment:
+      ENV: ${opt:stage, 'dev'}
 
 plugins:
   - serverless-python-requirements
