@@ -1,0 +1,21 @@
+service: leporem-art
+
+frameworkVersion: '3'
+
+custom:
+  functionsBasePath: src
+
+provider:
+  name: aws
+  runtime: python3.10
+  region: ap-northeast-2
+
+functions:
+  api:
+    handler: src/leporem_art/asgi.handler
+    events:
+      - httpApi: '*'
+
+
+plugins:
+  - serverless-python-requirements
