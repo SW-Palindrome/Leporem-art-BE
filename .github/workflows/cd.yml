@@ -1,4 +1,4 @@
-name: CI
+name: CD
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       - name: Collect static
 
         run: |
-          poetry run python manage.py collectstatic
+          poetry run python manage.py collectstatic --no-input
 
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
