@@ -2,9 +2,6 @@ service: leporem-art
 
 frameworkVersion: '3'
 
-custom:
-  functionsBasePath: src
-
 provider:
   name: aws
   runtime: python3.10
@@ -12,7 +9,7 @@ provider:
 
 functions:
   api:
-    handler: src/leporem_art/asgi.handler
+    handler: leporem_art/asgi.handler
     events:
       - httpApi: '*'
 
