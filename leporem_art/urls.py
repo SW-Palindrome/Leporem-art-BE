@@ -25,12 +25,12 @@ router = routers.DefaultRouter()
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Palindrome API",
+        title="Swpd-swagger API",
         default_version='v1',
-        description="leporemart-porject API description",
+        description="Test description",
         terms_of_service="https://www.google.com/policies/terms/",
-        # contact=openapi.Contact(email="contact@snippets.local"),
-        # license=openapi.License(name="BSD License"),
+        contact=openapi.Contact(email="contact@snippets.local"),
+        license=openapi.License(name="BSD License"),
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
@@ -38,7 +38,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin', admin.site.urls),
-    path('users', include('users.urls')),
+    path('users/', include('users.urls')),
 ]
 
 if settings.DEBUG:

@@ -4,13 +4,15 @@ version = "0.1.0"
 description = "backend for leporem art"
 authors = ["jshong0907 <jshong0907@gmail.com>"]
 readme = "README.md"
-packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "~3.10.0"
 Django = "^4.2.2"
 djangorestframework = "^3.14.0"
 drf-yasg = "^1.21.6"
+sentry-sdk = "^1.26.0"
+mangum = "^0.17.0"
+django-s3-storage = "^0.14.0"
 mysqlclient = "^2.2.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -27,6 +29,7 @@ build-backend = "poetry.core.masonry.api"
 exclude = '''
     \.git
     | ^.*\b(migrations)\b.*$
+    | ^.*\b(settings)\b.*$
 '''
 line-length = 120
 skip-string-normalization = true

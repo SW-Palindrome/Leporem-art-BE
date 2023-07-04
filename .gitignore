@@ -160,3 +160,7 @@ cython_debug/
 .idea/
 .python-version
 .pytest_cache/*
+
+node_modules/
+.DS_Store
+.serverless
