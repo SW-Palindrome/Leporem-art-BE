@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import permissions
 from rest_framework.response import Response
