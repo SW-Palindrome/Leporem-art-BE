@@ -23,23 +23,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-hs5l-zi%l-ojy3gpjml!5snrnh@^bd*y887jn9ut(6cla7e$#6"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+# DEBUG = True
+
+# ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'rest_framework',
-    'drf_yasg',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'apps.users.apps.UsersConfig',
+    'rest_framework',
+    'drf_yasg',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
@@ -75,13 +76,6 @@ WSGI_APPLICATION = "leporem_art.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
 
 # Password validation
