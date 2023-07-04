@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.users.views import GoogleAuthUrlView, GoogleSignupView, GoogleLoginView
+from apps.users.views import GoogleAuthUrlView, GoogleLoginView, GoogleSignupView
 
 urlpatterns = [
     path('redirect/google', GoogleAuthUrlView.as_view()),
