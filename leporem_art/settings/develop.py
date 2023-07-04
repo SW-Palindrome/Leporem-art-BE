@@ -11,7 +11,7 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {
