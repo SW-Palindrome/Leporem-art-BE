@@ -1,7 +1,11 @@
 from django.urls import path
 
-from apps.users.views import ConsentPrivacyView
-from apps.users.views import GoogleAuthUrlView, GoogleLoginView, GoogleSignupView
+from apps.users.views import (
+    ConsentPrivacyView,
+    GoogleAuthUrlView,
+    GoogleLoginView,
+    GoogleSignupView,
+)
 
 urlpatterns = [
     path('v1/consent-privacy/', ConsentPrivacyView.as_view(), name='consent-privacy'),
