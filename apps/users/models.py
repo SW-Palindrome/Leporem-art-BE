@@ -1,9 +1,11 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from django.utils import timezone
+from django_extensions.db.models import TimeStampedModel
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, TimeStampedModel):
+    user_id = models.AutoField(primary_key=True)
     nickname = models.CharField(max_length=20, unique=True)
     profile_image = models.CharField(max_length=50, null=True)
     inactive_datetime = models.DateTimeField(null=True)
@@ -14,10 +16,11 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'nickname'
 
 
-class UserOAuthInfo(models.Model):
+class UserOAuthInfo(TimeStampedModel):
+    user_oauth_info_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     provider = models.CharField(max_length=20)
-    provider_id = models.CharField(max_length=100)
+    provider_id = models.CharField(max_length=50)
 
     class Meta:
         unique_together = ('provider', 'provider_id')
