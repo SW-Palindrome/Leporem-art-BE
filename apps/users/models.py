@@ -15,9 +15,7 @@ class User(AbstractBaseUser):
     gender = models.CharField(null=True, max_length=2)
     is_seller = models.BooleanField(null=False)
     is_staff = models.BooleanField(null=False)
-    created_date = models.DateTimeField(default=timezone.now)
     created_no = models.PositiveIntegerField(null=False)
-    modified_date = models.DateTimeField(auto_now=True)
     modified_no = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'nickname'
