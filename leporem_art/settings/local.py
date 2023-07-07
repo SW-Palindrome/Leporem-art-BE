@@ -9,7 +9,7 @@ DATABASES = {
         'NAME': 'db-leporemart',
         'USER': 'palindrome',
         'PASSWORD': 'dikqU8-jyqjac-ruxxyf',
-        'HOST': 'db-leporemart.cadfwurpcjgm.ap-northeast-2.rds.amazonaws.com',
+        'HOST': 'db-leporemart.ckbfh3nhrtug.ap-northeast-2.rds.amazonaws.com',
         'PORT': '3306',
     }
 }
