@@ -2,11 +2,8 @@ import base64
 import binascii
 import json
 from datetime import datetime
-from typing import Optional
-from urllib.parse import urlencode
 
 import jwt
-import requests
 from jwt import PyJWKClient
 
 AUDIENCE = '8aeac9bb18f42060a2332885577b8cb9'
@@ -32,7 +29,6 @@ def validate_id_token(id_token: str) -> True:
 
     header, payload, signature = id_token.split('.')
     try:
-        decoded_header = json.loads(base64.urlsafe_b64decode(header + '=' * (-len(header) % 4)))
         decoded_payload = json.loads(base64.urlsafe_b64decode(payload + '=' * (-len(payload) % 4)))
     except binascii.Error:
         return False
