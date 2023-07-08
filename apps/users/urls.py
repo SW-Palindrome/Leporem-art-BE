@@ -5,11 +5,18 @@ from apps.users.views import (
     GoogleAuthUrlView,
     GoogleLoginView,
     GoogleSignupView,
+    KakaoSigninView,
+    KakaoSignupView,
 )
 
 urlpatterns = [
-    path('v1/consent-privacy/', ConsentPrivacyView.as_view(), name='consent-privacy'),
+    path(
+        'consent-privacy/',
+        ConsentPrivacyView.as_view(),
+    ),
     path('redirect/google', GoogleAuthUrlView.as_view()),
     path('login/google', GoogleLoginView.as_view()),
     path('signup/google', GoogleSignupView.as_view()),
+    path('login/kakao', KakaoSigninView.as_view()),
+    path('signup/kakao', KakaoSignupView.as_view()),
 ]
