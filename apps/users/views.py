@@ -19,11 +19,12 @@ class ConsentPrivacyView(APIView):
     permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(manual_parameters=get_params)
-    def get(self, request):
+    # def get(self, request):
+    def get(self):
         return Response('Description Test')
 
     @swagger_auto_schema(request_body=ConsentSerializer, responses={201: 'Success'})
-    def post(self):
+    def post(self, request):
         consents = ConsentSerializer(data=request.data)
         if consents.is_valid():
             consents.save()
@@ -80,9 +81,8 @@ class KakaoSigninView(APIView):
         temp_signature = ''
         kakao_auth_service = KakaoAuthService()
         user = kakao_auth_service.signin(
-            temp_signature,
+            temp_signature,  # '1234'
             request.GET['provider_id'],
-            #'1234'
         )
         if user:
             return Response({'message': 'success'})
