@@ -64,3 +64,19 @@ class GoogleAuthService:
 
         user_repository = UserRepository()
         return user_repository.login(self.PROVIDER, email)
+
+
+class KakaoAuthService:
+    USER_SIGNATURE = ''
+    PROVIDER = 'KAKAO'
+
+    def signup(self, provider_id, nickname):
+        temp_signature = ''
+        user_repository = UserRepository()
+        return user_repository.kakao_signup(self.PROVIDER, provider_id, nickname, temp_signature)
+
+    def signin(self, user_signature, provider_id):
+        user_repository = UserRepository()
+        if user_signature == self.USER_SIGNATURE:
+            return user_repository.kakao_signin(self.PROVIDER, provider_id)
+        return None
