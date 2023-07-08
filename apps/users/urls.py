@@ -10,10 +10,7 @@ from apps.users.views import (
 )
 
 urlpatterns = [
-    path(
-        'consent-privacy/',
-        ConsentPrivacyView.as_view(),
-    ),
+    path('consent-privacy/', ConsentPrivacyView.as_view()),
     path('redirect/google', GoogleAuthUrlView.as_view()),
     path('login/google', GoogleLoginView.as_view()),
     path('signup/google', GoogleSignupView.as_view()),
