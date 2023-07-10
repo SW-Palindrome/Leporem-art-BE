@@ -18,9 +18,13 @@ functions:
 custom:
   customDomain:
     domainName: ${opt:stage, 'dev'}.leporem.art
+    certificateName: '*.leporem.art'
+    endpointType: 'regional'
     stage: ${opt:stage, 'dev'}
     basePath: ''
-    createRoute53Record: false
+    createRoute53Record: true
+    apiType: http
+    autoDomain: true
 
 plugins:
   - serverless-python-requirements
