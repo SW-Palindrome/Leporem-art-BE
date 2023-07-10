@@ -2,7 +2,8 @@ from rest_framework.authentication import BaseAuthentication, get_authorization_
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.users.models import User
-from utils.auth.kakao import validate_id_token as kakao_validate_id_token, extract_provider_id as kakao_extract_provider_id
+from utils.auth.kakao import extract_provider_id as kakao_extract_provider_id
+from utils.auth.kakao import validate_id_token as kakao_validate_id_token
 
 
 class OIDCAuthentication(BaseAuthentication):
