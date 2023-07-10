@@ -7,7 +7,11 @@ from utils.auth.kakao import validate_id_token as kakao_validate_id_token, extra
 
 class OIDCAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        id_token = str(get_authorization_header(request).split()[-1])
+        id_token = get_authorization_header(request)
+
+        if isinstance(id_token, bytes):
+            id_token = id_token.decode('utf-8')
+
         if not id_token:
             return None
 
