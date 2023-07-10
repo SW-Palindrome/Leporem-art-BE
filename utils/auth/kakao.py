@@ -9,7 +9,7 @@ from jwt import PyJWKClient
 AUDIENCE = '8aeac9bb18f42060a2332885577b8cb9'
 
 
-def validate_id_token(id_token: str) -> True:
+def validate_id_token(id_token: str) -> bool:
     """카카오 ID 토큰을 검증합니다.
 
     참고: https://developers.kakao.com/docs/latest/ko/kakaologin/common#oidc
@@ -58,3 +58,10 @@ def validate_id_token(id_token: str) -> True:
         return False
 
     return True
+
+
+def extract_provider_id(id_token: str):
+    """카카오 ID 토큰에서 고유 식별자를 추출합니다."""
+    header, payload, signature = id_token.split('.')
+    decoded_payload = json.loads(base64.urlsafe_b64decode(payload + '=' * (-len(payload) % 4)))
+    return decoded_payload['sub']
