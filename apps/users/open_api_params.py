@@ -13,19 +13,10 @@ get_params = [
         description='광고성 정보 동의여부입니다.',
         type=openapi.TYPE_BOOLEAN,
     ),
-]
-
-get_params2 = [
-    openapi.Parameter(
-        'kakao_user',
-        openapi.IN_QUERY,
-        description='Kakao signup',
-        type=openapi.TYPE_STRING,
-    ),
     openapi.Parameter(
         '닉네임',
         openapi.IN_QUERY,
-        description='nickname입니다.',
-        type=openapi.TYPE_OBJECT,
+        description="r'^[A-Za-z0-9가-힣_-]{2,10}$'",
+        type=openapi.TYPE_STRING,
     ),
 ]
