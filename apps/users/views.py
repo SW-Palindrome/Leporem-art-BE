@@ -6,27 +6,34 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_302_FOUND, HTTP_401_UNAUTHORIZED
 from rest_framework.views import APIView
 
-from apps.users.services import GoogleAuthService
+from apps.users.services import GoogleAuthService, KakaoAuthService
+from utils.auth.kakao import extract_provider_id
 
 from .open_api_params import get_params
-from .serializers import ConsentSerializer
 
 
 # Create your views here.
-class ConsentPrivacyView(APIView):
-    permission_classes = [permissions.AllowAny]
+class SignUpView(APIView):
+    '''회원가입: 이용약관동의여부, 닉네임'''
+
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(manual_parameters=get_params)
-    def get(self):
+    def get(self, request):
+        # def get(self):
         return Response('Description Test')
 
-    @swagger_auto_schema(request_body=ConsentSerializer, responses={201: 'Success'})
+    @swagger_auto_schema(responses={201: 'Success'})
     def post(self, request):
-        consents = ConsentSerializer(data=request.data)
-        if consents.is_valid():
-            consents.save()
-            return Response(consents.data)
-        return Response(consents.errors, status=400)
+        provider_id = extract_provider_id(request.GET.get('id_token'))
+        is_agree_privacy = request.GET.get('is_agree_privacy')
+        is_agree_ads = request.GET.get('is_agree_ads')
+        nickname = request.GET.get('nickname')
+        kakao_auth_service = KakaoAuthService()
+        if kakao_auth_service.signup(provider_id, is_agree_privacy, is_agree_ads, nickname):
+            return Response({'message': 'nickname is not valid'}, status=400)
+
+        return Response({'message': 'success'}, status=201)
 
 
 class GoogleAuthUrlView(APIView):
@@ -49,7 +56,7 @@ class GoogleLoginView(APIView):
 
 
 class GoogleSignupView(APIView):
-    def get(self, request):
+    def post(self, request):
         google_auth_service = GoogleAuthService()
         google_auth_service.signup(request.GET['code'])
         return Response({'message': 'success'})

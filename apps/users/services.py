@@ -1,3 +1,4 @@
+import re
 from typing import Optional
 from urllib.parse import urlencode
 
@@ -64,3 +65,22 @@ class GoogleAuthService:
 
         user_repository = UserRepository()
         return user_repository.login(self.PROVIDER, email)
+
+
+class KakaoAuthService:
+    PROVIDER = 'KAKAO'
+    nickname_pattern = r'^[A-Za-z0-9가-힣_-]{2,10}$'
+
+    def _check_nickname(self, nickname):
+        user_repository = UserRepository()
+        if not re.match(self.nickname_pattern, nickname):
+            return False
+        if user_repository.objects.filter(nickname=nickname).exists():
+            return False
+        return True
+
+    def signup(self, provider_id, is_agree_privacy, is_agree_ads, nickname):
+        temp_token = ''
+        user_repository = UserRepository()
+        nickname = self._check_nickname(nickname)
+        return user_repository.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname, temp_token)
