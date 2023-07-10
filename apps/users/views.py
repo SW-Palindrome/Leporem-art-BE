@@ -7,7 +7,7 @@ from rest_framework.status import HTTP_302_FOUND, HTTP_401_UNAUTHORIZED
 from rest_framework.views import APIView
 
 from apps.users.services import GoogleAuthService, KakaoAuthService
-from utils.auth.kakao import extract_provider_id, validate_id_token
+from utils.auth.kakao import extract_provider_id
 
 from .open_api_params import get_params
 
