@@ -16,10 +16,13 @@ class User(AbstractBaseUser, TimeStampedModel):
     is_staff = models.BooleanField(null=False)
     USERNAME_FIELD = 'nickname'
 
+    def __str__(self):
+        return f'[User {self.user_id}]: {self.nickname}'
+
 
 class UserOAuthInfo(TimeStampedModel):
     user_oauth_info_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_oauth_info')
     provider = models.CharField(max_length=20)
     provider_id = models.CharField(max_length=50)
 
