@@ -67,8 +67,7 @@ class GoogleAuthService:
         return user_repository.login(self.PROVIDER, email)
 
 
-class SignupService:
-    ID_TOKEN = ''
+class KakaoAuthService:
     PROVIDER = 'KAKAO'
     nickname_pattern = r'^[A-Za-z0-9가-힣_-]{2,10}$'
 
@@ -85,3 +84,4 @@ class SignupService:
         user_repository = UserRepository()
         nickname = self._check_nickname(nickname)
         return user_repository.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname, temp_token)
+
