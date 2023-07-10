@@ -6,15 +6,6 @@ from apps.users.models import User, UserOAuthInfo
 
 
 class UserRepository:
-    @transaction.atomic
-    def signup(self, provider, email, nickname):
-        user = User.objects.create(nickname=nickname)
-        UserOAuthInfo.objects.create(
-            user=user,
-            provider=provider,
-            provider_id=email,
-        )
-        return user
 
     def login(self, provider, email) -> Optional[User]:
         try:
@@ -27,19 +18,17 @@ class UserRepository:
             return None
 
     @transaction.atomic
-    def kakao_signup(self, provider, provider_id, nickname):
-        kakao_oauth_info = UserOAuthInfo.objects.create(provider=provider, provider_id=provider_id)
-        kakao_oauth_info.save()
-        user = User.objects.create(nickname=nickname)
-        user.save()
-        return user
-
-    def kakao_signin(self, provider, provider_id):
-        try:
-            kakao_oauth_info = UserOAuthInfo.objects.get(
-                provider=provider,
-                provider_id=provider_id,
+    def signup(self, provider, provider_id, is_agree_privacy, is_agree_ads, nickname):
+        user_info = User.objects.create(
+            is_agree_privacy=is_agree_privacy,
+            is_agree_ads=is_agree_ads,
+            nickname=nickname,
+            is_seller=False
+        )
+        oauth_info = UserOAuthInfo.objects.create(
+            provider=provider,
+            provider_id=provider_id,
             )
-            return kakao_oauth_info.user
-        except UserOAuthInfo.DoesNotExist:
-            return None
+        oauth_info.save()
+        user_info.save()
+        return user_info
