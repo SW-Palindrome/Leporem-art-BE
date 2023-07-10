@@ -1,15 +1,9 @@
 from django.urls import path
 
-from apps.users.views import (
-    ConsentPrivacyView,
-    GoogleAuthUrlView,
-    GoogleLoginView,
-    GoogleSignupView,
-)
+from apps.users.views import GoogleAuthUrlView, GoogleLoginView, SignUpView
 
 urlpatterns = [
-    path('v1/consent-privacy/', ConsentPrivacyView.as_view(), name='consent-privacy'),
+    path('signup/kakao', SignUpView.as_view()),
     path('redirect/google', GoogleAuthUrlView.as_view()),
     path('login/google', GoogleLoginView.as_view()),
-    path('signup/google', GoogleSignupView.as_view()),
 ]

@@ -13,4 +13,10 @@ get_params = [
         description='광고성 정보 동의여부입니다.',
         type=openapi.TYPE_BOOLEAN,
     ),
+    openapi.Parameter(
+        '닉네임',
+        openapi.IN_QUERY,
+        description="r'^[A-Za-z0-9가-힣_-]{2,10}$'",
+        type=openapi.TYPE_STRING,
+    ),
 ]
