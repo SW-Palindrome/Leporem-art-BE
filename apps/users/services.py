@@ -84,4 +84,3 @@ class KakaoAuthService:
         user_repository = UserRepository()
         nickname = self._check_nickname(nickname)
         return user_repository.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname, temp_token)
-
