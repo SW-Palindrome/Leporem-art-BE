@@ -1,5 +1,3 @@
-import re
-
 from django.shortcuts import redirect
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -8,28 +6,32 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_302_FOUND, HTTP_401_UNAUTHORIZED
 from rest_framework.views import APIView
 
-from apps.users.services import GoogleAuthService, KakaoAuthService
+from apps.users.services import GoogleAuthService, SignupService
 
-from .open_api_params import get_params, get_params2
-from .serializers import ConsentSerializer
+from .open_api_params import get_params
 
 
 # Create your views here.
-class ConsentPrivacyView(APIView):
+class SignUpView(APIView):
+    '''이용약관 + 닉네임'''
     permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(manual_parameters=get_params)
-    # def get(self, request):
-    def get(self):
+    def get(self, request):
+    # def get(self):
         return Response('Description Test')
 
-    @swagger_auto_schema(request_body=ConsentSerializer, responses={201: 'Success'})
+    @swagger_auto_schema(responses={201: 'Success'})
     def post(self, request):
-        consents = ConsentSerializer(data=request.data)
-        if consents.is_valid():
-            consents.save()
-            return Response(consents.data)
-        return Response(consents.errors, status=400)
+        provider_id = request.GET.get('provider_id')
+        is_agree_privacy = request.GET.get('is_agree_privacy')
+        is_agree_ads = request.GET.get('is_agree_ads')
+        nickname = request.GET.get('nickname')
+        signup_service = SignupService()
+        if signup_service.signup(provider_id, is_agree_privacy, is_agree_ads, nickname):
+            return Response({'message':'nickname is not valid'}, status=400)
+
+        return Response({'message':'success'}, status=201)
 
 
 class GoogleAuthUrlView(APIView):
@@ -57,34 +59,3 @@ class GoogleSignupView(APIView):
         google_auth_service.signup(request.GET['code'])
         return Response({'message': 'success'})
 
-
-'''KAKAO'''
-
-
-class KakaoSignupView(APIView):
-    @swagger_auto_schema(manual_parameters=get_params2)
-    def post(self, request):
-        # nickname='abc'
-        nickname_pattern = r'^[A-Za-z0-9가-힣_-]+$'
-        if not re.match(nickname_pattern, request.GET['nickname']):
-            return Response({'error': 'Invalid nickname'}, status=400)
-        kakao_auth_service = KakaoAuthService()
-        kakao_auth_service.signup(request.GET['provider_id'], request.GET['nickname'])
-        return Response({'message': 'success'}, status=201)
-
-
-class KakaoSigninView(APIView):
-    """Kakao User Signin"""
-
-    @swagger_auto_schema()
-    def get(self, request):
-        temp_signature = ''
-        kakao_auth_service = KakaoAuthService()
-        user = kakao_auth_service.signin(
-            temp_signature,  # '1234'
-            request.GET['provider_id'],
-        )
-        if user:
-            return Response({'message': 'success'})
-
-        return Response({'message': 'failed'}, status=401)
