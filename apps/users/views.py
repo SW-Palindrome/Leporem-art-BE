@@ -6,16 +6,17 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_302_FOUND, HTTP_401_UNAUTHORIZED
 from rest_framework.views import APIView
 
-from apps.users.services import GoogleAuthService, SignupService
+from apps.users.services import GoogleAuthService, KakaoAuthService
+from utils.auth.kakao import extract_provider_id, validate_id_token
 
 from .open_api_params import get_params
 
 
 # Create your views here.
 class SignUpView(APIView):
-    '''이용약관 + 닉네임'''
+    '''회원가입: 이용약관동의여부, 닉네임'''
 
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(manual_parameters=get_params)
     def get(self, request):
@@ -24,12 +25,12 @@ class SignUpView(APIView):
 
     @swagger_auto_schema(responses={201: 'Success'})
     def post(self, request):
-        provider_id = request.GET.get('provider_id')
+        provider_id = extract_provider_id(request.GET.get('id_token'))
         is_agree_privacy = request.GET.get('is_agree_privacy')
         is_agree_ads = request.GET.get('is_agree_ads')
         nickname = request.GET.get('nickname')
-        signup_service = SignupService()
-        if signup_service.signup(provider_id, is_agree_privacy, is_agree_ads, nickname):
+        kakao_auth_service = KakaoAuthService()
+        if kakao_auth_service.signup(provider_id, is_agree_privacy, is_agree_ads, nickname):
             return Response({'message': 'nickname is not valid'}, status=400)
 
         return Response({'message': 'success'}, status=201)
