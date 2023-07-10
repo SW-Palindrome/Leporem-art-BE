@@ -17,3 +17,7 @@ functions:
 
 plugins:
   - serverless-python-requirements
+
+package:
+  exclude:
+    - node_modules/**
