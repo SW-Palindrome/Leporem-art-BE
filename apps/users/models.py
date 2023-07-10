@@ -12,7 +12,8 @@ class User(AbstractBaseUser, TimeStampedModel):
     is_agree_privacy = models.BooleanField(default=False)
     is_agree_ads = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
-
+    is_seller = models.BooleanField(null=False)
+    is_staff = models.BooleanField(null=False)
     USERNAME_FIELD = 'nickname'
 
 
