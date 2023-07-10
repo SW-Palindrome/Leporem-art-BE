@@ -15,8 +15,16 @@ functions:
     environment:
       ENV: ${opt:stage, 'dev'}
 
+custom:
+  customDomain:
+    domainName: ${opt:stage, 'dev'}.leporem.art
+    stage: ${opt:stage, 'dev'}
+    basePath: ''
+    createRoute53Record: false
+
 plugins:
   - serverless-python-requirements
+  - serverless-domain-manager
 
 package:
   exclude:
