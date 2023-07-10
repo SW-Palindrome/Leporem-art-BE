@@ -16,6 +16,9 @@ functions:
       ENV: ${opt:stage, 'dev'}
 
 custom:
+  pythonRequirements:
+    dockerizePip: true
+
   customDomain:
     domainName: ${opt:stage, 'dev'}.leporem.art
     certificateName: '*.leporem.art'
