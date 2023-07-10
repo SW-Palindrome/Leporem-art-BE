@@ -1,8 +1,8 @@
+import re
 from typing import Optional
 from urllib.parse import urlencode
 
 import requests
-import re
 
 from apps.users.models import User
 from apps.users.repositories import UserRepository

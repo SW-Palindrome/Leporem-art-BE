@@ -14,11 +14,12 @@ from .open_api_params import get_params
 # Create your views here.
 class SignUpView(APIView):
     '''이용약관 + 닉네임'''
+
     permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(manual_parameters=get_params)
     def get(self, request):
-    # def get(self):
+        # def get(self):
         return Response('Description Test')
 
     @swagger_auto_schema(responses={201: 'Success'})
@@ -29,9 +30,9 @@ class SignUpView(APIView):
         nickname = request.GET.get('nickname')
         signup_service = SignupService()
         if signup_service.signup(provider_id, is_agree_privacy, is_agree_ads, nickname):
-            return Response({'message':'nickname is not valid'}, status=400)
+            return Response({'message': 'nickname is not valid'}, status=400)
 
-        return Response({'message':'success'}, status=201)
+        return Response({'message': 'success'}, status=201)
 
 
 class GoogleAuthUrlView(APIView):
@@ -58,4 +59,3 @@ class GoogleSignupView(APIView):
         google_auth_service = GoogleAuthService()
         google_auth_service.signup(request.GET['code'])
         return Response({'message': 'success'})
-
