@@ -2,6 +2,7 @@ from typing import Optional
 from urllib.parse import urlencode
 
 import requests
+import re
 
 from apps.users.models import User
 from apps.users.repositories import UserRepository
@@ -66,17 +67,21 @@ class GoogleAuthService:
         return user_repository.login(self.PROVIDER, email)
 
 
-class KakaoAuthService:
-    USER_SIGNATURE = ''
+class SignupService:
+    ID_TOKEN = ''
     PROVIDER = 'KAKAO'
+    nickname_pattern = r'^[A-Za-z0-9가-힣_-]{2,10}$'
 
-    def signup(self, provider_id, nickname):
-        temp_signature = ''
+    def _check_nickname(self, nickname):
         user_repository = UserRepository()
-        return user_repository.kakao_signup(self.PROVIDER, provider_id, nickname, temp_signature)
+        if not re.match(self.nickname_pattern, nickname):
+            return False
+        if user_repository.objects.filter(nickname=nickname).exists():
+            return False
+        return True
 
-    def signin(self, user_signature, provider_id):
+    def signup(self, provider_id, is_agree_privacy, is_agree_ads, nickname):
+        temp_token = ''
         user_repository = UserRepository()
-        if user_signature == self.USER_SIGNATURE:
-            return user_repository.kakao_signin(self.PROVIDER, provider_id)
-        return None
+        nickname = self._check_nickname(nickname)
+        return user_repository.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname, temp_token)
