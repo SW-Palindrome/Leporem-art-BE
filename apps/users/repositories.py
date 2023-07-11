@@ -36,3 +36,8 @@ class UserRepository:
         if User.objects.filter(nickname=nickname).exists():
             return True
         return False
+
+    def signin(self, provider_id):
+        if not UserOAuthInfo.objects.filter(provider_id=provider_id).exists():
+            return True
+        return False
