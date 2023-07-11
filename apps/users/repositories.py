@@ -25,7 +25,7 @@ class UserRepository:
             is_seller=False,
             is_staff=False,
         )
-        oauth_info = UserOAuthInfo.objects.create(
+        UserOAuthInfo.objects.create(
             user=user_info,
             provider=provider,
             provider_id=provider_id,

@@ -25,8 +25,7 @@ class SignUpView(APIView):
 
     @swagger_auto_schema(responses={201: 'Success'})
     def post(self, request):
-        # provider_id = extract_provider_id(request.data.get('id_token'))
-        provider_id = 1234
+        provider_id = extract_provider_id(request.data.get('id_token'))
         is_agree_privacy = request.data.get('is_agree_privacy')
         is_agree_ads = request.data.get('is_agree_ads')
         nickname = request.data.get('nickname')
