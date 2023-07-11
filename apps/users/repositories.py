@@ -23,7 +23,7 @@ class UserRepository:
             is_agree_ads=is_agree_ads,
             nickname=nickname,
             is_seller=False,
-            is_staff=False
+            is_staff=False,
         )
         oauth_info = UserOAuthInfo.objects.create(
             user=user_info,
