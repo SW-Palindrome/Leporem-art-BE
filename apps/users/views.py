@@ -16,7 +16,7 @@ from .open_api_params import get_params
 class SignUpView(APIView):
     '''회원가입: 이용약관동의여부, 닉네임'''
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(manual_parameters=get_params)
     def get(self, request):
@@ -25,10 +25,10 @@ class SignUpView(APIView):
 
     @swagger_auto_schema(responses={201: 'Success'})
     def post(self, request):
-        provider_id = extract_provider_id(request.GET.get('id_token'))
-        is_agree_privacy = request.GET.get('is_agree_privacy')
-        is_agree_ads = request.GET.get('is_agree_ads')
-        nickname = request.GET.get('nickname')
+        provider_id = extract_provider_id(request.data.get('id_token'))
+        is_agree_privacy = request.data.get('is_agree_privacy')
+        is_agree_ads = request.data.get('is_agree_ads')
+        nickname = request.data.get('nickname')
         kakao_auth_service = KakaoAuthService()
         if kakao_auth_service.signup(provider_id, is_agree_privacy, is_agree_ads, nickname):
             return Response({'message': 'nickname is not valid'}, status=400)
