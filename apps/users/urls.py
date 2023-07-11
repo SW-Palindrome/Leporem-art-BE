@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.users.views import GoogleAuthUrlView, GoogleLoginView, SignUpView, SignInView
+from apps.users.views import GoogleAuthUrlView, GoogleLoginView, SignInView, SignUpView
 
 urlpatterns = [
     path('signup/kakao', SignUpView.as_view()),

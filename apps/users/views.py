@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from apps.users.services import GoogleAuthService, KakaoAuthService
 from utils.auth.kakao import extract_provider_id
 
-from .open_api_params import signup_get_params, signup_post_params, signin_params
+from .open_api_params import signin_params, signup_get_params, signup_post_params
 
 
 # Create your views here.
