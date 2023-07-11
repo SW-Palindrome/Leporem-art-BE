@@ -24,7 +24,7 @@ class SignUpView(APIView):
         return Response('Description Test')
 
     @swagger_auto_schema(responses={201: 'Success'})
-    def post(self, request):
+
         provider_id = extract_provider_id(request.data.get('id_token'))
         is_agree_privacy = request.data.get('is_agree_privacy')
         is_agree_ads = request.data.get('is_agree_ads')
@@ -34,7 +34,6 @@ class SignUpView(APIView):
             return Response({'message': 'nickname is not valid'}, status=400)
 
         return Response({'message': 'success'}, status=201)
-
 
 class GoogleAuthUrlView(APIView):
     """구글 로그인을 위한 URL을 리다이렉팅합니다."""
