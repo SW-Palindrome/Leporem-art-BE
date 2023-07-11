@@ -1,6 +1,6 @@
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
-from django.core.validators import MaxValueValidator
 
 from apps.sellers.models import Seller
 
@@ -31,11 +31,7 @@ class Tag(models.Model):
     color = models.CharField(max_length=10)
 
     class Meta:
-        constraints = (models.UniqueConstraint(
-            fields=['category', 'color'],
-            name='unique together'
-        ),
-        )
+        constraints = (models.UniqueConstraint(fields=['category', 'color'], name='unique together'),)
 
 
 class ItemTagMapping(TimeStampedModel):
