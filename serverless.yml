@@ -6,6 +6,12 @@ provider:
   name: aws
   runtime: python3.10
   region: ap-northeast-2
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: 'SES:SendEmail'
+          Resource: '*'
 
 functions:
   api:
