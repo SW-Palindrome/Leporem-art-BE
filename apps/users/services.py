@@ -84,3 +84,9 @@ class KakaoAuthService:
         if not self._check_nickname(nickname):
             return False
         return user_repository.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname)
+
+    def signin(self, provider_id):
+        user_repository = UserRepository()
+        if not user_repository.signin(provider_id):
+            return False
+        return user_repository.signin(provider_id)
