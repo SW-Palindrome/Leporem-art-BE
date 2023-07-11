@@ -25,13 +25,14 @@ class SignUpView(APIView):
 
     @swagger_auto_schema(responses={201: 'Success'})
     def post(self, request):
-        provider_id = extract_provider_id(request.data.get('id_token'))
+        # provider_id = extract_provider_id(request.data.get('id_token'))
+        provider_id = 1234
         is_agree_privacy = request.data.get('is_agree_privacy')
         is_agree_ads = request.data.get('is_agree_ads')
         nickname = request.data.get('nickname')
         kakao_auth_service = KakaoAuthService()
-        if kakao_auth_service.signup(provider_id, is_agree_privacy, is_agree_ads, nickname):
-            return Response({'message': 'nickname is not valid'}, status=400)
+        if not kakao_auth_service.signup(provider_id, is_agree_privacy, is_agree_ads, nickname):
+            return Response({'message': 'signup failed'}, status=400)
 
         return Response({'message': 'success'}, status=201)
 
