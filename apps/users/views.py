@@ -43,8 +43,8 @@ class SignInView(APIView):
         kakao_auth_service = KakaoAuthService()
         provider_id = extract_provider_id(request.data.get('id_token'))
         if not kakao_auth_service.signin(provider_id):
-            return Response({'message': 'signin failed'})
-        return Response({'message': 'success'})
+            return Response({'message': 'signin failed'}, status=401)
+        return Response({'message': 'success'}, status=200)
 
 
 class GoogleAuthUrlView(APIView):
