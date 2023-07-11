@@ -75,7 +75,7 @@ class KakaoAuthService:
         user_repository = UserRepository()
         if not re.match(self.nickname_pattern, nickname):
             return False
-        if user_repository.objects.filter(nickname=nickname).exists():
+        if user_repository.check_nickname(nickname).exists():
             return False
         return True
 
