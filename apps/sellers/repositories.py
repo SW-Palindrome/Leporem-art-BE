@@ -13,4 +13,6 @@ class SellerRepository:
         return VerifyEmail.objects.filter(user=user, verify_code=verify_code).last()
 
     def register(self, user: User, email: str) -> Seller:
+        user.is_seller = True
+        user.save()
         return Seller.objects.create(user=user, email=email)
