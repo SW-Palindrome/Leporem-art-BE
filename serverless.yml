@@ -10,7 +10,7 @@ provider:
     role:
       statements:
         - Effect: Allow
-          Action: 'SES:Publish'
+          Action: 'SES:SendEmail'
           Resource: '*'
 
 functions:
