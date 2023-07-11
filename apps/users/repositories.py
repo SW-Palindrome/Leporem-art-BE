@@ -28,3 +28,8 @@ class UserRepository:
         oauth_info.save()
         user_info.save()
         return user_info
+
+    def check_nickname(self, nickname):
+        if User.objects.filter(nickname=nickname).exists():
+            return True
+        return False
