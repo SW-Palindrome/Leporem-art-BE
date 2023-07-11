@@ -6,4 +6,4 @@ class SellerRegisterSerializer(serializers.Serializer):
 
 
 class SellerVerifySerializer(serializers.Serializer):
-    verify_code = serializers.CharField(max_length=4)
+    verify_code = serializers.CharField(max_length=6)
