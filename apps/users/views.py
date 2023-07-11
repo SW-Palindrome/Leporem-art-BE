@@ -23,7 +23,6 @@ class SignUpView(APIView):
         # def get(self):
         return Response('Description Test')
 
-
     @swagger_auto_schema(responses={201: 'Success'})
     def post(self, request):
         provider_id = extract_provider_id(request.data.get('id_token'))
