@@ -75,12 +75,12 @@ class KakaoAuthService:
         user_repository = UserRepository()
         if not re.match(self.nickname_pattern, nickname):
             return False
-        if user_repository.objects.filter(nickname=nickname).exists():
+        if user_repository.check_nickname(nickname):
             return False
         return True
 
     def signup(self, provider_id, is_agree_privacy, is_agree_ads, nickname):
-        temp_token = ''
         user_repository = UserRepository()
-        nickname = self._check_nickname(nickname)
-        return user_repository.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname, temp_token)
+        if not self._check_nickname(nickname):
+            return False
+        return user_repository.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname)
