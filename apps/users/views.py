@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from apps.users.services import GoogleAuthService, KakaoAuthService
 from utils.auth.kakao import extract_provider_id
 
-from .open_api_params import get_params
+from .open_api_params import signup_get_params, signup_post_params, signin_params
 
 
 # Create your views here.
@@ -18,12 +18,11 @@ class SignUpView(APIView):
 
     permission_classes = [permissions.AllowAny]
 
-    @swagger_auto_schema(manual_parameters=get_params)
+    @swagger_auto_schema(manual_parameters=signup_get_params)
     def get(self, request):
-        # def get(self):
         return Response('Description Test')
 
-    @swagger_auto_schema(responses={201: 'Success'})
+    @swagger_auto_schema(manual_parameters=signup_post_params, responses={201: 'Success'})
     def post(self, request):
         provider_id = extract_provider_id(request.data.get('id_token'))
         is_agree_privacy = request.data.get('is_agree_privacy')
@@ -34,6 +33,18 @@ class SignUpView(APIView):
             return Response({'message': 'signup failed'}, status=400)
 
         return Response({'message': 'success'}, status=201)
+
+
+class SignInView(APIView):
+    '''로그인: 최초회원가입 이후 재로그인'''
+
+    @swagger_auto_schema(manual_parameters=signin_params)
+    def get(self, request):
+        kakao_auth_service = KakaoAuthService()
+        provider_id = extract_provider_id(request.data.get('id_token'))
+        if not kakao_auth_service.signin(provider_id):
+            return Response({'message': 'signin failed'})
+        return Response({'message': 'success'})
 
 
 class GoogleAuthUrlView(APIView):
