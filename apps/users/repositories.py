@@ -36,3 +36,15 @@ class UserRepository:
         if User.objects.filter(nickname=nickname).exists():
             return True
         return False
+
+    def check_is_staff(self, user_id):
+        if User.objects.filter(pk=user_id, is_staff=True).exists():
+            return True
+        return False
+
+    def remove(self, user_nickname):
+        user = User.objects.get(nickname=user_nickname)
+        if user.is_seller:
+            user.seller.delete()
+        user.delete()
+        return True
