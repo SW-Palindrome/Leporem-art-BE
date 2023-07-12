@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
@@ -27,6 +28,9 @@ class OIDCAuthentication(BaseAuthentication):
 
         if not id_token:
             return None
+
+        if settings.DEBUG and id_token == settings.TEST_ID_TOKEN:
+            return User.objects.get(nickname=settings.TEST_STAFF_NICKNAME), None
 
         if kakao_validate_id_token(id_token):
             try:
