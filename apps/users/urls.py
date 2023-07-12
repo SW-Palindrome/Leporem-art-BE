@@ -1,11 +1,7 @@
 from django.conf import settings
 from django.urls import path
 
-from apps.users.views import (
-    KakaoLogInView,
-    RemoveUserView,
-    KakaoSignUpView,
-)
+from apps.users.views import KakaoLogInView, KakaoSignUpView, RemoveUserView
 
 urlpatterns = [
     path('signup/kakao', KakaoSignUpView.as_view()),
