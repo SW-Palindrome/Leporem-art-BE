@@ -85,11 +85,11 @@ class KakaoAuthService:
             return False
         return user_repository.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname)
 
-    def signin(self, provider_id):
+    def login(self, provider, provider_id):
         user_repository = UserRepository()
-        if not user_repository.signin(provider_id):
+        if not user_repository.login(provider, provider_id):
             return False
-        return user_repository.signin(provider_id)
+        return user_repository.login(provider, provider_id)
 
     def remove(self, user_nickname, staff_id):
         """회원 삭제"""

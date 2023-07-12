@@ -36,14 +36,15 @@ class SignUpView(APIView):
         return Response({'message': 'success'}, status=201)
 
 
-class SignInView(APIView):
+class LogInView(APIView):
     '''로그인: 최초회원가입 이후 재로그인'''
 
     @swagger_auto_schema(manual_parameters=signin_params)
     def get(self, request):
         kakao_auth_service = KakaoAuthService()
+        provider = request.data.get('provider')
         provider_id = extract_provider_id(request.data.get('id_token'))
-        if not kakao_auth_service.signin(provider_id):
+        if not kakao_auth_service.login(provider, provider_id):
             return Response({'message': 'signin failed'}, status=401)
         return Response({'message': 'success'}, status=200)
 
