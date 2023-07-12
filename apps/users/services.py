@@ -6,7 +6,7 @@ from apps.users.repositories import UserRepository
 class AuthService:
     nickname_pattern = r'^[A-Za-z0-9가-힣_-]{2,10}$'
 
-    def _check_nickname(self, nickname):
+    def check_nickname(self, nickname):
         user_repository = UserRepository()
         if not re.match(self.nickname_pattern, nickname):
             return False
@@ -16,7 +16,7 @@ class AuthService:
 
     def signup(self, provider, provider_id, is_agree_privacy, is_agree_ads, nickname):
         user_repository = UserRepository()
-        if not self._check_nickname(nickname):
+        if not self.check_nickname(nickname):
             return False
         return user_repository.signup(provider, provider_id, is_agree_privacy, is_agree_ads, nickname)
 
