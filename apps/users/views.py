@@ -41,6 +41,17 @@ class KakaoLogInView(APIView):
         return Response({'message': 'success'}, status=200)
 
 
+class ValidateNicknameView(APIView):
+    """닉네임 검증 API"""
+
+    def get(self, request, *args, **kwargs):
+        nickname = kwargs['nickname']
+        auth_service = AuthService()
+        if not auth_service.check_nickname(nickname):
+            return Response({'message': 'invalid nickname'}, status=400)
+        return Response({'message': 'success'}, status=200)
+
+
 class RemoveUserView(APIView):
     permission_classes = [IsStaff]
 
