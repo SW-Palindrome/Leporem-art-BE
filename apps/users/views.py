@@ -30,11 +30,13 @@ class KakaoSignUpView(APIView):
 class KakaoLogInView(APIView):
     """로그인: 최초회원가입 이후 재로그인"""
 
+    PROVIDER = 'KAKAO'
+    permission_classes = [permissions.AllowAny]
+
     def get(self, request):
         auth_service = AuthService()
-        provider = request.data.get('provider')
         provider_id = extract_provider_id(request.data.get('id_token'))
-        if not auth_service.login(provider, provider_id):
+        if not auth_service.login(self.PROVIDER, provider_id):
             return Response({'message': 'signin failed'}, status=401)
         return Response({'message': 'success'}, status=200)
 
