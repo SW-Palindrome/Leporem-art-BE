@@ -90,3 +90,10 @@ class KakaoAuthService:
         if not user_repository.signin(provider_id):
             return False
         return user_repository.signin(provider_id)
+
+    def remove(self, user_nickname, staff_id):
+        """회원 삭제"""
+        user_repository = UserRepository()
+        if not user_repository.check_is_staff(staff_id):
+            return False
+        return user_repository.remove(user_nickname)
