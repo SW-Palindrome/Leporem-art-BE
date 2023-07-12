@@ -27,11 +27,6 @@ jobs:
           pip install poetry
           poetry install --without dev
 
-      - name: Collect static
-
-        run: |
-          poetry run python manage.py collectstatic --no-input
-
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
