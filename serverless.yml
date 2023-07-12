@@ -10,7 +10,9 @@ provider:
     role:
       statements:
         - Effect: Allow
-          Action: 'SES:SendEmail'
+          Action:
+          - 'SES:SendEmail'
+          - 'S3:*'
           Resource: '*'
 
 functions:

@@ -10,6 +10,7 @@ from apps.users.services import GoogleAuthService, KakaoAuthService
 from utils.auth.kakao import extract_provider_id
 
 from .open_api_params import signin_params, signup_get_params, signup_post_params
+from .permissions import IsStaff
 
 
 # Create your views here.
@@ -35,15 +36,26 @@ class SignUpView(APIView):
         return Response({'message': 'success'}, status=201)
 
 
-class SignInView(APIView):
+class LogInView(APIView):
     '''로그인: 최초회원가입 이후 재로그인'''
 
     @swagger_auto_schema(manual_parameters=signin_params)
     def get(self, request):
         kakao_auth_service = KakaoAuthService()
+        provider = request.data.get('provider')
         provider_id = extract_provider_id(request.data.get('id_token'))
-        if not kakao_auth_service.signin(provider_id):
+        if not kakao_auth_service.login(provider, provider_id):
             return Response({'message': 'signin failed'}, status=401)
+        return Response({'message': 'success'}, status=200)
+
+
+class RemoveUserView(APIView):
+    permission_classes = [IsStaff]
+
+    def delete(self, request):
+        kakao_auth_service = KakaoAuthService()
+        if not kakao_auth_service.remove(request.data['nickname'], request.user.user_id):
+            return Response({'message': 'remove user failed'}, status=400)
         return Response({'message': 'success'}, status=200)
 
 

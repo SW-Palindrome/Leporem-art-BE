@@ -1,4 +1,3 @@
-from django.core.validators import MaxValueValidator
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
@@ -7,25 +6,27 @@ from apps.sellers.models import Seller
 
 class Item(TimeStampedModel):
     item_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='item')
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='items')
     price = models.IntegerField(null=True)
     max_amount = models.IntegerField(null=False)
     current_amount = models.IntegerField(null=False)
     title = models.CharField(max_length=46)
     description = models.CharField(max_length=255, null=True)
-    shorts = models.IntegerField(validators=[MaxValueValidator(10)], null=False)
-    width = models.FloatField(null=False)
-    depth = models.FloatField(null=False)
-    height = models.FloatField(null=False)
+    shorts = models.FileField(upload_to='items/item_shorts/', null=False)
+    width = models.DecimalField(max_digits=4, decimal_places=2, null=False)
+    depth = models.DecimalField(max_digits=4, decimal_places=2, null=False)
+    height = models.DecimalField(max_digits=4, decimal_places=2, null=False)
+    display_dt = models.DateField(null=True)
 
 
 class ItemImage(TimeStampedModel):
     item_image_id = models.AutoField(primary_key=True)
-    item = models.OneToOneField(Item, on_delete=models.CASCADE, related_name='item_image')
-    is_thumbnail = models.BooleanField(null=False)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='item_images')
+    is_thumbnail = models.BooleanField(default=False)
+    image = models.FileField(upload_to='items/item_image/', null=False)
 
 
-class Tag(models.Model):
+class Tag(TimeStampedModel):
     tag_id = models.AutoField(primary_key=True)
     category = models.CharField(max_length=10)
     color = models.CharField(max_length=10)

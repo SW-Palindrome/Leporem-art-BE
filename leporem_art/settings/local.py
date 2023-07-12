@@ -1,5 +1,7 @@
 from .base import *
 
+AWS_STORAGE_BUCKET_NAME = 'leporem-art-media-dev'
+
 DEBUG = True
 ALLOWED_HOSTS = []
 
