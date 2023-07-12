@@ -13,10 +13,10 @@ class Item(TimeStampedModel):
     title = models.CharField(max_length=46)
     description = models.CharField(max_length=255, null=True)
     shorts = models.FileField(upload_to='items/item_shorts/', null=False)
-    width = models.DecimalField(max_digits=4, decimal_places=2, null=False)
-    depth = models.DecimalField(max_digits=4, decimal_places=2, null=False)
-    height = models.DecimalField(max_digits=4, decimal_places=2, null=False)
-    display_dt = models.DateField(null=True)
+    width = models.DecimalField(max_digits=6, decimal_places=2, null=False)
+    depth = models.DecimalField(max_digits=6, decimal_places=2, null=False)
+    height = models.DecimalField(max_digits=6, decimal_places=2, null=False)
+    display_dt = models.DateTimeField(null=True)
 
 
 class ItemImage(TimeStampedModel):
@@ -37,5 +37,5 @@ class Tag(TimeStampedModel):
 
 class ItemTagMapping(TimeStampedModel):
     item_tag_mapping_id = models.AutoField(primary_key=True)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='item_tag_mapping')
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='tag')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='item_tag_mappings')
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='item_tag_mappings')
