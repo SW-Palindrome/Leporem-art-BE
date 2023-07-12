@@ -140,3 +140,10 @@ CORS_ALLOW_ALL_ORIGINS = True
 # 스태프용 ID 토큰 및 계정
 TEST_ID_TOKEN = 'Leporemart33!'
 TEST_STAFF_NICKNAME = '공예쁨'
+
+# Django Storage Settings
+STORAGES = {
+    'default': {
+        'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+    },
+}
