@@ -6,4 +6,5 @@ urlpatterns = [
     path('register', SellerRegisterView.as_view()),
     path('verify', SellerVerifyView.as_view()),
     path('items', SellerItemView.as_view()),
+    path('items/<str:item_id>', SellerItemView.as_view()),
 ]
