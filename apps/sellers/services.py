@@ -1,5 +1,6 @@
 from typing import Optional
 
+from apps.items.repositories import ItemRepository
 from apps.sellers.models import Seller
 from apps.sellers.repositories import SellerRepository
 from apps.users.models import User
@@ -19,3 +20,36 @@ class SellerRegisterService:
         if verify_email:
             return SellerRepository().register(user=user, email=verify_email.email)
         return None
+
+
+class SellerService:
+    def register_item(
+        self,
+        seller_id,
+        price,
+        max_amount,
+        title,
+        description,
+        shorts,
+        width,
+        depth,
+        height,
+        thumbnail_image,
+        images,
+        tags,
+    ):
+        item_repository = ItemRepository()
+        item_repository.register(
+            seller=Seller.objects.get(seller_id=seller_id),
+            price=price,
+            max_amount=max_amount,
+            title=title,
+            description=description,
+            shorts=shorts,
+            width=width,
+            depth=depth,
+            height=height,
+            thumbnail_image=thumbnail_image,
+            images=images,
+            tags=tags,
+        )
