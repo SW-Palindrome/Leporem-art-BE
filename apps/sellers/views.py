@@ -66,3 +66,24 @@ class SellerItemView(APIView):
                 tags=serializer.validated_data.get('tags', []),
             )
             return Response({'message': 'success'})
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            seller_service = SellerService()
+            seller_service.modify_item(
+                seller_id=request.user.seller.seller_id,
+                item_id=kwargs['item_id'],
+                price=serializer.validated_data['price'],
+                max_amount=serializer.validated_data['max_amount'],
+                title=serializer.validated_data['title'],
+                description=serializer.validated_data['description'],
+                shorts=serializer.validated_data['shorts'],
+                width=serializer.validated_data['width'],
+                depth=serializer.validated_data['depth'],
+                height=serializer.validated_data['height'],
+                thumbnail_image=serializer.validated_data['thumbnail_image'],
+                images=serializer.validated_data.get('images', []),
+                tags=serializer.validated_data.get('tags', []),
+            )
+            return Response({'message': 'success'})
