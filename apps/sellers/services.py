@@ -5,6 +5,7 @@ from apps.sellers.models import Seller
 from apps.sellers.repositories import SellerRepository
 from apps.users.models import User
 from utils.email.aws import send_email
+from utils.files import create_random_filename
 
 
 class SellerRegisterService:
@@ -39,6 +40,12 @@ class SellerService:
         tags,
     ):
         item_repository = ItemRepository()
+
+        shorts.name = create_random_filename(shorts.name)
+        thumbnail_image.name = create_random_filename(thumbnail_image.name)
+        for image in images:
+            image.name = create_random_filename(image.name)
+
         item_repository.register(
             seller=Seller.objects.get(seller_id=seller_id),
             price=price,
