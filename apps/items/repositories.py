@@ -5,7 +5,7 @@ from apps.users.models import User
 class ItemRepository:
     def load_nickname(self, nickname):
         try:
-            nickname_info = User.objects.select_related('seller', 'items').filter(nickname=nickname)
+            nickname_info = User.objects.select_related('seller', 'items').get(nickname=nickname)
             return nickname_info
         except User.DoesNotExist:
             return None
@@ -17,9 +17,9 @@ class ItemRepository:
         except Item.DoesNotExist:
             return None
 
-    def load_like_count(self, item):
+    def load_like(self, item):
         try:
-            like_count = Item.objects.select_related('likes').get(item=item).count()
+            like_count = Item.objects.select_related('likes').filter(item=item).count()
             return like_count
         except Item.DoesNotExist:
             return None
