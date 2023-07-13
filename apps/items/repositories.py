@@ -9,7 +9,19 @@ from apps.sellers.models import Seller
 class ItemRepository:
     @transaction.atomic
     def register(
-        self, seller_id, price, max_amount, title, description, shorts, width, depth, height, thumbnail_image, images, tags
+        self,
+        seller_id,
+        price,
+        max_amount,
+        title,
+        description,
+        shorts,
+        width,
+        depth,
+        height,
+        thumbnail_image,
+        images,
+        tags,
     ):
         seller = Seller.objects.get(seller_id=seller_id)
         item = Item.objects.create(
@@ -44,7 +56,20 @@ class ItemRepository:
 
     @transaction.atomic
     def modify(
-        self, seller_id, item_id, price, max_amount, title, description, shorts, width, depth, height, thumbnail_image, images, tags
+        self,
+        seller_id,
+        item_id,
+        price,
+        max_amount,
+        title,
+        description,
+        shorts,
+        width,
+        depth,
+        height,
+        thumbnail_image,
+        images,
+        tags,
     ):
         try:
             item = Seller.objects.get(seller_id=seller_id).items.get(item_id=item_id)
