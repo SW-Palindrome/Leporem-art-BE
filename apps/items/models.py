@@ -39,3 +39,8 @@ class ItemTagMapping(TimeStampedModel):
     item_tag_mapping_id = models.AutoField(primary_key=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='item_tag_mappings')
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='item_tag_mappings')
+
+
+class Like(TimeStampedModel):
+    like_id = models.AutoField(primary_key=True)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='likes')
