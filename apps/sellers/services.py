@@ -23,7 +23,21 @@ class SellerRegisterService:
 
 
 class SellerService:
-    def register_item(self, seller_id, price, max_amount, title, description, shorts, width, depth, height, thumbnail_image, images, tags):
+    def register_item(
+        self,
+        seller_id,
+        price,
+        max_amount,
+        title,
+        description,
+        shorts,
+        width,
+        depth,
+        height,
+        thumbnail_image,
+        images,
+        tags,
+    ):
         item_repository = ItemRepository()
         item_repository.register(
             seller=Seller.objects.get(seller_id=seller_id),
@@ -39,4 +53,3 @@ class SellerService:
             images=images,
             tags=tags,
         )
-

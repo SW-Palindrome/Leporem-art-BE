@@ -6,7 +6,9 @@ from apps.items.models import Item, ItemImage, ItemTagMapping
 
 class ItemRepository:
     @transaction.atomic
-    def register(self, seller, price, max_amount, title, description, shorts, width, depth, height, thumbnail_image, images, tags):
+    def register(
+        self, seller, price, max_amount, title, description, shorts, width, depth, height, thumbnail_image, images, tags
+    ):
         item = Item.objects.create(
             seller=seller,
             price=price,

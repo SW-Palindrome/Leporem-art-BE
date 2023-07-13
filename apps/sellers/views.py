@@ -3,7 +3,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.sellers.serializers import SellerRegisterSerializer, SellerVerifySerializer, SellerItemSerializer
+from apps.sellers.serializers import (
+    SellerItemSerializer,
+    SellerRegisterSerializer,
+    SellerVerifySerializer,
+)
 from apps.sellers.services import SellerRegisterService, SellerService
 from apps.users.permissions import IsSeller
 

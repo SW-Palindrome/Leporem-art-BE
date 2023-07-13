@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.sellers.views import SellerRegisterView, SellerVerifyView, SellerItemView
+from apps.sellers.views import SellerItemView, SellerRegisterView, SellerVerifyView
 
 urlpatterns = [
     path('register', SellerRegisterView.as_view()),
