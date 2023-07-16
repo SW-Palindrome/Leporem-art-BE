@@ -1,5 +1,8 @@
 import re
 
+from django.db import IntegrityError
+
+from apps.users.exceptions import DuplicateNicknameException, DuplicateUserInfoException
 from apps.users.repositories import UserRepository
 
 
@@ -17,8 +20,12 @@ class AuthService:
     def signup(self, provider, provider_id, is_agree_privacy, is_agree_ads, nickname):
         user_repository = UserRepository()
         if not self.check_nickname(nickname):
-            return False
-        return user_repository.signup(provider, provider_id, is_agree_privacy, is_agree_ads, nickname)
+            raise DuplicateNicknameException
+        try:
+            user_repository.signup(provider, provider_id, is_agree_privacy, is_agree_ads, nickname)
+        except IntegrityError:
+            raise DuplicateUserInfoException
+        return True
 
     def login(self, provider, provider_id):
         user_repository = UserRepository()
