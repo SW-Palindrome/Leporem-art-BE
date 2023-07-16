@@ -8,6 +8,7 @@ class IsStaff(BasePermission):
 
 class IsBuyerOnly(BasePermission):
     """판매자가 아닌 구매자만 접근 가능"""
+
     def has_permission(self, request, view):
         return not request.user.is_seller
 

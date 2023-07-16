@@ -4,8 +4,8 @@ from rest_framework.views import APIView
 
 from apps.users.services import AuthService
 from utils.auth.kakao import extract_provider_id
-from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
 
+from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
 from .permissions import IsStaff
 
 

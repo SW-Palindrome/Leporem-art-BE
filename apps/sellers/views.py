@@ -8,7 +8,7 @@ from apps.sellers.serializers import (
     SellerVerifySerializer,
 )
 from apps.sellers.services import SellerRegisterService, SellerService
-from apps.users.permissions import IsSeller, IsBuyerOnly
+from apps.users.permissions import IsBuyerOnly, IsSeller
 
 
 class SellerRegisterView(APIView):
