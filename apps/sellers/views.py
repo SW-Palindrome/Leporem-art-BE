@@ -9,11 +9,11 @@ from apps.sellers.serializers import (
     SellerVerifySerializer,
 )
 from apps.sellers.services import SellerRegisterService, SellerService
-from apps.users.permissions import IsSeller
+from apps.users.permissions import IsSeller, IsBuyerOnly
 
 
 class SellerRegisterView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsBuyerOnly]
     serializer_class = SellerRegisterSerializer
 
     def post(self, request):
@@ -27,7 +27,7 @@ class SellerRegisterView(APIView):
 
 
 class SellerVerifyView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsBuyerOnly]
     serializer_class = SellerVerifySerializer
 
     def post(self, request):
