@@ -17,6 +17,13 @@ class AuthService:
             return False
         return True
 
+    def change_nickname(self, user_id, nickname):
+        if self.check_nickname(nickname):
+            user_repository = UserRepository()
+            user_repository.change_nickname(user_id, nickname)
+            return True
+        return False
+
     def signup(self, provider, provider_id, is_agree_privacy, is_agree_ads, nickname):
         user_repository = UserRepository()
         if not self.check_nickname(nickname):
