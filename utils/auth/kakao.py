@@ -44,8 +44,12 @@ def validate_id_token(id_token: str) -> bool:
 
     url = 'https://kauth.kakao.com/.well-known/jwks.json'
 
-    jwks_client = PyJWKClient(url)
-    signing_key = jwks_client.get_signing_key_from_jwt(id_token)
+    try:
+        jwks_client = PyJWKClient(url)
+        signing_key = jwks_client.get_signing_key_from_jwt(id_token)
+    except jwt.exceptions.InvalidTokenError:
+        return False
+
     try:
         jwt.decode(
             id_token,

@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from apps.users.services import AuthService
 from utils.auth.kakao import extract_provider_id
 
+from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
 from .permissions import IsStaff
 
 
@@ -21,8 +22,13 @@ class KakaoSignUpView(APIView):
         is_agree_ads = request.data.get('is_agree_ads')
         nickname = request.data.get('nickname')
         auth_service = AuthService()
-        if not auth_service.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname):
-            return Response({'message': 'signup failed'}, status=400)
+
+        try:
+            auth_service.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname)
+        except DuplicateNicknameException:
+            return Response({'message': 'duplicate nickname'}, status=400)
+        except DuplicateUserInfoException:
+            return Response({'message': 'duplicate user info'}, status=400)
 
         return Response({'message': 'success'}, status=201)
 

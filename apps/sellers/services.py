@@ -1,9 +1,11 @@
 from typing import Optional
 
+from apps.items.repositories import ItemRepository
 from apps.sellers.models import Seller
 from apps.sellers.repositories import SellerRepository
 from apps.users.models import User
 from utils.email.aws import send_email
+from utils.files import create_random_filename
 
 
 class SellerRegisterService:
@@ -19,3 +21,81 @@ class SellerRegisterService:
         if verify_email:
             return SellerRepository().register(user=user, email=verify_email.email)
         return None
+
+
+class SellerService:
+    def register_item(
+        self,
+        seller_id,
+        price,
+        max_amount,
+        title,
+        description,
+        shorts,
+        width,
+        depth,
+        height,
+        thumbnail_image,
+        images,
+        tags,
+    ):
+        item_repository = ItemRepository()
+
+        shorts.name = create_random_filename(shorts.name)
+        thumbnail_image.name = create_random_filename(thumbnail_image.name)
+        for image in images:
+            image.name = create_random_filename(image.name)
+
+        item_repository.register(
+            seller_id=seller_id,
+            price=price,
+            max_amount=max_amount,
+            title=title,
+            description=description,
+            shorts=shorts,
+            width=width,
+            depth=depth,
+            height=height,
+            thumbnail_image=thumbnail_image,
+            images=images,
+            tags=tags,
+        )
+
+    def modify_item(
+        self,
+        seller_id,
+        item_id,
+        price,
+        max_amount,
+        title,
+        description,
+        shorts,
+        width,
+        depth,
+        height,
+        thumbnail_image,
+        images,
+        tags,
+    ):
+        item_repository = ItemRepository()
+
+        shorts.name = create_random_filename(shorts.name)
+        thumbnail_image.name = create_random_filename(thumbnail_image.name)
+        for image in images:
+            image.name = create_random_filename(image.name)
+
+        item_repository.modify(
+            seller_id=seller_id,
+            item_id=item_id,
+            price=price,
+            max_amount=max_amount,
+            title=title,
+            description=description,
+            shorts=shorts,
+            width=width,
+            depth=depth,
+            height=height,
+            thumbnail_image=thumbnail_image,
+            images=images,
+            tags=tags,
+        )
