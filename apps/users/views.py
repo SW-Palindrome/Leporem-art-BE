@@ -62,6 +62,7 @@ class ValidateNicknameView(APIView):
 
 class ChangeNicknameView(APIView):
     """닉네임 변경 API"""
+
     permission_classes = [IsAuthenticated]
     serializer_class = ChangeNicknameSerializer
 
