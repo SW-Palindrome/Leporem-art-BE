@@ -37,6 +37,11 @@ class UserRepository:
             return True
         return False
 
+    def change_nickname(self, user_id, nickname):
+        user = User.objects.get(user_id=user_id)
+        user.nickname = nickname
+        user.save()
+
     def check_is_staff(self, user_id):
         if User.objects.filter(pk=user_id, is_staff=True).exists():
             return True
