@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -7,6 +8,7 @@ from utils.auth.kakao import extract_provider_id
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
 from .permissions import IsStaff
+from .serializers import ChangeNicknameSerializer
 
 
 # Create your views here.
@@ -55,6 +57,20 @@ class ValidateNicknameView(APIView):
         auth_service = AuthService()
         if not auth_service.check_nickname(nickname):
             return Response({'message': 'invalid nickname'}, status=400)
+        return Response({'message': 'success'}, status=200)
+
+
+class ChangeNicknameView(APIView):
+    """닉네임 변경 API"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangeNicknameSerializer
+
+    def patch(self, request):
+        auth_service = AuthService()
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if not auth_service.change_nickname(request.user.user_id, serializer.validated_data['nickname']):
+            return Response({'message': 'change nickname failed'}, status=400)
         return Response({'message': 'success'}, status=200)
 
 
