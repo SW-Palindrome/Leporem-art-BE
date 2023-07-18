@@ -60,3 +60,7 @@ class UserRepository:
             user.seller.delete()
         user.delete()
         return True
+
+    def get_user_info(self, user_id):
+        user = User.objects.get(user_id=user_id)
+        return user

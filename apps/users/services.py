@@ -24,10 +24,6 @@ class AuthService:
             return True
         return False
 
-    def change_profile_image(self, user_id, profile_image):
-        user_repository = UserRepository()
-        user_repository.change_profile_image(user_id, profile_image)
-
     def signup(self, provider, provider_id, is_agree_privacy, is_agree_ads, nickname):
         user_repository = UserRepository()
         if not self.check_nickname(nickname):
@@ -43,6 +39,16 @@ class AuthService:
         if not user_repository.login(provider, provider_id):
             return False
         return user_repository.login(provider, provider_id)
+
+
+class UserService:
+    def change_profile_image(self, user_id, profile_image):
+        user_repository = UserRepository()
+        user_repository.change_profile_image(user_id, profile_image)
+
+    def get_user_info(self, user_id):
+        user_repository = UserRepository()
+        return user_repository.get_user_info(user_id)
 
     def remove(self, user_nickname, staff_id):
         """회원 삭제"""
