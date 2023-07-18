@@ -1,5 +1,4 @@
 from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -9,11 +8,11 @@ from apps.sellers.serializers import (
     SellerVerifySerializer,
 )
 from apps.sellers.services import SellerRegisterService, SellerService
-from apps.users.permissions import IsSeller
+from apps.users.permissions import IsBuyerOnly, IsSeller
 
 
 class SellerRegisterView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsBuyerOnly]
     serializer_class = SellerRegisterSerializer
 
     def post(self, request):
@@ -27,7 +26,7 @@ class SellerRegisterView(APIView):
 
 
 class SellerVerifyView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsBuyerOnly]
     serializer_class = SellerVerifySerializer
 
     def post(self, request):

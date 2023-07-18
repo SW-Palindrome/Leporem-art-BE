@@ -1,10 +1,15 @@
 from rest_framework import serializers
 
-from .models import User
+
+class ChangeNicknameSerializer(serializers.Serializer):
+    nickname = serializers.CharField(max_length=10)
 
 
-# ConsentPrivacy
-class ConsentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['is_agree_privacy', 'is_agree_ads']
+class ChangeProfileImageSerializer(serializers.Serializer):
+    profile_image = serializers.ImageField()
+
+
+class UserInfoSerializer(serializers.Serializer):
+    nickname = serializers.CharField(max_length=20)
+    profile_image = serializers.ImageField()
+    is_seller = serializers.BooleanField()
