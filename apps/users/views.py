@@ -88,10 +88,10 @@ class ChangeProfileImageView(APIView):
     serializer_class = ChangeProfileImageSerializer
 
     def patch(self, request):
-        auth_service = AuthService()
+        user_service = UserService()
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        auth_service.change_profile_image(request.user.user_id, serializer.validated_data['profile_image'])
+        user_service.change_profile_image(request.user.user_id, serializer.validated_data['profile_image'])
         return Response({'message': 'success'}, status=200)
 
 
@@ -112,7 +112,7 @@ class RemoveUserView(APIView):
     permission_classes = [IsStaff]
 
     def delete(self, request):
-        auth_service = AuthService()
-        if not auth_service.remove(request.data['nickname'], request.user.user_id):
+        user_service = UserService()
+        if not user_service.remove(request.data['nickname'], request.user.user_id):
             return Response({'message': 'remove user failed'}, status=400)
         return Response({'message': 'success'}, status=200)
