@@ -3,6 +3,7 @@ from typing import Optional
 from django.db import transaction
 
 from apps.users.models import User, UserOAuthInfo
+from utils.files import create_random_filename
 
 
 class UserRepository:
@@ -40,6 +41,12 @@ class UserRepository:
     def change_nickname(self, user_id, nickname):
         user = User.objects.get(user_id=user_id)
         user.nickname = nickname
+        user.save()
+
+    def change_profile_image(self, user_id, profile_image):
+        profile_image.name = create_random_filename(profile_image.name)
+        user = User.objects.get(user_id=user_id)
+        user.profile_image = profile_image
         user.save()
 
     def check_is_staff(self, user_id):

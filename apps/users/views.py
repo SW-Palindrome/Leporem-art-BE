@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,7 +9,7 @@ from utils.auth.kakao import extract_provider_id
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
 from .permissions import IsStaff
-from .serializers import ChangeNicknameSerializer
+from .serializers import ChangeNicknameSerializer, ChangeProfileImageSerializer
 
 
 # Create your views here.
@@ -72,6 +73,21 @@ class ChangeNicknameView(APIView):
         serializer.is_valid(raise_exception=True)
         if not auth_service.change_nickname(request.user.user_id, serializer.validated_data['nickname']):
             return Response({'message': 'change nickname failed'}, status=400)
+        return Response({'message': 'success'}, status=200)
+
+
+class ChangeProfileImageView(APIView):
+    """프로필 이미지 변경 API"""
+
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
+    serializer_class = ChangeProfileImageSerializer
+
+    def patch(self, request):
+        auth_service = AuthService()
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        auth_service.change_profile_image(request.user.user_id, serializer.validated_data['profile_image'])
         return Response({'message': 'success'}, status=200)
 
 

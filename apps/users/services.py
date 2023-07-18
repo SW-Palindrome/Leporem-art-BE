@@ -24,6 +24,10 @@ class AuthService:
             return True
         return False
 
+    def change_profile_image(self, user_id, profile_image):
+        user_repository = UserRepository()
+        user_repository.change_profile_image(user_id, profile_image)
+
     def signup(self, provider, provider_id, is_agree_privacy, is_agree_ads, nickname):
         user_repository = UserRepository()
         if not self.check_nickname(nickname):
