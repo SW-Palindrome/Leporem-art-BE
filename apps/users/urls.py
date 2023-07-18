@@ -6,7 +6,7 @@ from apps.users.views import (
     KakaoLogInView,
     KakaoSignUpView,
     RemoveUserView,
-    ValidateNicknameView,
+    ValidateNicknameView, ChangeProfileImageView,
 )
 
 urlpatterns = [
@@ -14,6 +14,7 @@ urlpatterns = [
     path('login/kakao', KakaoLogInView.as_view()),
     path('validate/nickname/<str:nickname>', ValidateNicknameView.as_view()),
     path('nickname', ChangeNicknameView.as_view()),
+    path('profile-image', ChangeProfileImageView.as_view()),
 ]
 
 if settings.DEBUG:
