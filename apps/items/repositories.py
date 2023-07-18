@@ -5,7 +5,6 @@ from django.utils import timezone
 
 from apps.items.models import Item, ItemImage, ItemTagMapping
 from apps.sellers.models import Seller
-from apps.users.models import User
 
 
 class ItemRepository:
