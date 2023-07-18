@@ -50,3 +50,9 @@ class AuthService:
         if not user_repository.check_is_staff(staff_id):
             return False
         return user_repository.remove(user_nickname)
+
+
+class UserService:
+    def get_user_info(self, user_id):
+        user_repository = UserRepository()
+        return user_repository.get_user_info(user_id)
