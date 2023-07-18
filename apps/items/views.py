@@ -5,9 +5,10 @@ from rest_framework.views import APIView
 from apps.items.repositories import ItemRepository
 from apps.items.serializers import ItemListSerializer
 
+
 class LoadItemListView(APIView):
     def get(self, request):
-        page_number = request.GET.get('page',1)
+        page_number = request.GET.get('page', 1)
         item_repository = ItemRepository()
         items = item_repository.load_item_list()
         paginator = Paginator(items, 20)
