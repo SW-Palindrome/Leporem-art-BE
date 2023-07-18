@@ -3,10 +3,11 @@ from django.urls import path
 
 from apps.users.views import (
     ChangeNicknameView,
+    ChangeProfileImageView,
     KakaoLogInView,
     KakaoSignUpView,
     RemoveUserView,
-    ValidateNicknameView, ChangeProfileImageView,
+    ValidateNicknameView,
 )
 
 urlpatterns = [
