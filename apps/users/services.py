@@ -42,7 +42,6 @@ class AuthService:
 
 
 class UserService:
-
     def change_profile_image(self, user_id, profile_image):
         user_repository = UserRepository()
         user_repository.change_profile_image(user_id, profile_image)
