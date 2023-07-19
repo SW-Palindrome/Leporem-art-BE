@@ -13,9 +13,9 @@ class Item(TimeStampedModel):
     title = models.CharField(max_length=46)
     description = models.CharField(max_length=255, null=True)
     shorts = models.FileField(upload_to='items/item_shorts/', null=False)
-    width = models.DecimalField(max_digits=6, decimal_places=2, null=False)
-    depth = models.DecimalField(max_digits=6, decimal_places=2, null=False)
-    height = models.DecimalField(max_digits=6, decimal_places=2, null=False)
+    width = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    depth = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    height = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     display_dt = models.DateTimeField(null=True)
 
 

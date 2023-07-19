@@ -2,7 +2,9 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.sellers.repositories import SellerRepository
 from apps.sellers.serializers import (
+    SellerInfoSerializer,
     SellerItemSerializer,
     SellerRegisterSerializer,
     SellerVerifySerializer,
@@ -86,3 +88,13 @@ class SellerItemView(APIView):
                 tags=serializer.validated_data.get('tags', []),
             )
             return Response({'message': 'success'})
+
+
+class SellerMyInfoView(APIView):
+    permission_classes = [IsSeller]
+    serializer_class = SellerInfoSerializer
+
+    def get(self, request):
+        user = SellerRepository().get_seller_info(request.user.user_id)
+        data = self.serializer_class(user).data
+        return Response(data, status=200)

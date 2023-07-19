@@ -9,11 +9,7 @@ from utils.auth.kakao import extract_provider_id
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
 from .permissions import IsStaff
-from .serializers import (
-    ChangeNicknameSerializer,
-    ChangeProfileImageSerializer,
-    UserInfoSerializer,
-)
+from .serializers import ChangeNicknameSerializer, ChangeProfileImageSerializer
 
 
 # Create your views here.
@@ -93,19 +89,6 @@ class ChangeProfileImageView(APIView):
         serializer.is_valid(raise_exception=True)
         user_service.change_profile_image(request.user.user_id, serializer.validated_data['profile_image'])
         return Response({'message': 'success'}, status=200)
-
-
-class UserView(APIView):
-    """사용자 정보 조회 API"""
-
-    permission_classes = [IsAuthenticated]
-    serializer_class = UserInfoSerializer
-
-    def get(self, request):
-        user_service = UserService()
-        user = user_service.get_user_info(request.user.user_id)
-        data = self.serializer_class(user).data
-        return Response(data, status=200)
 
 
 class RemoveUserView(APIView):
