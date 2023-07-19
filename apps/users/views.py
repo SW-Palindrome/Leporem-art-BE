@@ -1,12 +1,19 @@
 from rest_framework import permissions
+from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.users.services import AuthService
+from apps.users.services import AuthService, UserService
 from utils.auth.kakao import extract_provider_id
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
 from .permissions import IsStaff
+from .serializers import (
+    ChangeNicknameSerializer,
+    ChangeProfileImageSerializer,
+    UserInfoSerializer,
+)
 
 
 # Create your views here.
@@ -58,11 +65,54 @@ class ValidateNicknameView(APIView):
         return Response({'message': 'success'}, status=200)
 
 
+class ChangeNicknameView(APIView):
+    """닉네임 변경 API"""
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangeNicknameSerializer
+
+    def patch(self, request):
+        auth_service = AuthService()
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if not auth_service.change_nickname(request.user.user_id, serializer.validated_data['nickname']):
+            return Response({'message': 'change nickname failed'}, status=400)
+        return Response({'message': 'success'}, status=200)
+
+
+class ChangeProfileImageView(APIView):
+    """프로필 이미지 변경 API"""
+
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
+    serializer_class = ChangeProfileImageSerializer
+
+    def patch(self, request):
+        user_service = UserService()
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user_service.change_profile_image(request.user.user_id, serializer.validated_data['profile_image'])
+        return Response({'message': 'success'}, status=200)
+
+
+class UserView(APIView):
+    """사용자 정보 조회 API"""
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserInfoSerializer
+
+    def get(self, request):
+        user_service = UserService()
+        user = user_service.get_user_info(request.user.user_id)
+        data = self.serializer_class(user).data
+        return Response(data, status=200)
+
+
 class RemoveUserView(APIView):
     permission_classes = [IsStaff]
 
     def delete(self, request):
-        auth_service = AuthService()
-        if not auth_service.remove(request.data['nickname'], request.user.user_id):
+        user_service = UserService()
+        if not user_service.remove(request.data['nickname'], request.user.user_id):
             return Response({'message': 'remove user failed'}, status=400)
         return Response({'message': 'success'}, status=200)

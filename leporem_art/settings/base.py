@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'corsheaders',
+    'apps.buyers',
     'apps.users',
     'apps.sellers',
     'apps.items',
@@ -148,3 +149,6 @@ STORAGES = {
         'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
     },
 }
+
+# Payload Max Size
+DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
