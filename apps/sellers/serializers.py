@@ -21,3 +21,10 @@ class SellerItemSerializer(serializers.Serializer):
     thumbnail_image = serializers.ImageField()
     images = serializers.ListField(child=serializers.ImageField(), required=False)
     tags = serializers.ListField(child=serializers.IntegerField(), required=False)
+
+
+class SellerInfoSerializer(serializers.Serializer):
+    nickname = serializers.CharField(max_length=20)
+    profile_image = serializers.CharField(source='user.profile_image.url')
+    item_count = serializers.IntegerField()
+    temperature = serializers.FloatField()
