@@ -1,5 +1,7 @@
 from random import randint
 
+from django.db.models import Count, F
+
 from apps.sellers.models import Seller, VerifyEmail
 from apps.users.models import User
 
@@ -16,3 +18,13 @@ class SellerRepository:
         user.is_seller = True
         user.save()
         return Seller.objects.create(user=user, email=email)
+
+    def get_seller_info(self, seller_id):
+        return (
+            Seller.objects.select_related('user')
+            .annotate(
+                nickname=F('user__nickname'),
+                item_count=Count('items'),
+            )
+            .get(seller_id=seller_id)
+        )
