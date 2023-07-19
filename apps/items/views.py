@@ -16,6 +16,9 @@ class LoadItemListView(APIView):
         try:
             page_number = int(page_number)
             page_obj = paginator.page(page_number)
+
+
+
             try:
                 serializer = ItemListSerializer(page_obj, many=True)
 
