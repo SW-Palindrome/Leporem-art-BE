@@ -1514,6 +1514,19 @@ files = [
 ]
 
 [[package]]
+name = "paginator"
+version = "0.5.1"
+description = "Paginator for SQLAlchemy query object, list or iterable"
+optional = false
+python-versions = "*"
+files = [
+    {file = "Paginator-0.5.1.tar.gz", hash = "sha256:a76e445a5462d3fe02761b0b0ea69780e68d57bd328d1abe00916c31f646690e"},
+]
+
+[package.dependencies]
+six = "*"
+
+[[package]]
 name = "pandocfilters"
 version = "1.5.0"
 description = "Utilities for writing pandoc filters in python"
@@ -2621,4 +2634,4 @@ test = ["websockets"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "1848f64e11410ce1162445a207a36eb29a45d96de80cd89aba80c9c07cdee772"
+content-hash = "094105db0d80a5a45c49b83f93f0ab7aa90ac597e293524c683b5f993cdb349a"
