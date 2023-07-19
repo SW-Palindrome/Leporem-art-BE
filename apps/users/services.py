@@ -49,10 +49,6 @@ class UserService:
         user_repository = UserRepository()
         user_repository.change_profile_image(user_id, profile_image)
 
-    def get_user_info(self, user_id):
-        user_repository = UserRepository()
-        return user_repository.get_user_info(user_id)
-
     def remove(self, user_nickname, staff_id):
         """회원 삭제"""
         user_repository = UserRepository()
