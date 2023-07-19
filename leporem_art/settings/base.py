@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'corsheaders',
+    'apps.buyers',
     'apps.users',
     'apps.sellers',
     'apps.items',
