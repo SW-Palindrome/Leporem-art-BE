@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'apps.buyers',
+    'apps.orders',
     'apps.users',
     'apps.sellers',
     'apps.items',
@@ -134,7 +135,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'apps.users.authentications.OIDCAuthentication',
-    ]
+    ],
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
