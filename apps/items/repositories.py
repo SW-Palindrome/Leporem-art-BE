@@ -1,5 +1,6 @@
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from django.db.models import Count, F
 from django.utils import timezone
 
 from apps.items.models import Item, ItemImage, ItemTagMapping
@@ -102,3 +103,9 @@ class ItemRepository:
             )
 
         return item
+
+    def load_item_list(self):
+        item_info = Item.objects.order_by('-display_dt').annotate(
+            like_count=Count('likes'), nickname=F('seller__user__nickname')
+        )
+        return item_info
