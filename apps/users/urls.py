@@ -7,10 +7,12 @@ from apps.users.views import (
     KakaoLogInView,
     KakaoSignUpView,
     RemoveUserView,
+    UserView,
     ValidateNicknameView,
 )
 
 urlpatterns = [
+    path('', UserView.as_view()),
     path('signup/kakao', KakaoSignUpView.as_view()),
     path('login/kakao', KakaoLogInView.as_view()),
     path('validate/nickname/<str:nickname>', ValidateNicknameView.as_view()),
