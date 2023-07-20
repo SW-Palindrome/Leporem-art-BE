@@ -6,6 +6,8 @@ from datetime import datetime
 import jwt
 from jwt import PyJWKClient
 
+from apps.users.exceptions import ExpiredTokenException
+
 AUDIENCE = '8aeac9bb18f42060a2332885577b8cb9'
 
 
@@ -26,8 +28,10 @@ def validate_id_token(id_token: str) -> bool:
             공개키는 일정 기간 캐싱(Caching)하여 사용할 것을 권장하며, 지나치게 빈번한 요청 시 요청이 차단될 수 있으므로 유의
         4. JWT 서명 검증을 지원하는 라이브러리를 사용해 공개키로 서명 검증
     """
-
-    header, payload, signature = id_token.split('.')
+    try:
+        header, payload, signature = id_token.split('.')
+    except ValueError:
+        return False
     try:
         decoded_payload = json.loads(base64.urlsafe_b64decode(payload + '=' * (-len(payload) % 4)))
     except binascii.Error:
@@ -40,7 +44,7 @@ def validate_id_token(id_token: str) -> bool:
         return False
 
     if decoded_payload['exp'] < int(datetime.now().timestamp()):
-        return False
+        raise ExpiredTokenException
 
     url = 'https://kauth.kakao.com/.well-known/jwks.json'
 
