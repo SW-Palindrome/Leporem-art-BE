@@ -28,12 +28,12 @@ class ItemImage(TimeStampedModel):
 
 class Category(TimeStampedModel):
     category_id = models.AutoField(primary_key=True)
-    category = models.CharField(max_length=10, null=False)
+    category = models.CharField(max_length=10, null=False, unique=True)
 
 
 class Color(TimeStampedModel):
     color_id = models.AutoField(primary_key=True)
-    color = models.CharField(max_length=10, null=False)
+    color = models.CharField(max_length=10, null=False, unique=True)
 
 
 class CategoryMapping(TimeStampedModel):
