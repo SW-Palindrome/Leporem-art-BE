@@ -9,6 +9,7 @@ class Seller(TimeStampedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller')
     email = models.EmailField(max_length=50, unique=True)
     temperature = models.FloatField(null=True)
+    description = models.CharField(max_length=80, null=True)
 
     def __str__(self):
         return f'[Seller {self.seller_id}]: {self.email}'
