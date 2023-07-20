@@ -28,6 +28,7 @@ class SellerMyInfoSerializer(serializers.Serializer):
     profile_image = serializers.CharField(source='user.profile_image.url')
     item_count = serializers.IntegerField()
     temperature = serializers.FloatField()
+    description = serializers.CharField(max_length=80)
 
 
 class SellerInfoSerializer(serializers.Serializer):
@@ -35,3 +36,4 @@ class SellerInfoSerializer(serializers.Serializer):
     profile_image = serializers.CharField(source='user.profile_image.url')
     item_count = serializers.IntegerField()
     temperature = serializers.FloatField()
+    description = serializers.CharField(max_length=80)
