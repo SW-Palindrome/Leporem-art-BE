@@ -1,6 +1,7 @@
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
+from apps.buyers.models import Buyer
 from apps.sellers.models import Seller
 
 
@@ -51,3 +52,4 @@ class ColorMapping(TimeStampedModel):
 class Like(TimeStampedModel):
     like_id = models.AutoField(primary_key=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='likes')
+    buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='likes')
