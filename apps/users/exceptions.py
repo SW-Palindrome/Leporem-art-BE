@@ -4,3 +4,7 @@ class DuplicateNicknameException(Exception):
 
 class DuplicateUserInfoException(Exception):
     """유저 정보 중복 예외"""
+
+
+class ExpiredTokenException(Exception):
+    """토큰 만료 예외"""

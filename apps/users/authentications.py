@@ -2,6 +2,7 @@ from django.conf import settings
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
+from apps.users.exceptions import ExpiredTokenException
 from apps.users.models import User
 from utils.auth.kakao import extract_provider_id as kakao_extract_provider_id
 from utils.auth.kakao import validate_id_token as kakao_validate_id_token
@@ -32,7 +33,12 @@ class OIDCAuthentication(BaseAuthentication):
         if settings.DEBUG and id_token == settings.TEST_ID_TOKEN:
             return User.objects.get(nickname=settings.TEST_STAFF_NICKNAME), None
 
-        if kakao_validate_id_token(id_token):
+        try:
+            is_kakao_id_token = kakao_validate_id_token(id_token)
+        except ExpiredTokenException:
+            raise AuthenticationFailed('Expired token')
+
+        if is_kakao_id_token:
             try:
                 user = User.objects.get(
                     user_oauth_info__provider='KAKAO',
