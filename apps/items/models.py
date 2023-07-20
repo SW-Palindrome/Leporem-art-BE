@@ -26,19 +26,26 @@ class ItemImage(TimeStampedModel):
     image = models.FileField(upload_to='items/item_image/', null=False)
 
 
-class Tag(TimeStampedModel):
-    tag_id = models.AutoField(primary_key=True)
-    category = models.CharField(max_length=10)
-    color = models.CharField(max_length=10)
-
-    class Meta:
-        constraints = (models.UniqueConstraint(fields=['category', 'color'], name='unique together'),)
+class Category(TimeStampedModel):
+    category_id = models.AutoField(primary_key=True)
+    category = models.CharField(max_length=10, null=False)
 
 
-class ItemTagMapping(TimeStampedModel):
-    item_tag_mapping_id = models.AutoField(primary_key=True)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='item_tag_mappings')
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='item_tag_mappings')
+class Color(TimeStampedModel):
+    color_id = models.AutoField(primary_key=True)
+    color = models.CharField(max_length=10, null=False)
+
+
+class CategoryMapping(TimeStampedModel):
+    category_mapping_id = models.AutoField(primary_key=True)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='category_mappings')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_mappings')
+
+
+class ColorMapping(TimeStampedModel):
+    color_mapping_id = models.AutoField(primary_key=True)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='color_mappings')
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='color_mappings')
 
 
 class Like(TimeStampedModel):
