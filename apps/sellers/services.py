@@ -37,7 +37,6 @@ class SellerService:
         height,
         thumbnail_image,
         images,
-        tags,
     ):
         item_repository = ItemRepository()
 
@@ -58,7 +57,6 @@ class SellerService:
             height=height,
             thumbnail_image=thumbnail_image,
             images=images,
-            tags=tags,
         )
 
     def modify_item(
@@ -75,7 +73,6 @@ class SellerService:
         height,
         thumbnail_image,
         images,
-        tags,
     ):
         item_repository = ItemRepository()
 
@@ -97,5 +94,4 @@ class SellerService:
             height=height,
             thumbnail_image=thumbnail_image,
             images=images,
-            tags=tags,
         )
