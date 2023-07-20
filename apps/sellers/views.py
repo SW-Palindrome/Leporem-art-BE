@@ -1,4 +1,5 @@
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -6,6 +7,7 @@ from apps.sellers.repositories import SellerRepository
 from apps.sellers.serializers import (
     SellerInfoSerializer,
     SellerItemSerializer,
+    SellerMyInfoSerializer,
     SellerRegisterSerializer,
     SellerVerifySerializer,
 )
@@ -92,9 +94,20 @@ class SellerItemView(APIView):
 
 class SellerMyInfoView(APIView):
     permission_classes = [IsSeller]
-    serializer_class = SellerInfoSerializer
+    serializer_class = SellerMyInfoSerializer
 
     def get(self, request):
-        user = SellerRepository().get_seller_info(request.user.user_id)
-        data = self.serializer_class(user).data
+        seller = SellerRepository().get_seller_info(request.user.user_id)
+        data = self.serializer_class(seller).data
+        return Response(data, status=200)
+
+
+class SellerInfoView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = SellerInfoSerializer
+
+    def get(self, request, *args, **kwargs):
+        nickname = kwargs['nickname']
+        seller = SellerRepository().get_seller_info_by_nickname(nickname)
+        data = self.serializer_class(seller).data
         return Response(data, status=200)
