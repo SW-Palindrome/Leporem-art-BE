@@ -38,3 +38,8 @@ class SellerRepository:
             )
             .get(user__nickname=nickname)
         )
+
+    def change_description(self, seller_id, description):
+        seller = Seller.objects.get(seller_id=seller_id)
+        seller.description = description
+        seller.save()
