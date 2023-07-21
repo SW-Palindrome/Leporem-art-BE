@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 
 from apps.sellers.repositories import SellerRepository
 from apps.sellers.serializers import (
+    DescriptionSerializer,
     SellerInfoSerializer,
     SellerItemSerializer,
     SellerMyInfoSerializer,
@@ -111,3 +112,18 @@ class SellerInfoView(APIView):
         seller = SellerRepository().get_seller_info_by_nickname(nickname)
         data = self.serializer_class(seller).data
         return Response(data, status=200)
+
+
+class SellerDescriptionView(APIView):
+    permission_classes = [IsSeller]
+    serializer_class = DescriptionSerializer
+
+    def patch(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            seller_service = SellerService()
+            seller_service.change_description(
+                seller_id=request.user.seller.seller_id,
+                description=serializer.validated_data['description'],
+            )
+            return Response({'message': 'success'})
