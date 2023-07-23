@@ -1,3 +1,5 @@
+import enum
+
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
@@ -6,6 +8,12 @@ from apps.items.models import Item
 
 
 class OrderStatus(TimeStampedModel):
+    class Status(enum.Enum):
+        ORDERED = '주문완료'
+        PAYMENT_COMPLETED = '배송중'
+        DELIVERED = '배송완료'
+        CANCELED = '주문취소'
+
     order_status_id = models.AutoField(primary_key=True)
     status = models.CharField(max_length=10)
 

@@ -97,3 +97,6 @@ class ItemRepository:
             like_count=Count('likes'), nickname=F('seller__user__nickname')
         )
         return item_info
+
+    def get_item(self, item_id) -> Item:
+        return Item.objects.get(item_id=item_id)
