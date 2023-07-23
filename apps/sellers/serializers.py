@@ -37,3 +37,7 @@ class SellerInfoSerializer(serializers.Serializer):
     item_count = serializers.IntegerField()
     temperature = serializers.FloatField()
     description = serializers.CharField(max_length=80)
+
+
+class DescriptionSerializer(serializers.Serializer):
+    description = serializers.CharField(max_length=255)

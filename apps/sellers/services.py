@@ -95,3 +95,7 @@ class SellerService:
             thumbnail_image=thumbnail_image,
             images=images,
         )
+
+    def change_description(self, seller_id, description):
+        seller_repository = SellerRepository()
+        seller_repository.change_description(seller_id=seller_id, description=description)
