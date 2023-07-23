@@ -21,3 +21,14 @@ class OrderRepository:
         )
         item.current_amount -= 1
         item.save()
+
+    @transaction.atomic
+    def start_delivery(self, order_id):
+        order = Order.objects.get(order_id=order_id)
+        order_status = OrderStatus.objects.get(status=OrderStatus.Status.DELIVERY_STARTED.value)
+        order.order_status = order_status
+        order.save()
+        OrderHistory.objects.create(
+            order=order,
+            order_status=order_status,
+        )
