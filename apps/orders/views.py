@@ -7,7 +7,7 @@ from apps.orders.repositories import OrderRepository
 from apps.orders.serializers import OrderSerializer
 
 
-class OrderView(APIView):
+class OrderRegisterView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = OrderSerializer
 
