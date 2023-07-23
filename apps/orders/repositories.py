@@ -32,3 +32,14 @@ class OrderRepository:
             order=order,
             order_status=order_status,
         )
+
+    @transaction.atomic
+    def complete_delivery(self, order_id):
+        order = Order.objects.get(order_id=order_id)
+        order_status = OrderStatus.objects.get(status=OrderStatus.Status.DELIVERED.value)
+        order.order_status = order_status
+        order.save()
+        OrderHistory.objects.create(
+            order=order,
+            order_status=order_status,
+        )
