@@ -26,6 +26,9 @@ class Order(TimeStampedModel):
     price = models.IntegerField()
     ordered_datetime = models.DateTimeField()
 
+    def get_order_status_display(self):
+        return self.order_status.status
+
 
 class OrderHistory(TimeStampedModel):
     order_history_id = models.AutoField(primary_key=True)

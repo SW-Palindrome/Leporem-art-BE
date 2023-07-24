@@ -62,3 +62,9 @@ class OrderRepository:
         item = order.item
         item.current_amount += 1
         item.save()
+
+    def get_order_list_by_seller(self, seller_id):
+        return Order.objects.filter(item__seller_id=seller_id).select_related('item', 'buyer__user', 'order_status')
+
+    def get_order_list_by_buyer(self, buyer_id):
+        return Order.objects.filter(buyer_id=buyer_id).select_related('item', 'order_status')

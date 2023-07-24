@@ -41,3 +41,14 @@ class SellerInfoSerializer(serializers.Serializer):
 
 class DescriptionSerializer(serializers.Serializer):
     description = serializers.CharField(max_length=255)
+
+
+class SellerMyOrderSerializer(serializers.Serializer):
+    order_id = serializers.IntegerField()
+    item_id = serializers.IntegerField()
+    item_title = serializers.CharField(source='item.title')
+    item_thumbnail_image = serializers.CharField(source='item.thumbnail_image.image.url')
+    price = serializers.IntegerField()
+    ordered_datetime = serializers.DateTimeField()
+    order_status = serializers.CharField(source='get_order_status_display')
+    buyer = serializers.CharField(source='buyer.user.nickname')
