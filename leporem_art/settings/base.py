@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.sellers',
     'apps.items',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +136,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'apps.users.authentications.OIDCAuthentication',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
     ],
 }
 
