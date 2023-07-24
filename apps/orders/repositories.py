@@ -23,7 +23,7 @@ class OrderRepository:
         item.save()
 
     def get_order(self, order_id):
-        return Order.objects.get(order_id=order_id).select_related('item')
+        return Order.objects.get(order_id=order_id)
 
     @transaction.atomic
     def start_delivery(self, order_id):
