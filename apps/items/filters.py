@@ -8,8 +8,8 @@ from django.db.models import Q
 class ItemFilter(django_filters.FilterSet):
     ordering = django_filters.OrderingFilter(
         fields=(
-            ('-created', 'created'),
-            ('-like_count', 'like_count'),
+            ('-display_dt', 'recent'),
+            ('-like_count', 'likes'),
             ('price', 'price_low'),
             ('-price', 'price_high'),
         )
