@@ -92,11 +92,14 @@ class ItemRepository:
 
         return item
 
-    def load_item_list(self):
-        item_info = Item.objects.order_by('-display_dt').annotate(
-            like_count=Count('likes'), nickname=F('seller__user__nickname')
-        )
-        return item_info
-
     def get_item(self, item_id) -> Item:
         return Item.objects.get(item_id=item_id)
+
+    def filter_item(self):
+        search_item = Item.objects.order_by('-display_dt').annotate(
+            nickname=F('seller__user__nickname'),
+            category=F('category_mappings__category__category'),
+            color=F('color_mappings__color'),
+            like_count=Count('likes'),
+        )
+        return search_item
