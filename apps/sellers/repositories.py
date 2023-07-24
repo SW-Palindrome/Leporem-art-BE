@@ -28,3 +28,18 @@ class SellerRepository:
             )
             .get(seller_id=seller_id)
         )
+
+    def get_seller_info_by_nickname(self, nickname):
+        return (
+            Seller.objects.select_related('user')
+            .annotate(
+                nickname=F('user__nickname'),
+                item_count=Count('items'),
+            )
+            .get(user__nickname=nickname)
+        )
+
+    def change_description(self, seller_id, description):
+        seller = Seller.objects.get(seller_id=seller_id)
+        seller.description = description
+        seller.save()

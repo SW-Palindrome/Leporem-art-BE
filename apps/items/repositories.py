@@ -98,6 +98,9 @@ class ItemRepository:
         )
         return item_info
 
+    def get_item(self, item_id) -> Item:
+        return Item.objects.get(item_id=item_id)
+
     def filter_item(self):
         search_item = Item.objects.annotate(
             nickname=F('seller__user__nickname'),

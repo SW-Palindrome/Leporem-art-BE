@@ -1,11 +1,18 @@
+from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.orders.repositories import OrderRepository
+from apps.sellers.filters import SellerMyOrderFilterBackend
 from apps.sellers.repositories import SellerRepository
 from apps.sellers.serializers import (
+    DescriptionSerializer,
     SellerInfoSerializer,
     SellerItemSerializer,
+    SellerMyInfoSerializer,
+    SellerMyOrderSerializer,
     SellerRegisterSerializer,
     SellerVerifySerializer,
 )
@@ -92,9 +99,50 @@ class SellerItemView(APIView):
 
 class SellerMyInfoView(APIView):
     permission_classes = [IsSeller]
-    serializer_class = SellerInfoSerializer
+    serializer_class = SellerMyInfoSerializer
 
     def get(self, request):
-        user = SellerRepository().get_seller_info(request.user.user_id)
-        data = self.serializer_class(user).data
+        seller = SellerRepository().get_seller_info(request.user.user_id)
+        data = self.serializer_class(seller).data
         return Response(data, status=200)
+
+
+class SellerInfoView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = SellerInfoSerializer
+
+    def get(self, request, *args, **kwargs):
+        nickname = kwargs['nickname']
+        seller = SellerRepository().get_seller_info_by_nickname(nickname)
+        data = self.serializer_class(seller).data
+        return Response(data, status=200)
+
+
+class SellerDescriptionView(APIView):
+    permission_classes = [IsSeller]
+    serializer_class = DescriptionSerializer
+
+    def patch(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            seller_service = SellerService()
+            seller_service.change_description(
+                seller_id=request.user.seller.seller_id,
+                description=serializer.validated_data['description'],
+            )
+            return Response({'message': 'success'})
+
+
+class SellerMyOrderView(GenericAPIView):
+    permission_classes = [IsSeller]
+    serializer_class = SellerMyOrderSerializer
+    filterset_class = SellerMyOrderFilterBackend
+
+    def get(self, request):
+        orders = self.filter_queryset(self.get_queryset())
+        orders_data = self.serializer_class(orders, many=True).data
+        return Response(orders_data, status=200)
+
+    def get_queryset(self):
+        order_repository = OrderRepository()
+        return order_repository.get_order_list_by_seller(self.request.user.seller.seller_id)
