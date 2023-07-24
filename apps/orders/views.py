@@ -45,3 +45,15 @@ class OrderDeliveryCompleteView(APIView):
         except OrderException as e:
             return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
         return Response(status=HTTP_201_CREATED)
+
+
+class OrderCancelView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, order_id):
+        order_service = OrderService()
+        try:
+            order_service.cancel(request.user.buyer.buyer_id, order_id)
+        except OrderException as e:
+            return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
+        return Response(status=HTTP_201_CREATED)
