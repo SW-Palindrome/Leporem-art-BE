@@ -33,7 +33,7 @@ class ItemFilter(django_filters.FilterSet):
         return queryset
 
     class Meta:
-        fields = ('ordering', 'price', 'category', 'search')
+        fields = ('ordering', 'price', 'nickname', 'category', 'search')
 
     def __init__(self, *args, **kwargs):
         super(ItemFilter, self).__init__(*args, **kwargs)
