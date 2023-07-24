@@ -24,6 +24,7 @@ class Order(TimeStampedModel):
     item = models.ForeignKey(Item, on_delete=models.PROTECT)
     order_status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT)
     price = models.IntegerField()
+    ordered_datetime = models.DateTimeField()
 
 
 class OrderHistory(TimeStampedModel):

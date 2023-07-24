@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.utils import timezone
 
 from apps.items.models import Item
 from apps.orders.models import Order, OrderHistory, OrderStatus
@@ -14,6 +15,7 @@ class OrderRepository:
             item=item,
             order_status=order_status,
             price=item.price,
+            ordered_datetime=timezone.now(),
         )
         OrderHistory.objects.create(
             order=order,
