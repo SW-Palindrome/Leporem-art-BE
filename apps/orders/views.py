@@ -21,3 +21,27 @@ class OrderRegisterView(APIView):
         except OrderException as e:
             return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
         return Response(status=HTTP_201_CREATED)
+
+
+class OrderDeliveryStartView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, order_id):
+        order_service = OrderService()
+        try:
+            order_service.start_delivery(request.user.seller.seller_id, order_id)
+        except OrderException as e:
+            return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
+        return Response(status=HTTP_201_CREATED)
+
+
+class OrderDeliveryCompleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, order_id):
+        order_service = OrderService()
+        try:
+            order_service.complete_delivery(request.user.seller.seller_id, order_id)
+        except OrderException as e:
+            return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
+        return Response(status=HTTP_201_CREATED)
