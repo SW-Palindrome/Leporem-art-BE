@@ -10,7 +10,7 @@ from apps.items.models import Item
 class OrderStatus(TimeStampedModel):
     class Status(enum.Enum):
         ORDERED = '주문완료'
-        PAYMENT_COMPLETED = '배송중'
+        DELIVERY_STARTED = '배송중'
         DELIVERED = '배송완료'
         CANCELED = '주문취소'
 
