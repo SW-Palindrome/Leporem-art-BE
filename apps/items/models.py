@@ -19,6 +19,10 @@ class Item(TimeStampedModel):
     height = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     display_dt = models.DateTimeField(null=True)
 
+    @property
+    def thumbnail_image(self):
+        return self.item_images.get(is_thumbnail=True)
+
 
 class ItemImage(TimeStampedModel):
     item_image_id = models.AutoField(primary_key=True)
