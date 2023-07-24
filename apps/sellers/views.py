@@ -1,9 +1,11 @@
+from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.orders.repositories import OrderRepository
+from apps.sellers.filters import SellerMyOrderFilterBackend
 from apps.sellers.repositories import SellerRepository
 from apps.sellers.serializers import (
     DescriptionSerializer,
@@ -131,12 +133,16 @@ class SellerDescriptionView(APIView):
             return Response({'message': 'success'})
 
 
-class SellerMyOrderView(APIView):
+class SellerMyOrderView(GenericAPIView):
     permission_classes = [IsSeller]
     serializer_class = SellerMyOrderSerializer
+    filterset_class = SellerMyOrderFilterBackend
 
     def get(self, request):
-        order_repository = OrderRepository()
-        orders = order_repository.get_order_list_by_seller(request.user.seller.seller_id)
+        orders = self.filter_queryset(self.get_queryset())
         orders_data = self.serializer_class(orders, many=True).data
         return Response(orders_data, status=200)
+
+    def get_queryset(self):
+        order_repository = OrderRepository()
+        return order_repository.get_order_list_by_seller(self.request.user.seller.seller_id)
