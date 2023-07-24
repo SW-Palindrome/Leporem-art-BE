@@ -1,5 +1,5 @@
 from django.urls import path
 
-from apps.items.views import FilterItemView, LoadItemListView
+from apps.items.views import FilterItemView
 
-urlpatterns = [path('buyers/main', LoadItemListView.as_view()), path('filter', FilterItemView.as_view())]
+urlpatterns = [path('filter', FilterItemView.as_view())]
