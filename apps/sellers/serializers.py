@@ -51,3 +51,4 @@ class SellerMyOrderSerializer(serializers.Serializer):
     price = serializers.IntegerField()
     ordered_datetime = serializers.DateTimeField()
     order_status = serializers.CharField(source='get_order_status_display')
+    buyer = serializers.CharField(source='buyer.user.nickname')
