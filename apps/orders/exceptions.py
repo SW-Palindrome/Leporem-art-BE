@@ -12,3 +12,7 @@ class SelfOrderException(OrderException):
 
 class InvalidOrderStatusException(OrderException):
     """주문 상태 오류"""
+
+
+class OrderPermissionException(OrderException):
+    """주문 품목에 대한 권한 오류"""

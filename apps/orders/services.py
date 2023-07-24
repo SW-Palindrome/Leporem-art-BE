@@ -3,6 +3,7 @@ from apps.items.repositories import ItemRepository
 from apps.orders.exceptions import (
     InvalidOrderStatusException,
     NotEnoughProductException,
+    OrderPermissionException,
     SelfOrderException,
 )
 from apps.orders.models import OrderStatus
@@ -22,22 +23,34 @@ class OrderService:
 
         return OrderRepository().order(buyer_id, item_id)
 
-    def start_delivery(self, order_id):
+    def start_delivery(self, seller_id, order_id):
         order = OrderRepository().get_order(order_id)
+
+        if order.item.seller_id != seller_id:
+            raise OrderPermissionException('판매자가 아닙니다.')
+
         if order.order_status.status != OrderStatus.Status.ORDERED.value:
             raise InvalidOrderStatusException('주문 완료 상태에서만 배송이 가능합니다.')
 
         return OrderRepository().start_delivery(order_id)
 
-    def complete_delivery(self, order_id):
+    def complete_delivery(self, seller_id, order_id):
         order = OrderRepository().get_order(order_id)
+
+        if order.item.seller_id != seller_id:
+            raise OrderPermissionException('판매자가 아닙니다.')
+
         if order.order_status.status != OrderStatus.Status.DELIVERY_STARTED.value:
             raise InvalidOrderStatusException('배송중 상태에서만 배송 완료가 가능합니다.')
 
         return OrderRepository().complete_delivery(order_id)
 
-    def cancel(self, order_id):
+    def cancel(self, user_id, order_id):
         order = OrderRepository().get_order(order_id)
+
+        if order.item.seller.user_id != user_id and order.buyer.user_id != user_id:
+            raise OrderPermissionException('판매자 혹은 구매자가 아닙니다.')
+
         if order.order_status.status not in [
             OrderStatus.Status.ORDERED.value,
             OrderStatus.Status.DELIVERY_STARTED.value,
