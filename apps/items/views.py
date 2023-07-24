@@ -39,8 +39,20 @@ class FilterItemView(APIView):
         items = item_repository.filter_item()
 
         page_number = request.GET.get('page', 1)
-        keywords = request.GET.get('keyword')
-        filtered_items = ItemFilter(keywords, queryset=items)
+        ordering = request.GET.get('ordering')
+        price = request.GET.get('price')
+        category = request.GET.get('category')
+        nickname = request.GET.get('nickname')
+        search = request.GET.get('search')
+        get_params = {
+            'ordering': ordering,
+            'price': price,
+            'category': category,
+            'nickname': nickname,
+            'search': search,
+        }
+
+        filtered_items = ItemFilter(get_params, queryset=items)
 
         paginator = Paginator(filtered_items.qs, 20)
 
