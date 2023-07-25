@@ -14,13 +14,16 @@ class FilterItemView(APIView):
 
         page_number = request.GET.get('page', 1)
         ordering = request.GET.get('ordering')
-        price = request.GET.get('price')
         category = request.GET.get('category')
         nickname = request.GET.get('nickname')
         search = request.GET.get('search')
+        price = request.GET.get('price')
+        price_min, price_max = price.split(',')
+
         get_params = {
             'ordering': ordering,
-            'price': price,
+            'price_min': price_min,
+            'price_max': price_max,
             'category': category,
             'nickname': nickname,
             'search': search,
