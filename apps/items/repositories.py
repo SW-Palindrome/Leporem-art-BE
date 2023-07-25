@@ -3,7 +3,7 @@ from django.db import transaction
 from django.db.models import Count, F
 from django.utils import timezone
 
-from apps.items.models import Item, ItemImage, ItemTagMapping
+from apps.items.models import Item, ItemImage
 from apps.sellers.models import Seller
 
 
@@ -22,7 +22,6 @@ class ItemRepository:
         height,
         thumbnail_image,
         images,
-        tags,
     ):
         seller = Seller.objects.get(seller_id=seller_id)
         item = Item.objects.create(
@@ -48,11 +47,6 @@ class ItemRepository:
                 item=item,
                 image=image,
             )
-        for tag in tags:
-            ItemTagMapping.objects.create(
-                item=item,
-                tag=tag,
-            )
         return item
 
     @transaction.atomic
@@ -70,7 +64,6 @@ class ItemRepository:
         height,
         thumbnail_image,
         images,
-        tags,
     ):
         try:
             item = Seller.objects.get(seller_id=seller_id).items.get(item_id=item_id)
@@ -96,16 +89,17 @@ class ItemRepository:
                 item=item,
                 image=image,
             )
-        for tag in tags:
-            ItemTagMapping.objects.create(
-                item=item,
-                tag=tag,
-            )
 
         return item
 
-    def load_item_list(self):
-        item_info = Item.objects.order_by('-display_dt').annotate(
-            like_count=Count('likes'), nickname=F('seller__user__nickname')
+    def get_item(self, item_id) -> Item:
+        return Item.objects.get(item_id=item_id)
+
+    def filter_item(self):
+        search_item = Item.objects.order_by('-display_dt').annotate(
+            nickname=F('seller__user__nickname'),
+            category=F('category_mappings__category__category'),
+            color=F('color_mappings__color'),
+            like_count=Count('likes'),
         )
-        return item_info
+        return search_item

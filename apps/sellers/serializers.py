@@ -23,8 +23,32 @@ class SellerItemSerializer(serializers.Serializer):
     tags = serializers.ListField(child=serializers.IntegerField(), required=False)
 
 
+class SellerMyInfoSerializer(serializers.Serializer):
+    nickname = serializers.CharField(max_length=20)
+    profile_image = serializers.CharField(source='user.profile_image.url')
+    item_count = serializers.IntegerField()
+    temperature = serializers.FloatField()
+    description = serializers.CharField(max_length=80)
+
+
 class SellerInfoSerializer(serializers.Serializer):
     nickname = serializers.CharField(max_length=20)
     profile_image = serializers.CharField(source='user.profile_image.url')
     item_count = serializers.IntegerField()
     temperature = serializers.FloatField()
+    description = serializers.CharField(max_length=80)
+
+
+class DescriptionSerializer(serializers.Serializer):
+    description = serializers.CharField(max_length=255)
+
+
+class SellerMyOrderSerializer(serializers.Serializer):
+    order_id = serializers.IntegerField()
+    item_id = serializers.IntegerField()
+    item_title = serializers.CharField(source='item.title')
+    item_thumbnail_image = serializers.CharField(source='item.thumbnail_image.image.url')
+    price = serializers.IntegerField()
+    ordered_datetime = serializers.DateTimeField()
+    order_status = serializers.CharField(source='get_order_status_display')
+    buyer = serializers.CharField(source='buyer.user.nickname')

@@ -1,6 +1,7 @@
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
+from apps.buyers.models import Buyer
 from apps.sellers.models import Seller
 
 
@@ -18,6 +19,10 @@ class Item(TimeStampedModel):
     height = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     display_dt = models.DateTimeField(null=True)
 
+    @property
+    def thumbnail_image(self):
+        return self.item_images.get(is_thumbnail=True)
+
 
 class ItemImage(TimeStampedModel):
     item_image_id = models.AutoField(primary_key=True)
@@ -26,21 +31,29 @@ class ItemImage(TimeStampedModel):
     image = models.FileField(upload_to='items/item_image/', null=False)
 
 
-class Tag(TimeStampedModel):
-    tag_id = models.AutoField(primary_key=True)
-    category = models.CharField(max_length=10)
-    color = models.CharField(max_length=10)
-
-    class Meta:
-        constraints = (models.UniqueConstraint(fields=['category', 'color'], name='unique together'),)
+class Category(TimeStampedModel):
+    category_id = models.AutoField(primary_key=True)
+    category = models.CharField(max_length=10, null=False, unique=True)
 
 
-class ItemTagMapping(TimeStampedModel):
-    item_tag_mapping_id = models.AutoField(primary_key=True)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='item_tag_mappings')
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='item_tag_mappings')
+class Color(TimeStampedModel):
+    color_id = models.AutoField(primary_key=True)
+    color = models.CharField(max_length=10, null=False, unique=True)
+
+
+class CategoryMapping(TimeStampedModel):
+    category_mapping_id = models.AutoField(primary_key=True)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='category_mappings')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_mappings')
+
+
+class ColorMapping(TimeStampedModel):
+    color_mapping_id = models.AutoField(primary_key=True)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='color_mappings')
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='color_mappings')
 
 
 class Like(TimeStampedModel):
     like_id = models.AutoField(primary_key=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='likes')
+    buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='likes')
