@@ -21,7 +21,6 @@ def get_images(item):
 
 class BuyerDetailedItemSerializer(serializers.Serializer):
     item_id = serializers.IntegerField()
-    buyer_id = serializers.CharField()
     nickname = serializers.CharField()
     title = serializers.CharField()
     description = serializers.CharField()
