@@ -121,3 +121,13 @@ class ItemRepository:
             buyer_id=Subquery(like_subquery.values('buyer_id')[:1]),
         ).filter(item_id=item_id)
         return detailed_item
+
+    def get_like(self, item_id, buyer_id):
+        isliked = Like.objects.filter(item_id=item_id, buyer_id=buyer_id)
+        return isliked
+
+    def post_like(self, item_id, buyer_id):
+        Like.objects.create(item_id=item_id, buyer_id=buyer_id)
+
+    def delete_like(self, item_id, buyer_id):
+        Like.objects.filter(item_id=item_id, buyer_id=buyer_id).delete()
