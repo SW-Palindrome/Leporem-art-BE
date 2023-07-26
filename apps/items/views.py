@@ -60,7 +60,7 @@ class FilterItemView(APIView):
 class BuyerItemView(APIView):
     def get(self, request):
         item_id = request.GET.get('item_id')
-        buyer_id = request.GET.get('buyer_id')
+        buyer_id = request.user.buyer.buyer_id
 
         try:
             item_service = ItemService()
