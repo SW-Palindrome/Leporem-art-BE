@@ -77,8 +77,7 @@ class BuyerItemView(APIView):
 class LikeItemView(APIView):
     def get(self, request):
         item_id = request.GET.get('item_id')
-        # buyer_id = request.user.buyer.buyer_id
-        buyer_id = request.GET.get('buyer_id')
+        buyer_id = request.user.buyer.buyer_id
         like_service = LikeService()
         if like_service.check_like(item_id, buyer_id):
             return Response({"message": "success"}, status=200)
@@ -86,8 +85,7 @@ class LikeItemView(APIView):
 
     def post(self, request):
         item_id = request.GET.get('item_id')
-        # buyer_id = request.user.buyer.buyer_id
-        buyer_id = request.GET.get('buyer_id')
+        buyer_id = request.user.buyer.buyer_id
         like_service = LikeService()
         if like_service.on_like(item_id, buyer_id):
             return Response({"message": "success"}, status=200)
@@ -95,8 +93,7 @@ class LikeItemView(APIView):
 
     def delete(self, request):
         item_id = request.GET.get('item_id')
-        # buyer_id = request.user.buyer.buyer_id
-        buyer_id = request.GET.get('buyer_id')
+        buyer_id = request.user.buyer.buyer_id
         like_service = LikeService()
         if like_service.off_like(item_id, buyer_id):
             return Response({"message": "success"}, status=200)
