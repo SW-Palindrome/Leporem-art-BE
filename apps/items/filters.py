@@ -15,13 +15,12 @@ class ItemFilter(django_filters.FilterSet):
         )
     )
     price = django_filters.RangeFilter()
-    category = django_filters.CharFilter(method='multivalue_filter')
+    category = django_filters.CharFilter(method='category_filter')
     nickname = django_filters.CharFilter()
     search = django_filters.CharFilter(method='search_filter')
 
-    def multivalue_filter(self, queryset, name, value):
-        lookup = {f'{name}__in': value.split(",")}
-        queryset = queryset.filter(**lookup)
+    def category_filter(self, queryset, name, value):
+        queryset = queryset.filter(category_mappings__category__category__in=value.split(','))
         return queryset
 
     def search_filter(self, queryset, name, value):
