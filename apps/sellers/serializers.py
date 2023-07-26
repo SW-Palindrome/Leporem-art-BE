@@ -20,6 +20,8 @@ class SellerItemSerializer(serializers.Serializer):
     height = serializers.DecimalField(max_digits=6, decimal_places=2)
     thumbnail_image = serializers.ImageField()
     images = serializers.ListField(child=serializers.ImageField(), required=False)
+    categories = serializers.ListField(child=serializers.IntegerField(), required=False)
+    colors = serializers.ListField(child=serializers.IntegerField(), required=False)
 
 
 class SellerMyInfoSerializer(serializers.Serializer):
