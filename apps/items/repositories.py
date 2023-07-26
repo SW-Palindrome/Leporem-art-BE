@@ -108,8 +108,6 @@ class ItemRepository:
     def filter_item(self):
         search_item = Item.objects.order_by('-display_dt').annotate(
             nickname=F('seller__user__nickname'),
-            category=F('category_mappings__category__category'),
-            color=F('color_mappings__color'),
             like_count=Count('likes'),
         )
         return search_item
