@@ -115,6 +115,7 @@ class ItemRepository:
         return search_item
 
     def item_detail(self, item_id, buyer_id):
+        '''buyer가 item에 대한 좋아요 여부 판단하기 위한 Like model의 item_id와 buyer_id'''
         like_subquery = Like.objects.filter(item_id=item_id, buyer_id=buyer_id)
         detailed_item = Item.objects.annotate(
             nickname=F('seller__user__nickname'),
