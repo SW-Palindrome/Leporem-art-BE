@@ -8,4 +8,7 @@ class ItemService:
 
     def buyer_detailed_item(self, item_id, buyer_id):
         item_repository = ItemRepository()
-        return item_repository.item_detail(item_id, buyer_id)
+        detailed_item = item_repository.item_detail(item_id, buyer_id)
+        if not detailed_item:
+            return None
+        return detailed_item

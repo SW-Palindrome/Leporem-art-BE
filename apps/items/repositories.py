@@ -117,7 +117,6 @@ class ItemRepository:
         like_subquery = Like.objects.filter(item_id=item_id, buyer_id=buyer_id)
         detailed_item = Item.objects.annotate(
             nickname=F('seller__user__nickname'),
-            category=F('category_mappings__category__category'),
             temperature=F('seller__temperature'),
             buyer_id=Subquery(like_subquery.values('buyer_id')[:1]),
         ).filter(item_id=item_id)
