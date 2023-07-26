@@ -71,7 +71,8 @@ class SellerItemView(APIView):
                 height=serializer.validated_data['height'],
                 thumbnail_image=serializer.validated_data['thumbnail_image'],
                 images=serializer.validated_data.get('images', []),
-                tags=serializer.validated_data.get('tags', []),
+                categories=serializer.validated_data.get('categories', []),
+                colors=serializer.validated_data.get('colors', []),
             )
             return Response({'message': 'success'})
 
