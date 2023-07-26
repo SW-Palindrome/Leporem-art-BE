@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from apps.items.filters import ItemFilter
 from apps.items.serializers import BuyerDetailedItemSerializer, ItemListSerializer
-from apps.items.services import ItemService
+from apps.items.services import ItemService, LikeService
 
 
 class FilterItemView(APIView):
@@ -46,15 +46,15 @@ class FilterItemView(APIView):
                 serializer = ItemListSerializer(page_obj, many=True)
 
                 return Response(
-                    {'items': serializer.data},
+                    {"items": serializer.data},
                     status=200,
                 )
             except Exception as e:
                 return Response({"error": str(e)}, status=500)
         except PageNotAnInteger:
-            return Response({'message': 'PageNotAnInteger'}, status=400)
+            return Response({"message": "PageNotAnInteger"}, status=400)
         except EmptyPage:
-            return Response({'message': 'EmptyPage'}, status=400)
+            return Response({"message": "EmptyPage"}, status=400)
 
 
 class BuyerItemView(APIView):
@@ -67,8 +67,37 @@ class BuyerItemView(APIView):
             item = item_service.buyer_detailed_item(item_id, buyer_id)
             try:
                 serializer = BuyerDetailedItemSerializer(item, many=True)
-                return Response({'item': serializer.data}, status=200)
+                return Response({"item": serializer.data}, status=200)
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
         except ObjectDoesNotExist:
-            return Response({'message': 'ObjectDoesNotExist'}, status=404)
+            return Response({"message": "ObjectDoesNotExist"}, status=404)
+
+
+class LikeItemView(APIView):
+    def get(self, request):
+        item_id = request.GET.get('item_id')
+        # buyer_id = request.user.buyer.buyer_id
+        buyer_id = request.GET.get('buyer_id')
+        like_service = LikeService()
+        if like_service.check_like(item_id, buyer_id):
+            return Response({"message": "success"}, status=200)
+        return Response({"message": "ObjectDoesNotExist"}, status=404)
+
+    def post(self, request):
+        item_id = request.GET.get('item_id')
+        # buyer_id = request.user.buyer.buyer_id
+        buyer_id = request.GET.get('buyer_id')
+        like_service = LikeService()
+        if like_service.on_like(item_id, buyer_id):
+            return Response({"message": "success"}, status=200)
+        return Response({"message": "set like failed"}, status=400)
+
+    def delete(self, request):
+        item_id = request.GET.get('item_id')
+        # buyer_id = request.user.buyer.buyer_id
+        buyer_id = request.GET.get('buyer_id')
+        like_service = LikeService()
+        if like_service.off_like(item_id, buyer_id):
+            return Response({"message": "success"}, status=200)
+        return Response({"message": "remove like failed"}, status=400)
