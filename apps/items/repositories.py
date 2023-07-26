@@ -1,9 +1,9 @@
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import Count, F
+from django.db.models import Count, F, Subquery
 from django.utils import timezone
 
-from apps.items.models import Item, ItemImage
+from apps.items.models import Item, ItemImage, Like
 from apps.sellers.models import Seller
 
 
@@ -113,3 +113,13 @@ class ItemRepository:
             like_count=Count('likes'),
         )
         return search_item
+
+    def item_detail(self, item_id, buyer_id):
+        like_subquery = Like.objects.filter(item_id=item_id, buyer_id=buyer_id)
+        detailed_item = Item.objects.annotate(
+            nickname=F('seller__user__nickname'),
+            category=F('category_mappings__category__category'),
+            temperature=F('seller__temperature'),
+            buyer_id=Subquery(like_subquery.values('buyer_id')[:1]),
+        ).filter(item_id=item_id)
+        return detailed_item
