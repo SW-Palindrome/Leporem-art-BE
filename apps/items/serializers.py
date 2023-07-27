@@ -28,6 +28,7 @@ def get_category(item):
 class BuyerDetailedItemSerializer(serializers.Serializer):
     item_id = serializers.IntegerField()
     nickname = serializers.CharField()
+    profile_image = serializers.CharField(source='seller.user.profile_image.url')
     title = serializers.CharField()
     description = serializers.CharField()
     price = serializers.IntegerField()

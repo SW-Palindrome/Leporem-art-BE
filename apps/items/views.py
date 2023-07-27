@@ -67,8 +67,8 @@ class BuyerItemView(APIView):
             item_service = ItemService()
             item = item_service.buyer_detailed_item(item_id, buyer_id)
             try:
-                serializer = BuyerDetailedItemSerializer(item, many=True)
-                return Response({"item": serializer.data}, status=200)
+                serializer = BuyerDetailedItemSerializer(item)
+                return Response({"detail": serializer.data}, status=200)
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
         except ObjectDoesNotExist:

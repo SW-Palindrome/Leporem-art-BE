@@ -8,7 +8,7 @@ class Seller(TimeStampedModel):
     seller_id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller')
     email = models.EmailField(max_length=50, unique=True)
-    temperature = models.FloatField(null=True)
+    temperature = models.FloatField(null=True, default=0)
     description = models.CharField(max_length=80, null=True)
 
     def __str__(self):
