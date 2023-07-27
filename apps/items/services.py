@@ -12,3 +12,25 @@ class ItemService:
         if not detailed_item:
             return None
         return detailed_item
+
+
+class LikeService:
+    def check_like(self, item_id, buyer_id):
+        item_repository = ItemRepository()
+        if item_repository.get_like(item_id, buyer_id):
+            return True
+        return False
+
+    def on_like(self, item_id, buyer_id):
+        item_repository = ItemRepository()
+        if not self.check_like(item_id, buyer_id):
+            item_repository.post_like(item_id, buyer_id)
+            return True
+        return False
+
+    def off_like(self, item_id, buyer_id):
+        item_repository = ItemRepository()
+        if self.check_like(item_id, buyer_id):
+            item_repository.delete_like(item_id, buyer_id)
+            return True
+        return False
