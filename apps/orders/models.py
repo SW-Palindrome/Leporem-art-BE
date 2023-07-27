@@ -1,5 +1,6 @@
 import enum
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
@@ -34,3 +35,10 @@ class OrderHistory(TimeStampedModel):
     order_history_id = models.AutoField(primary_key=True)
     order = models.ForeignKey(Order, on_delete=models.PROTECT)
     order_status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT)
+
+
+class Review(TimeStampedModel):
+    review_id = models.AutoField(primary_key=True)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='review')
+    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    comment = models.CharField(max_length=255)
