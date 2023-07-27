@@ -123,8 +123,8 @@ class ItemRepository:
         return detailed_item
 
     def get_like(self, item_id, buyer_id):
-        isliked = Like.objects.filter(item_id=item_id, buyer_id=buyer_id)
-        return isliked
+        is_liked = Like.objects.filter(item_id=item_id, buyer_id=buyer_id)
+        return is_liked
 
     def post_like(self, item_id, buyer_id):
         Like.objects.create(item_id=item_id, buyer_id=buyer_id)
