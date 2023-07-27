@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -75,6 +76,8 @@ class BuyerItemView(APIView):
 
 
 class LikeItemView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         item_id = request.GET.get('item_id')
         buyer_id = request.user.buyer.buyer_id
@@ -84,7 +87,7 @@ class LikeItemView(APIView):
         return Response({"message": "ObjectDoesNotExist"}, status=404)
 
     def post(self, request):
-        item_id = request.GET.get('item_id')
+        item_id = request.data.get('item_id')
         buyer_id = request.user.buyer.buyer_id
         like_service = LikeService()
         if like_service.on_like(item_id, buyer_id):
@@ -92,7 +95,7 @@ class LikeItemView(APIView):
         return Response({"message": "set like failed"}, status=400)
 
     def delete(self, request):
-        item_id = request.GET.get('item_id')
+        item_id = request.data.get('item_id')
         buyer_id = request.user.buyer.buyer_id
         like_service = LikeService()
         if like_service.off_like(item_id, buyer_id):
