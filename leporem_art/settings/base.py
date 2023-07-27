@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'apps.buyers',
+    'apps.chats',
     'apps.orders',
     'apps.users',
     'apps.sellers',
