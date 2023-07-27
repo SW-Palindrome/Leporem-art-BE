@@ -22,4 +22,5 @@ urlpatterns = [
     path('items/', include('apps.items.urls')),
     path('buyers/', include('apps.buyers.urls')),
     path('orders/', include('apps.orders.urls')),
+    path('chats/', include('apps.chats.urls')),
 ]
