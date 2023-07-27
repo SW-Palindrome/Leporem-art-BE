@@ -119,5 +119,5 @@ class ItemRepository:
             nickname=F('seller__user__nickname'),
             temperature=F('seller__temperature'),
             buyer_id=Subquery(like_subquery.values('buyer_id')[:1]),
-        ).filter(item_id=item_id)
+        ).get(item_id=item_id)
         return detailed_item
