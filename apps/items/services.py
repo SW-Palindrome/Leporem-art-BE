@@ -13,6 +13,13 @@ class ItemService:
             return None
         return detailed_item
 
+    def seller_detailed_item(self, item_id, seller_id):
+        item_repository = ItemRepository()
+        detailed_item = item_repository.seller_item_detail(item_id, seller_id)
+        if not detailed_item:
+            return None
+        return detailed_item
+
 
 class LikeService:
     def check_like(self, item_id, buyer_id):
