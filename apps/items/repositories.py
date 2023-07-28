@@ -139,6 +139,19 @@ class ItemRepository:
         ).filter(item_id=item_id, seller=seller_id)
         return detailed_item
 
+    def detailed_item_review(self, item_id):
+        reviews = (
+            Item.objects.annotate(
+                comment=F('orders__review__comment'),
+                rating=F('orders__review__rating'),
+                writer=F('orders__buyer__user__nickname'),
+                write_dt=F('orders__review__modified'),
+            )
+            .filter(item_id=item_id)
+            .order_by('-write_dt')
+        )
+        return reviews
+
 
 class LikeRepository:
     def get_like(self, item_id, buyer_id):
