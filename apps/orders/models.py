@@ -22,7 +22,7 @@ class OrderStatus(TimeStampedModel):
 class Order(TimeStampedModel):
     order_id = models.AutoField(primary_key=True)
     buyer = models.ForeignKey(Buyer, on_delete=models.PROTECT)
-    item = models.ForeignKey(Item, on_delete=models.PROTECT)
+    item = models.ForeignKey(Item, on_delete=models.PROTECT, related_name='orders')
     order_status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT)
     price = models.IntegerField()
     ordered_datetime = models.DateTimeField()

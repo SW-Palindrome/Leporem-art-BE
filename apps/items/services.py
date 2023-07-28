@@ -2,9 +2,9 @@ from apps.items.repositories import ItemRepository
 
 
 class ItemService:
-    def filter_items(self):
+    def filter_items(self, buyer_id):
         item_repository = ItemRepository()
-        return item_repository.filter_item()
+        return item_repository.get_items(buyer_id=buyer_id)
 
     def buyer_detailed_item(self, item_id, buyer_id):
         item_repository = ItemRepository()
