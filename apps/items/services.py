@@ -20,6 +20,13 @@ class ItemService:
             return None
         return detailed_item
 
+    def detailed_item_review(self, item_id):
+        item_repository = ItemRepository()
+        reviews = item_repository.detailed_item_review(item_id)
+        if not reviews:
+            return None
+        return reviews
+
 
 class LikeService:
     def check_like(self, item_id, buyer_id):
