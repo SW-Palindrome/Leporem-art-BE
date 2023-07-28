@@ -11,8 +11,10 @@ from apps.items.services import ItemService, LikeService
 
 class FilterItemView(APIView):
     def get(self, request):
+        buyer_id = request.user.buyer.buyer_id
+
         item_service = ItemService()
-        items = item_service.filter_items()
+        items = item_service.filter_items(buyer_id)
 
         page_number = request.GET.get('page', 1)
         ordering = request.GET.get('ordering')
