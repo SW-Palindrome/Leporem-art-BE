@@ -66,3 +66,33 @@ class ReviewSerializer(serializers.Serializer):
 
     class Meta:
         fields = ('comment', 'rating', 'writer', 'write_dt')
+
+
+class SellerDetailedItemSerializer(serializers.Serializer):
+    item_id = serializers.IntegerField()
+    nickname = serializers.CharField()
+    profile_image = serializers.CharField(source='seller.user.profile_image.url')
+    title = serializers.CharField()
+    description = serializers.CharField()
+    price = serializers.IntegerField()
+    temperature = serializers.FloatField()
+    current_amount = serializers.IntegerField()
+    shorts = serializers.CharField(source='shorts.url')
+    thumbnail_image = serializers.CharField(source='thumbnail_image.image.url')
+    images = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
+    width = serializers.DecimalField(max_digits=6, decimal_places=2)
+    depth = serializers.DecimalField(max_digits=6, decimal_places=2)
+    height = serializers.DecimalField(max_digits=6, decimal_places=2)
+    reviews = serializers.SerializerMethodField()
+
+    def get_images(self, obj):
+        return get_images(obj)
+
+    def get_category(self, obj):
+        return get_category(obj)
+
+    def get_reviews(self, obj):
+        reviews = self.context.get('reviews')
+        review_serializer = ReviewSerializer(reviews, many=True)
+        return review_serializer.data
