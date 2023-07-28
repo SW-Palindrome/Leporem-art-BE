@@ -111,6 +111,7 @@ class ItemRepository:
             nickname=F('seller__user__nickname'),
             like_count=Count('likes'),
             avg_rating=Round(Avg('orders__review__rating'), 1),
+            time_diff=timezone.now() - F('display_dt'),
         )
         return search_item
 
