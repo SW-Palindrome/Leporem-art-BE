@@ -10,6 +10,8 @@ from apps.items.services import ItemService, LikeService
 
 
 class FilterItemView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         buyer_id = request.user.buyer.buyer_id
 
