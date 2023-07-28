@@ -1,4 +1,4 @@
-from apps.items.repositories import ItemRepository
+from apps.items.repositories import ItemRepository, LikeRepository
 
 
 class ItemService:
@@ -16,21 +16,21 @@ class ItemService:
 
 class LikeService:
     def check_like(self, item_id, buyer_id):
-        item_repository = ItemRepository()
-        if item_repository.get_like(item_id, buyer_id):
+        like_repository = LikeRepository()
+        if like_repository.get_like(item_id, buyer_id):
             return True
         return False
 
     def on_like(self, item_id, buyer_id):
-        item_repository = ItemRepository()
+        like_repository = LikeRepository()
         if not self.check_like(item_id, buyer_id):
-            item_repository.post_like(item_id, buyer_id)
+            like_repository.post_like(item_id, buyer_id)
             return True
         return False
 
     def off_like(self, item_id, buyer_id):
-        item_repository = ItemRepository()
+        like_repository = LikeRepository()
         if self.check_like(item_id, buyer_id):
-            item_repository.delete_like(item_id, buyer_id)
+            like_repository.delete_like(item_id, buyer_id)
             return True
         return False
