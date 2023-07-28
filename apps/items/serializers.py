@@ -56,3 +56,13 @@ class BuyerDetailedItemSerializer(serializers.Serializer):
         if obj.buyer_id:
             return True
         return False
+
+
+class ReviewSerializer(serializers.Serializer):
+    comment = serializers.CharField()
+    rating = serializers.DecimalField(max_digits=2, decimal_places=1)
+    writer = serializers.CharField()
+    write_dt = serializers.DateTimeField()
+
+    class Meta:
+        fields = ('comment', 'rating', 'writer', 'write_dt')
