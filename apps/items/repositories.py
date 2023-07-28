@@ -132,6 +132,13 @@ class ItemRepository:
         ).get(item_id=item_id)
         return detailed_item
 
+    def seller_item_detail(self, item_id, seller_id):
+        detailed_item = Item.objects.annotate(
+            nickname=F('seller__user__nickname'),
+            temperature=F('seller__temperature'),
+        ).filter(item_id=item_id, seller=seller_id)
+        return detailed_item
+
 
 class LikeRepository:
     def get_like(self, item_id, buyer_id):
