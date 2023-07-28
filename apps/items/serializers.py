@@ -8,9 +8,12 @@ class ItemListSerializer(serializers.Serializer):
     price = serializers.IntegerField()
     thumbnail_image = serializers.CharField(source='thumbnail_image.image.url')
     likes = serializers.IntegerField(source='like_count')
+    avg_rating = serializers.DecimalField(max_digits=2, decimal_places=1)
+    time_diff = serializers.DurationField()
+    is_liked = serializers.BooleanField()
 
     class Meta:
-        fields = ('item_id', 'nickname', 'title', 'price', 'thumbnail_image', 'likes')
+        fields = ('item_id', 'nickname', 'title', 'price', 'thumbnail_image', 'likes', 'avg_rating', 'time_diff')
 
 
 def get_images(item):
