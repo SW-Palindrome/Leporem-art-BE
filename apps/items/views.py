@@ -1,4 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -73,16 +72,15 @@ class BuyerItemView(APIView):
         item_id = request.GET.get('item_id')
         buyer_id = request.user.buyer.buyer_id
 
-        try:
-            item_service = ItemService()
-            item = item_service.buyer_detailed_item(item_id, buyer_id)
+        item_service = ItemService()
+        item = item_service.buyer_detailed_item(item_id, buyer_id)
+        if item:
             try:
                 serializer = BuyerDetailedItemSerializer(item)
                 return Response({"detail": serializer.data}, status=200)
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
-        except ObjectDoesNotExist:
-            return Response({"message": "ObjectDoesNotExist"}, status=404)
+        return Response({"message": "ObjectDoesNotExist"}, status=404)
 
 
 class LikeItemView(APIView):
