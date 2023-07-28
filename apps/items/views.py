@@ -5,7 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.items.filters import ItemFilter
-from apps.items.serializers import BuyerDetailedItemSerializer, ItemListSerializer
+from apps.items.serializers import (
+    BuyerDetailedItemSerializer,
+    ItemListSerializer,
+    SellerDetailedItemSerializer,
+)
 from apps.items.services import ItemService, LikeService
 
 
@@ -107,3 +111,22 @@ class LikeItemView(APIView):
         if like_service.off_like(item_id, buyer_id):
             return Response({"message": "success"}, status=200)
         return Response({"message": "remove like failed"}, status=400)
+
+
+class SellerItemView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        item_id = request.GET.get('item_id')
+        seller_id = request.user.seller.seller_id
+
+        item_service = ItemService()
+        item = item_service.seller_detailed_item(item_id, seller_id)
+        if item:
+            reviews = item_service.detailed_item_review(item_id)
+            try:
+                serializer = SellerDetailedItemSerializer(item, many=True, context={'reviews': reviews})
+                return Response({"detail": serializer.data}, status=200)
+            except Exception as e:
+                return Response({"error": str(e)}, status=400)
+        return Response({"message": "ObjectDoesNotExist"}, status=404)
