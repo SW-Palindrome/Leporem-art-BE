@@ -1,6 +1,7 @@
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import Count, F, Subquery
+from django.db.models import Avg, Count, F, Subquery
+from django.db.models.functions import Round
 from django.utils import timezone
 
 from apps.items.models import Item, ItemImage, Like
@@ -105,10 +106,11 @@ class ItemRepository:
     def get_item(self, item_id) -> Item:
         return Item.objects.get(item_id=item_id)
 
-    def filter_item(self):
+    def get_items(self):
         search_item = Item.objects.order_by('-display_dt').annotate(
             nickname=F('seller__user__nickname'),
             like_count=Count('likes'),
+            avg_rating=Round(Avg('orders__review__rating'), 1),
         )
         return search_item
 
