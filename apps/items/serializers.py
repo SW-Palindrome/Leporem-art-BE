@@ -93,3 +93,12 @@ class SellerDetailedItemSerializer(serializers.Serializer):
         reviews = self.context.get('reviews')
         review_serializer = ReviewSerializer(reviews, many=True)
         return review_serializer.data
+
+
+class ViewedItemListSerializer(serializers.Serializer):
+    item = serializers.IntegerField()
+    nickname = serializers.CharField()
+    title = serializers.CharField()
+    price = serializers.IntegerField()
+    thumbnail_image = serializers.CharField(source='item.thumbnail_image.image.url')
+    is_liked = serializers.BooleanField()
