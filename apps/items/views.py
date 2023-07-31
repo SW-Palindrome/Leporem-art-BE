@@ -8,8 +8,9 @@ from apps.items.serializers import (
     BuyerDetailedItemSerializer,
     ItemListSerializer,
     SellerDetailedItemSerializer,
+    ViewedItemListSerializer,
 )
-from apps.items.services import ItemService, LikeService
+from apps.items.services import ItemService, LikeService, ViewedItemService
 
 
 class FilterItemView(APIView):
@@ -124,6 +125,22 @@ class SellerItemView(APIView):
             reviews = item_service.detailed_item_review(item_id)
             try:
                 serializer = SellerDetailedItemSerializer(item, many=True, context={'reviews': reviews})
+                return Response({"detail": serializer.data}, status=200)
+            except Exception as e:
+                return Response({"error": str(e)}, status=400)
+        return Response({"message": "ObjectDoesNotExist"}, status=404)
+
+
+class ViewedItemView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        buyer = request.user.buyer.buyer_id
+        viewed_item_service = ViewedItemService()
+        viewed_items = viewed_item_service.viewed_items(buyer)
+        if viewed_items:
+            try:
+                serializer = ViewedItemListSerializer(viewed_items)
                 return Response({"detail": serializer.data}, status=200)
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
