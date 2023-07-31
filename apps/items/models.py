@@ -64,4 +64,3 @@ class RecentlyViewedItem(TimeStampedModel):
     buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='recently_viewed_items')
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='recently_viewed_items')
     viewed_date = models.DateTimeField(auto_now_add=True)
-    deleted_date = models.DateTimeField()
