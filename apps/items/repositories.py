@@ -4,6 +4,7 @@ from django.db.models import Avg, Count, Exists, F, OuterRef, Subquery
 from django.db.models.functions import Round
 from django.utils import timezone
 
+from apps.buyers.models import Buyer
 from apps.items.models import Item, ItemImage, Like, RecentlyViewedItem
 from apps.sellers.models import Seller
 
@@ -167,20 +168,24 @@ class ViewedItemRepository:
         try:
             viewed_item = RecentlyViewedItem.objects.get(item=item, buyer=buyer)
             viewed_item.viewed_date = timezone.now()
+            viewed_item.save()
             return viewed_item
         except RecentlyViewedItem.DoesNotExist:
             return None
 
+    @transaction.atomic
     def post_viewed_item(self, item, buyer):
+        buyer = Buyer.objects.get(pk=buyer)
+        item = Item.objects.get(pk=item)
         RecentlyViewedItem.objects.create(item=item, buyer=buyer)
 
     def delete_viewed_item(self, item, buyer):
-        RecentlyViewedItem.objects.filter(item=item, buyer=buyer).deleted()
+        RecentlyViewedItem.objects.filter(item=item, buyer=buyer).delete()
 
     def get_viewed_items(self, buyer):
         viewed_items = (
             RecentlyViewedItem.objects.annotate(
-                nickname=F('item__nickname'),
+                nickname=F('item__seller__user__nickname'),
                 title=F('item__title'),
                 price=F('item__price'),
                 is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer=buyer)),
