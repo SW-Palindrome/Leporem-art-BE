@@ -173,3 +173,6 @@ class ViewedItemRepository:
 
     def post_viewed_item(self, item, buyer):
         RecentlyViewedItem.objects.create(item=item, buyer=buyer)
+
+    def delete_viewed_item(self, item, buyer):
+        RecentlyViewedItem.objects.filter(item=item, buyer=buyer).deleted()
