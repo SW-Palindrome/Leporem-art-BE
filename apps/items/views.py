@@ -140,8 +140,8 @@ class ViewedItemView(APIView):
         viewed_items = viewed_item_service.viewed_items(buyer)
         if viewed_items:
             try:
-                serializer = ViewedItemListSerializer(viewed_items)
-                return Response({"detail": serializer.data}, status=200)
+                serializer = ViewedItemListSerializer(viewed_items, many=True)
+                return Response({"items": serializer.data}, status=200)
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
         return Response({"message": "ObjectDoesNotExist"}, status=404)
