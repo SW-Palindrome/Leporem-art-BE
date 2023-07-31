@@ -132,10 +132,11 @@ class SellerItemView(APIView):
 
 
 class ViewedItemView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        buyer = request.user.buyer.buyer_id
+        # buyer = request.user.buyer.buyer_id
+        buyer = request.GET.get('buyer_id')
         viewed_item_service = ViewedItemService()
         viewed_items = viewed_item_service.viewed_items(buyer)
         if viewed_items:
@@ -147,17 +148,21 @@ class ViewedItemView(APIView):
         return Response({"message": "ObjectDoesNotExist"}, status=404)
 
     def post(self, request):
-        item = request.GET.data('item_id')
-        buyer = request.user.buyer.buyer_id
+        item = request.data.get('item_id')
+        # buyer = request.user.buyer.buyer_id
+        buyer = request.data.get('buyer_id')
         viewed_item_service = ViewedItemService()
-
-        if viewed_item_service.add_viewed_item(item, buyer):
-            return Response({"message": "success"}, status=201)
-        return Response({"message": "updated viewed date"}, status=200)
+        try:
+            if viewed_item_service.add_viewed_item(item, buyer):
+                return Response({"message": "success"}, status=201)
+            return Response({"message": "updated viewed date"}, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
     def delete(self, request):
-        item = request.GET.data('item_id')
-        buyer = request.user.buyer.buyer_id
+        item = request.data.get('item_id')
+        # buyer = request.user.buyer.buyer_id
+        buyer = request.data.get('buyer_id')
         viewed_item_service = ViewedItemService()
 
         if viewed_item_service.delete_viewed_item(item, buyer):
