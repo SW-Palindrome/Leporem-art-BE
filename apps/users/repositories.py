@@ -3,6 +3,7 @@ from typing import Optional
 from django.db import transaction
 
 from apps.users.models import User, UserOAuthInfo
+from leporem_art import settings
 from utils.files import create_random_filename
 
 
@@ -16,6 +17,9 @@ class UserRepository:
             return user_oauth_info.user
         except UserOAuthInfo.DoesNotExist:
             return None
+
+    def login_with_test_user(self):
+        return User.objects.get(nickname=settings.TEST_STAFF_NICKNAME)
 
     @transaction.atomic
     def signup(self, provider, provider_id, is_agree_privacy, is_agree_ads, nickname):

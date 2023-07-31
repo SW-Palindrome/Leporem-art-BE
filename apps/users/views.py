@@ -42,12 +42,12 @@ class KakaoLogInView(APIView):
     PROVIDER = 'KAKAO'
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request):
+    def post(self, request):
         auth_service = AuthService()
-        provider_id = extract_provider_id(request.data.get('id_token'))
-        if not auth_service.login(self.PROVIDER, provider_id):
+        user = auth_service.login(id_token=request.data.get('id_token'))
+        if user is None:
             return Response({'message': 'signin failed'}, status=401)
-        return Response({'message': 'success'}, status=200)
+        return Response({'user_id': user.user_id}, status=200)
 
 
 class ValidateNicknameView(APIView):

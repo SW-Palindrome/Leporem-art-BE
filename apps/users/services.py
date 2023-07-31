@@ -1,10 +1,20 @@
 import re
+from typing import Optional
 
 from django.db import IntegrityError
+from rest_framework.exceptions import AuthenticationFailed
 
 from apps.buyers.respositories import BuyerRepository
-from apps.users.exceptions import DuplicateNicknameException, DuplicateUserInfoException
+from apps.users.exceptions import (
+    DuplicateNicknameException,
+    DuplicateUserInfoException,
+    ExpiredTokenException,
+)
+from apps.users.models import User
 from apps.users.repositories import UserRepository
+from leporem_art import settings
+from utils.auth.kakao import extract_provider_id as kakao_extract_provider_id
+from utils.auth.kakao import validate_id_token as kakao_validate_id_token
 
 
 class AuthService:
@@ -37,11 +47,28 @@ class AuthService:
         buyer_repository.register(user.user_id)
         return True
 
-    def login(self, provider, provider_id):
+    def login(self, id_token) -> Optional[User]:
         user_repository = UserRepository()
-        if not user_repository.login(provider, provider_id):
-            return False
-        return user_repository.login(provider, provider_id)
+
+        if not id_token:
+            return None
+
+        user = None
+
+        if settings.DEBUG and id_token == settings.TEST_ID_TOKEN:
+            user = user_repository.login_with_test_user()
+
+        try:
+            is_kakao_id_token = kakao_validate_id_token(id_token)
+        except ExpiredTokenException:
+            raise AuthenticationFailed('Expired token')
+
+        if is_kakao_id_token:
+            user = user_repository.login('KAKAO', kakao_extract_provider_id(id_token))
+            if user is None:
+                raise AuthenticationFailed('No such user')
+
+        return user
 
 
 class UserService:
