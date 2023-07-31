@@ -170,3 +170,6 @@ class ViewedItemRepository:
             return viewed_item
         except RecentlyViewedItem.DoesNotExist:
             return None
+
+    def post_viewed_item(self, item, buyer):
+        RecentlyViewedItem.objects.create(item=item, buyer=buyer)
