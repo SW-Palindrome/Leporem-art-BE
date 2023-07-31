@@ -20,13 +20,13 @@ class ChatRoomRepository:
 
 
 class MessageRepository:
-    def create(self, chat_room_id, sender_id, text, image):
+    def create(self, chat_room_id, user_id, text, image):
         if bool(text) == bool(image):
             raise ValueError('text와 image 중 하나만 입력해주세요.')
 
         return Message.objects.create(
             chat_room_id=chat_room_id,
-            sender_id=sender_id,
+            user_id=user_id,
             text=text,
             image=image,
         )
