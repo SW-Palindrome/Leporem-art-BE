@@ -191,6 +191,6 @@ class ViewedItemRepository:
                 is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer=buyer)),
             )
             .filter(buyer=buyer)
-            .order_by('viewed_date')
+            .order_by('-viewed_date')
         )
         return viewed_items
