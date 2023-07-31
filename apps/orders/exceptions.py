@@ -16,3 +16,19 @@ class InvalidOrderStatusException(OrderException):
 
 class OrderPermissionException(OrderException):
     """주문 품목에 대한 권한 오류"""
+
+
+class ReviewException(Exception):
+    """후기 오류"""
+
+
+class InvalidOrderStatusReviewException(ReviewException):
+    """주문 상태 오류"""
+
+
+class InvalidOrderIDException(ReviewException):
+    """주문 번호 오류"""
+
+
+class IntegrityOrderIDException(ReviewException):
+    """주문 번호 중복 오류"""
