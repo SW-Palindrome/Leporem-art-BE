@@ -64,3 +64,10 @@ class ViewedItemService:
             return None
         viewed_item_repository.delete_viewed_item(item_id, buyer_id)
         return True
+
+    def viewed_items(self, buyer_id):
+        viewed_item_repository = ViewedItemRepository()
+        viewed_items = viewed_item_repository.get_viewed_items(buyer_id)
+        if viewed_items:
+            return viewed_items
+        return None
