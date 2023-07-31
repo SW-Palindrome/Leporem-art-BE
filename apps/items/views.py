@@ -145,3 +145,12 @@ class ViewedItemView(APIView):
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
         return Response({"message": "ObjectDoesNotExist"}, status=404)
+
+    def post(self, request):
+        item = request.GET.data('item_id')
+        buyer = request.user.buyer.buyer_id
+        viewed_item_service = ViewedItemService()
+
+        if viewed_item_service.add_viewed_item(item, buyer):
+            return Response({"message": "success"}, status=201)
+        return Response({"message": "updated viewed date"}, status=200)
