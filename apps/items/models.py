@@ -57,3 +57,11 @@ class Like(TimeStampedModel):
     like_id = models.AutoField(primary_key=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='likes')
     buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='likes')
+
+
+class RecentlyViewedItem(TimeStampedModel):
+    recently_viewed_item_id = models.AutoField(primary_key=True)
+    buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='recently_viewed_items')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='recently_viewed_items')
+    viewed_date = models.DateTimeField(auto_now_add=True)
+    deleted_date = models.DateTimeField()
