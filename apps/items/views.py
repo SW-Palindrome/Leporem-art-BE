@@ -132,11 +132,10 @@ class SellerItemView(APIView):
 
 
 class ViewedItemView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # buyer = request.user.buyer.buyer_id
-        buyer = request.GET.get('buyer_id')
+        buyer = request.user.buyer.buyer_id
         viewed_item_service = ViewedItemService()
         viewed_items = viewed_item_service.viewed_items(buyer)
         if viewed_items:
@@ -149,8 +148,7 @@ class ViewedItemView(APIView):
 
     def post(self, request):
         item = request.data.get('item_id')
-        # buyer = request.user.buyer.buyer_id
-        buyer = request.data.get('buyer_id')
+        buyer = request.user.buyer.buyer_id
         viewed_item_service = ViewedItemService()
         try:
             if viewed_item_service.add_viewed_item(item, buyer):
@@ -161,8 +159,7 @@ class ViewedItemView(APIView):
 
     def delete(self, request):
         item = request.data.get('item_id')
-        # buyer = request.user.buyer.buyer_id
-        buyer = request.data.get('buyer_id')
+        buyer = request.user.buyer.buyer_id
         viewed_item_service = ViewedItemService()
 
         if viewed_item_service.delete_viewed_item(item, buyer):
