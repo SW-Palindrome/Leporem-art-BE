@@ -1,4 +1,4 @@
-from apps.items.repositories import ItemRepository, LikeRepository
+from apps.items.repositories import ItemRepository, LikeRepository, ViewedItemRepository
 
 
 class ItemService:
@@ -48,3 +48,12 @@ class LikeService:
             like_repository.delete_like(item_id, buyer_id)
             return True
         return False
+
+
+class ViewedItemService:
+    def add_viewed_item(self, item_id, buyer_id):
+        viewed_item_repository = ViewedItemRepository()
+        if viewed_item_repository.get_viewed_item(item_id, buyer_id):
+            return None
+        viewed_item_repository.post_viewed_item(item_id, buyer_id)
+        return True
