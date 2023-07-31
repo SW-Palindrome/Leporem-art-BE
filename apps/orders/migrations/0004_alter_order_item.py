@@ -6,6 +6,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
     dependencies = [
+        ('items', '0006_recentlyvieweditem'),
         ('items', '0005_like_buyer_alter_category_category_alter_color_color'),
         ('orders', '0003_review'),
     ]

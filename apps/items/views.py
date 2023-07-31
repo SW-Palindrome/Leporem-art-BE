@@ -8,8 +8,9 @@ from apps.items.serializers import (
     BuyerDetailedItemSerializer,
     ItemListSerializer,
     SellerDetailedItemSerializer,
+    ViewedItemListSerializer,
 )
-from apps.items.services import ItemService, LikeService
+from apps.items.services import ItemService, LikeService, ViewedItemService
 
 
 class FilterItemView(APIView):
@@ -128,3 +129,37 @@ class SellerItemView(APIView):
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
         return Response({"message": "ObjectDoesNotExist"}, status=404)
+
+
+class ViewedItemView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        buyer = request.user.buyer.buyer_id
+        viewed_item_service = ViewedItemService()
+        viewed_items = viewed_item_service.viewed_items(buyer)
+        if viewed_items:
+            try:
+                serializer = ViewedItemListSerializer(viewed_items)
+                return Response({"detail": serializer.data}, status=200)
+            except Exception as e:
+                return Response({"error": str(e)}, status=400)
+        return Response({"message": "ObjectDoesNotExist"}, status=404)
+
+    def post(self, request):
+        item = request.GET.data('item_id')
+        buyer = request.user.buyer.buyer_id
+        viewed_item_service = ViewedItemService()
+
+        if viewed_item_service.add_viewed_item(item, buyer):
+            return Response({"message": "success"}, status=201)
+        return Response({"message": "updated viewed date"}, status=200)
+
+    def delete(self, request):
+        item = request.GET.data('item_id')
+        buyer = request.user.buyer.buyer_id
+        viewed_item_service = ViewedItemService()
+
+        if viewed_item_service.delete_viewed_item(item, buyer):
+            return Response({"message": "success"}, status=200)
+        return Response({"message": "ObjectDoesNotExist"}, status=400)
