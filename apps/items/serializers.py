@@ -96,7 +96,7 @@ class SellerDetailedItemSerializer(serializers.Serializer):
 
 
 class ViewedItemListSerializer(serializers.Serializer):
-    item = serializers.IntegerField()
+    item_id = serializers.IntegerField()
     nickname = serializers.CharField()
     title = serializers.CharField()
     price = serializers.IntegerField()
