@@ -12,6 +12,7 @@ from apps.users.exceptions import (
 )
 from apps.users.models import User
 from apps.users.repositories import UserRepository
+from leporem_art import settings
 from utils.auth.kakao import extract_provider_id as kakao_extract_provider_id
 from utils.auth.kakao import validate_id_token as kakao_validate_id_token
 
@@ -49,12 +50,18 @@ class AuthService:
     def login(self, id_token) -> Optional[User]:
         user_repository = UserRepository()
 
+        if not id_token:
+            return None
+
+        user = None
+
+        if settings.DEBUG and id_token == settings.TEST_ID_TOKEN:
+            user = user_repository.login_with_test_user()
+
         try:
             is_kakao_id_token = kakao_validate_id_token(id_token)
         except ExpiredTokenException:
             raise AuthenticationFailed('Expired token')
-
-        user = None
 
         if is_kakao_id_token:
             user = user_repository.login('KAKAO', kakao_extract_provider_id(id_token))

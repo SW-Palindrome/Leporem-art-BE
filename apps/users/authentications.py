@@ -1,8 +1,6 @@
-from django.conf import settings
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
-from apps.users.models import User
 from apps.users.services import AuthService
 
 
@@ -24,12 +22,6 @@ class OIDCAuthentication(BaseAuthentication):
 
         if isinstance(id_token, bytes):
             id_token = id_token.decode('utf-8')
-
-        if not id_token:
-            return None
-
-        if settings.DEBUG and id_token == settings.TEST_ID_TOKEN:
-            return User.objects.get(nickname=settings.TEST_STAFF_NICKNAME), None
 
         user = AuthService().login(id_token)
 
