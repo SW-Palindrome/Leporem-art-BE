@@ -44,8 +44,7 @@ class KakaoLogInView(APIView):
 
     def get(self, request):
         auth_service = AuthService()
-        provider_id = extract_provider_id(request.data.get('id_token'))
-        if not auth_service.login(self.PROVIDER, provider_id):
+        if auth_service.login(id_token=request.data.get('id_token')) is None:
             return Response({'message': 'signin failed'}, status=401)
         return Response({'message': 'success'}, status=200)
 
