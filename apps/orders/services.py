@@ -1,13 +1,16 @@
 from apps.buyers.respositories import BuyerRepository
 from apps.items.repositories import ItemRepository
 from apps.orders.exceptions import (
+    IntegrityOrderIDException,
+    InvalidOrderIDException,
     InvalidOrderStatusException,
+    InvalidOrderStatusReviewException,
     NotEnoughProductException,
     OrderPermissionException,
     SelfOrderException,
 )
-from apps.orders.models import OrderStatus
-from apps.orders.repositories import OrderRepository
+from apps.orders.models import Order, OrderStatus, Review
+from apps.orders.repositories import OrderRepository, ReviewRepository
 
 
 class OrderService:
@@ -58,3 +61,22 @@ class OrderService:
             raise InvalidOrderStatusException('주문 완료 및 배송중 상태에서만 주문 취소가 가능합니다.')
 
         return OrderRepository().cancel(order_id)
+
+
+class ReviewService:
+    def register(self, order_id, rating, comment):
+        try:
+            order = OrderRepository().get_order(order_id)
+        except Order.DoesNotExist:
+            raise InvalidOrderIDException("Order does not exist.")
+
+        if order.order_status.status != OrderStatus.Status.ORDERED.value:
+            raise InvalidOrderStatusReviewException("Review can only be submitted in the 'ORDERED' status.")
+
+        try:
+            ReviewRepository().get_order(order_id)
+            raise IntegrityOrderIDException("Duplicate entry for order_id.")
+        except Review.DoesNotExist:
+            None
+
+        return ReviewRepository().register(order_id, rating, comment)

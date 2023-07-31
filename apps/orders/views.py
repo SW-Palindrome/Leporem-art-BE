@@ -3,9 +3,9 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
-from apps.orders.exceptions import OrderException
-from apps.orders.serializers import OrderSerializer
-from apps.orders.services import OrderService
+from apps.orders.exceptions import OrderException, ReviewException
+from apps.orders.serializers import OrderSerializer, ReviewSerializer
+from apps.orders.services import OrderService, ReviewService
 
 
 class OrderRegisterView(APIView):
@@ -57,3 +57,21 @@ class OrderCancelView(APIView):
         except OrderException as e:
             return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
         return Response(status=HTTP_201_CREATED)
+
+
+class ReviewRegisterView(APIView):
+    serializer_class = ReviewSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        review_service = ReviewService()
+        try:
+            review_service.register(
+                order_id=serializer.validated_data['order_id'],
+                rating=serializer.validated_data['rating'],
+                comment=serializer.validated_data.get('comment'),
+            )
+        except ReviewException as e:
+            return Response({"message": str(e)}, status=400)
+        return Response({"message": "success"}, status=201)

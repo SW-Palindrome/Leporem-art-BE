@@ -2,7 +2,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from apps.items.models import Item
-from apps.orders.models import Order, OrderHistory, OrderStatus
+from apps.orders.models import Order, OrderHistory, OrderStatus, Review
 
 
 class OrderRepository:
@@ -68,3 +68,13 @@ class OrderRepository:
 
     def get_order_list_by_buyer(self, buyer_id):
         return Order.objects.filter(buyer_id=buyer_id).select_related('item', 'order_status')
+
+
+class ReviewRepository:
+    @transaction.atomic
+    def register(self, order_id, rating, comment):
+        order_id = Order.objects.get(pk=order_id)
+        return Review.objects.create(order=order_id, rating=rating, comment=comment)
+
+    def get_order(self, order_id):
+        return Review.objects.get(order=order_id)
