@@ -1,4 +1,4 @@
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -21,7 +21,7 @@ class BuyerChatRoomListView(APIView):
 class MessageCreateView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = MessageCreateSerializer
-    parser_classes = [MultiPartParser]
+    parser_classes = [FormParser, MultiPartParser]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
