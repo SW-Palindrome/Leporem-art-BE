@@ -176,3 +176,16 @@ class ViewedItemRepository:
 
     def delete_viewed_item(self, item, buyer):
         RecentlyViewedItem.objects.filter(item=item, buyer=buyer).deleted()
+
+    def get_viewed_items(self, buyer):
+        viewed_items = (
+            RecentlyViewedItem.objects.annotate(
+                nickname=F('item__nickname'),
+                title=F('item__title'),
+                price=F('item__price'),
+                is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer=buyer)),
+            )
+            .filter(buyer=buyer)
+            .order_by('viewed_date')
+        )
+        return viewed_items
