@@ -4,7 +4,7 @@ from django.db.models import Avg, Count, Exists, F, OuterRef, Subquery
 from django.db.models.functions import Round
 from django.utils import timezone
 
-from apps.items.models import Item, ItemImage, Like
+from apps.items.models import Item, ItemImage, Like, RecentlyViewedItem
 from apps.sellers.models import Seller
 
 
@@ -160,3 +160,13 @@ class LikeRepository:
 
     def delete_like(self, item_id, buyer_id):
         Like.objects.filter(item_id=item_id, buyer_id=buyer_id).delete()
+
+
+class ViewedItemRepository:
+    def get_viewed_item(self, item, buyer):
+        try:
+            viewed_item = RecentlyViewedItem.objects.get(item=item, buyer=buyer)
+            viewed_item.viewed_date = timezone.now()
+            return viewed_item
+        except RecentlyViewedItem.DoesNotExist:
+            return None
