@@ -1,11 +1,7 @@
-from django.conf import settings
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
-from apps.users.exceptions import ExpiredTokenException
-from apps.users.models import User
-from utils.auth.kakao import extract_provider_id as kakao_extract_provider_id
-from utils.auth.kakao import validate_id_token as kakao_validate_id_token
+from apps.users.services import AuthService
 
 
 class OIDCAuthentication(BaseAuthentication):
@@ -27,24 +23,6 @@ class OIDCAuthentication(BaseAuthentication):
         if isinstance(id_token, bytes):
             id_token = id_token.decode('utf-8')
 
-        if not id_token:
-            return None
+        user = AuthService().login(id_token)
 
-        if settings.DEBUG and id_token == settings.TEST_ID_TOKEN:
-            return User.objects.get(nickname=settings.TEST_STAFF_NICKNAME), None
-
-        try:
-            is_kakao_id_token = kakao_validate_id_token(id_token)
-        except ExpiredTokenException:
-            raise AuthenticationFailed('Expired token')
-
-        if is_kakao_id_token:
-            try:
-                user = User.objects.get(
-                    user_oauth_info__provider='KAKAO',
-                    user_oauth_info__provider_id=kakao_extract_provider_id(id_token),
-                )
-            except User.DoesNotExist:
-                raise AuthenticationFailed('No such user')
-
-            return user, None
+        return user, None

@@ -15,7 +15,7 @@ class ChatRoom(TimeStampedModel):
 class Message(TimeStampedModel):
     message_id = models.AutoField(primary_key=True)
     chat_room = models.ForeignKey(ChatRoom, on_delete=models.PROTECT, related_name='messages')
-    sender = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
     write_datetime = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
     text = models.CharField(max_length=255)
