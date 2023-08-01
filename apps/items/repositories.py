@@ -96,6 +96,7 @@ class ItemRepository:
         item.current_amount = current_amount
         item.save()
 
+        item.item_images.all().delete()
         item.category_mappings.all().delete()
         item.color_mappings.all().delete()
 
