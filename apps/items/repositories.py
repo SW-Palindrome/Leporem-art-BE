@@ -91,23 +91,24 @@ class ItemRepository:
         item.width = width
         item.depth = depth
         item.height = height
-        item.thumbnail_image = thumbnail_image
-
         amount_diff = current_amount - item.current_amount
         item.max_amount = item.max_amount + amount_diff
         item.current_amount = current_amount
-
         item.save()
 
-        item.item_images.all().delete()
-        item.item_tag_mappings.all().delete()
+        item.category_mappings.all().delete()
+        item.color_mappings.all().delete()
 
+        ItemImage.objects.create(
+            item=item,
+            image=thumbnail_image,
+            is_thumbnail=True,
+        )
         for image in images:
             ItemImage.objects.create(
                 item=item,
                 image=image,
             )
-
         for category_id in categories:
             item.category_mappings.create(
                 category_id=category_id,
@@ -116,7 +117,6 @@ class ItemRepository:
             item.color_mappings.create(
                 color_id=color_id,
             )
-
         return item
 
     def get_item(self, item_id) -> Item:
