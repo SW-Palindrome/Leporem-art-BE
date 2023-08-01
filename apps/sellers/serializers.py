@@ -11,7 +11,7 @@ class SellerVerifySerializer(serializers.Serializer):
 
 class SellerItemSerializer(serializers.Serializer):
     price = serializers.IntegerField()
-    max_amount = serializers.IntegerField()
+    amount = serializers.IntegerField()
     title = serializers.CharField(max_length=46)
     description = serializers.CharField(max_length=255)
     shorts = serializers.FileField()

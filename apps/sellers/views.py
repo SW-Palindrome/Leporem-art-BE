@@ -62,7 +62,7 @@ class SellerItemView(APIView):
             seller_service.register_item(
                 seller_id=request.user.seller.seller_id,
                 price=serializer.validated_data['price'],
-                max_amount=serializer.validated_data['max_amount'],
+                max_amount=serializer.validated_data['amount'],
                 title=serializer.validated_data['title'],
                 description=serializer.validated_data['description'],
                 shorts=serializer.validated_data['shorts'],
@@ -84,7 +84,7 @@ class SellerItemView(APIView):
                 seller_id=request.user.seller.seller_id,
                 item_id=kwargs['item_id'],
                 price=serializer.validated_data['price'],
-                max_amount=serializer.validated_data['max_amount'],
+                current_amount=serializer.validated_data['amount'],
                 title=serializer.validated_data['title'],
                 description=serializer.validated_data['description'],
                 shorts=serializer.validated_data['shorts'],
