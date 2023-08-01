@@ -7,8 +7,9 @@ from apps.items.exceptions import ViewedException
 from apps.items.filters import ItemFilter
 from apps.items.serializers import (
     BuyerDetailedItemSerializer,
-    ItemListSerializer,
+    BuyerItemListSerializer,
     SellerDetailedItemSerializer,
+    SellerItemListSerializer,
     ViewedItemListSerializer,
 )
 from apps.items.services import ItemService, LikeService, ViewedItemService
@@ -52,15 +53,11 @@ class FilterItemView(APIView):
             page_number = int(page_number)
             page_obj = paginator.page(page_number)
 
-            try:
-                serializer = ItemListSerializer(page_obj, many=True)
-
-                return Response(
-                    {"items": serializer.data},
-                    status=200,
-                )
-            except Exception as e:
-                return Response({"error": str(e)}, status=500)
+            if nickname:
+                seller_serializer = SellerItemListSerializer(page_obj, many=True)
+                return Response({"items": seller_serializer.data}, status=200)
+            buyer_serializer = BuyerItemListSerializer(page_obj, many=True)
+            return Response({"items": buyer_serializer.data}, status=200)
         except PageNotAnInteger:
             return Response({"message": "PageNotAnInteger"}, status=400)
         except EmptyPage:
