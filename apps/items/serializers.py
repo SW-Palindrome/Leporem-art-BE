@@ -1,7 +1,17 @@
 from rest_framework import serializers
 
 
-class ItemListSerializer(serializers.Serializer):
+class BuyerItemListSerializer(serializers.Serializer):
+    item_id = serializers.IntegerField()
+    nickname = serializers.CharField()
+    title = serializers.CharField()
+    price = serializers.IntegerField()
+    thumbnail_image = serializers.CharField(source='thumbnail_image.image.url')
+    like_count = serializers.IntegerField()
+    is_liked = serializers.BooleanField()
+
+
+class SellerItemListSerializer(serializers.Serializer):
     item_id = serializers.IntegerField()
     nickname = serializers.CharField()
     title = serializers.CharField()
@@ -10,7 +20,7 @@ class ItemListSerializer(serializers.Serializer):
     like_count = serializers.IntegerField()
     avg_rating = serializers.DecimalField(max_digits=2, decimal_places=1)
     time_diff = serializers.DurationField()
-    is_liked = serializers.BooleanField()
+    current_amount = serializers.IntegerField()
 
 
 def get_images(item):
