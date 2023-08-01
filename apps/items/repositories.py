@@ -205,5 +205,5 @@ class ViewedItemRepository:
             )
             .filter(buyer=buyer, deleted_date__isnull=True, viewed_date=Subquery(recently_viewed_subquery))
             .order_by('-viewed_date')
-        )
+        )[:50]
         return viewed_items
