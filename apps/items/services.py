@@ -1,3 +1,7 @@
+from apps.buyers.models import Buyer
+from apps.buyers.respositories import BuyerRepository
+from apps.items.exceptions import BuyerDoesNotExist, ItemDoesNotExist
+from apps.items.models import Item
 from apps.items.repositories import ItemRepository, LikeRepository, ViewedItemRepository
 
 
@@ -53,21 +57,35 @@ class LikeService:
 class ViewedItemService:
     def add_viewed_item(self, item_id, buyer_id):
         viewed_item_repository = ViewedItemRepository()
-        if viewed_item_repository.get_viewed_item(item_id, buyer_id):
-            return None
-        viewed_item_repository.post_viewed_item(item_id, buyer_id)
-        return True
+        try:
+            ItemRepository().get_item(item_id)
+            try:
+                BuyerRepository().get_buyer(buyer_id)
+                viewed_item_repository.post_viewed_item(item_id, buyer_id)
+            except Buyer.DoesNotExist:
+                raise BuyerDoesNotExist("Buyer does not exist.")
+        except Item.DoesNotExist:
+            raise ItemDoesNotExist("Item does not exist.")
 
     def delete_viewed_item(self, item_id, buyer_id):
         viewed_item_repository = ViewedItemRepository()
-        if not viewed_item_repository.get_viewed_item(item_id, buyer_id):
-            return None
-        viewed_item_repository.delete_viewed_item(item_id, buyer_id)
-        return True
+        try:
+            ItemRepository().get_item(item_id)
+            try:
+                BuyerRepository().get_buyer(buyer_id)
+                viewed_item_repository.delete_viewed_item(item_id, buyer_id)
+            except Buyer.DoesNotExist:
+                raise BuyerDoesNotExist("Buyer does not exist.")
+        except Item.DoesNotExist:
+            raise ItemDoesNotExist("Item does not exist.")
 
     def viewed_items(self, buyer_id):
         viewed_item_repository = ViewedItemRepository()
-        viewed_items = viewed_item_repository.get_viewed_items(buyer_id)
-        if viewed_items:
-            return viewed_items
-        return None
+        try:
+            BuyerRepository().get_buyer(buyer_id)
+            viewed_items = viewed_item_repository.get_viewed_items(buyer_id)
+            if viewed_items:
+                return viewed_items
+            raise ItemDoesNotExist("Item does not exist.")
+        except Buyer.DoesNotExist:
+            raise BuyerDoesNotExist("Buyer does not exist.")

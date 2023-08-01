@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.items.exceptions import ViewedException
 from apps.items.filters import ItemFilter
 from apps.items.serializers import (
     BuyerDetailedItemSerializer,
@@ -137,31 +138,33 @@ class ViewedItemView(APIView):
     def get(self, request):
         buyer = request.user.buyer.buyer_id
         viewed_item_service = ViewedItemService()
-        viewed_items = viewed_item_service.viewed_items(buyer)
-        if viewed_items:
+        try:
+            viewed_items = viewed_item_service.viewed_items(buyer)
             try:
                 serializer = ViewedItemListSerializer(viewed_items, many=True)
                 return Response({"items": serializer.data}, status=200)
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
-        return Response({"message": "ObjectDoesNotExist"}, status=404)
+        except ViewedException as e:
+            return Response({"error": str(e)}, status=404)
 
     def post(self, request):
         item = request.data.get('item_id')
         buyer = request.user.buyer.buyer_id
         viewed_item_service = ViewedItemService()
         try:
-            if viewed_item_service.add_viewed_item(item, buyer):
-                return Response({"message": "success"}, status=201)
-            return Response({"message": "updated viewed date"}, status=200)
-        except Exception as e:
-            return Response({"error": str(e)}, status=400)
+            viewed_item_service.add_viewed_item(item, buyer)
+            return Response({"message": "success"}, status=201)
+        except ViewedException as e:
+            return Response({"error": str(e)}, status=404)
 
     def delete(self, request):
         item = request.data.get('item_id')
         buyer = request.user.buyer.buyer_id
         viewed_item_service = ViewedItemService()
 
-        if viewed_item_service.delete_viewed_item(item, buyer):
+        try:
+            viewed_item_service.delete_viewed_item(item, buyer)
             return Response({"message": "success"}, status=200)
-        return Response({"message": "ObjectDoesNotExist"}, status=400)
+        except ViewedException as e:
+            return Response({"error": str(e)}, status=404)
