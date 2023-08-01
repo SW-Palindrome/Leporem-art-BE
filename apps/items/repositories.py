@@ -164,25 +164,22 @@ class LikeRepository:
 
 
 class ViewedItemRepository:
-    def get_viewed_item(self, item, buyer):
-        try:
-            viewed_item = RecentlyViewedItem.objects.get(item=item, buyer=buyer)
-            viewed_item.viewed_date = timezone.now()
-            viewed_item.save()
-            return viewed_item
-        except RecentlyViewedItem.DoesNotExist:
-            return None
-
-    @transaction.atomic
     def post_viewed_item(self, item, buyer):
         buyer = Buyer.objects.get(pk=buyer)
         item = Item.objects.get(pk=item)
         RecentlyViewedItem.objects.create(item=item, buyer=buyer)
 
     def delete_viewed_item(self, item, buyer):
-        RecentlyViewedItem.objects.filter(item=item, buyer=buyer).delete()
+        viewed_item = RecentlyViewedItem.objects.filter(item=item, buyer=buyer)
+        viewed_item.update(deleted_date=timezone.now())
 
     def get_viewed_items(self, buyer):
+        recently_viewed_subquery = (
+            RecentlyViewedItem.objects.filter(buyer=OuterRef('buyer'), item=OuterRef('item'), deleted_date__isnull=True)
+            .order_by('-viewed_date')
+            .values('viewed_date')[:1]
+        )
+
         viewed_items = (
             RecentlyViewedItem.objects.annotate(
                 nickname=F('item__seller__user__nickname'),
@@ -190,7 +187,7 @@ class ViewedItemRepository:
                 price=F('item__price'),
                 is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer=buyer)),
             )
-            .filter(buyer=buyer)
+            .filter(buyer=buyer, deleted_date__isnull=True, viewed_date=Subquery(recently_viewed_subquery))
             .order_by('-viewed_date')
         )
         return viewed_items
