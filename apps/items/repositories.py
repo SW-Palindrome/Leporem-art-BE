@@ -76,6 +76,8 @@ class ItemRepository:
         height,
         thumbnail_image,
         images,
+        categories,
+        colors,
     ):
         try:
             item = Seller.objects.get(seller_id=seller_id).items.get(item_id=item_id)
@@ -100,6 +102,15 @@ class ItemRepository:
             ItemImage.objects.create(
                 item=item,
                 image=image,
+            )
+
+        for category_id in categories:
+            item.category_mappings.create(
+                category_id=category_id,
+            )
+        for color_id in colors:
+            item.color_mappings.create(
+                color_id=color_id,
             )
 
         return item
