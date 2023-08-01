@@ -67,7 +67,7 @@ class ItemRepository:
         seller_id,
         item_id,
         price,
-        max_amount,
+        current_amount,
         title,
         description,
         shorts,
@@ -85,7 +85,6 @@ class ItemRepository:
             raise PermissionDenied
 
         item.price = price
-        item.max_amount = max_amount
         item.title = title
         item.description = description
         item.shorts = shorts
@@ -93,6 +92,11 @@ class ItemRepository:
         item.depth = depth
         item.height = height
         item.thumbnail_image = thumbnail_image
+
+        amount_diff = current_amount - item.current_amount
+        item.max_amount = item.max_amount + amount_diff
+        item.current_amount = current_amount
+
         item.save()
 
         item.item_images.all().delete()
