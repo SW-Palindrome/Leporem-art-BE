@@ -156,3 +156,7 @@ STORAGES = {
 
 # Payload Max Size
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
+
+# Setting AWS_QUERYSTRING_AUTH to False removes query parameter authentication from generated URLs.
+# https://django-storages.readthedocs.io/en/1.5.0/backends/amazon-S3.html
+AWS_QUERYSTRING_AUTH = False
