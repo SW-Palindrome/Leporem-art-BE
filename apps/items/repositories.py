@@ -166,6 +166,19 @@ class ItemRepository:
         )
         return reviews
 
+    def get_favorite_items(self, buyer):
+        liked_dates = Subquery(Like.objects.filter(item=OuterRef('item_id'), buyer=buyer).values('created')[:1])
+        favorite_items = (
+            Item.objects.annotate(
+                nickname=F('seller__user__nickname'),
+                is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer=buyer)),
+                liked_dates=liked_dates,
+            )
+            .order_by('-liked_dates')
+            .filter(is_liked=True)
+        )
+        return favorite_items
+
 
 class LikeRepository:
     def get_like(self, item_id, buyer_id):
