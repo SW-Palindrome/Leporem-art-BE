@@ -27,6 +27,8 @@ class SellerItemSerializer(serializers.Serializer):
 class SellerMyInfoSerializer(serializers.Serializer):
     nickname = serializers.CharField(max_length=20)
     profile_image = serializers.CharField(source='user.profile_image.url')
+    total_transactions = serializers.IntegerField()
+    retention_rate = serializers.FloatField()
     item_count = serializers.IntegerField()
     temperature = serializers.FloatField()
     description = serializers.CharField(max_length=80)
@@ -53,3 +55,8 @@ class SellerMyOrderSerializer(serializers.Serializer):
     ordered_datetime = serializers.DateTimeField()
     order_status = serializers.CharField(source='get_order_status_display')
     buyer = serializers.CharField(source='buyer.user.nickname')
+
+
+class TransactionSerializer(serializers.Serializer):
+    total_transactions = serializers.IntegerField()
+    total_rate = serializers.FloatField()

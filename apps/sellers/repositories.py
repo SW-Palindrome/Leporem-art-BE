@@ -1,7 +1,9 @@
 from random import randint
 
-from django.db.models import Count, F
+from django.db.models import Case, Count, F, OuterRef, Subquery, Sum, When
+from django.db.models.functions import Round
 
+from apps.orders.models import OrderStatus, Review
 from apps.sellers.models import Seller, VerifyEmail
 from apps.users.models import User
 
@@ -20,14 +22,35 @@ class SellerRepository:
         return Seller.objects.create(user=user, email=email)
 
     def get_seller_info(self, seller_id):
-        return (
+        """총 거래횟수와 재구매희망률"""
+        transaction_subquery = (
+            Review.objects.filter(
+                order__item__seller=OuterRef('pk'),
+                order__order_status__status=OrderStatus.Status.DELIVERED.value,
+            )
+            .annotate(
+                is_positive_review=Case(When(rating__gte=3, then=1), default=0),
+            )
+            .values('order__item__seller')
+            .annotate(
+                total_transactions=Count('order__order_id'),
+                total_positive_reviews=Sum('is_positive_review'),
+                retention_rate=Round(100 * Sum('is_positive_review') / Count('order__order_id'), 1),
+            )
+        )
+
+        seller_info = (
             Seller.objects.select_related('user')
             .annotate(
                 nickname=F('user__nickname'),
                 item_count=Count('items'),
+                total_transactions=Subquery(transaction_subquery.values('total_transactions')[:1]),
+                retention_rate=Subquery(transaction_subquery.values('retention_rate')[:1]),
             )
             .get(seller_id=seller_id)
         )
+
+        return seller_info
 
     def get_seller_info_by_nickname(self, nickname):
         return (
