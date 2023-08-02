@@ -70,8 +70,8 @@ class ReviewService:
         except Order.DoesNotExist:
             raise InvalidOrderIDException("Order does not exist.")
 
-        if order.order_status.status != OrderStatus.Status.ORDERED.value:
-            raise InvalidOrderStatusReviewException("Review can only be submitted in the 'ORDERED' status.")
+        if order.order_status.status != OrderStatus.Status.DELIVERED.value:
+            raise InvalidOrderStatusReviewException("Review can only be submitted in the 'DELIVERED' status.")
 
         try:
             ReviewRepository().get_order(order_id)
