@@ -31,6 +31,15 @@ class ItemService:
             return None
         return reviews
 
+    def favorite_items(self, buyer):
+        item_repository = ItemRepository()
+        try:
+            BuyerRepository().get_buyer(buyer)
+            favorite_items = item_repository.get_favorite_items(buyer)
+            return favorite_items
+        except Buyer.DoesNotExist:
+            raise BuyerDoesNotExist("Buyer does not exist.")
+
 
 class LikeService:
     def check_like(self, item_id, buyer_id):
