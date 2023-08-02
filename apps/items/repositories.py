@@ -179,6 +179,20 @@ class ItemRepository:
         )
         return favorite_items
 
+    def change_current_amount(self, item_id, seller_id, action):
+        try:
+            item = Seller.objects.get(seller_id=seller_id).items.get(item_id=item_id)
+        except Item.DoesNotExist:
+            raise PermissionDenied
+
+        action = int(action)
+
+        if action == 1:
+            item.current_amount += 1
+        else:
+            item.current_amount -= 1
+        item.save()
+
 
 class LikeRepository:
     def get_like(self, item_id, buyer_id):
