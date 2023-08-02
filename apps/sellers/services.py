@@ -107,3 +107,7 @@ class SellerService:
     def change_description(self, seller_id, description):
         seller_repository = SellerRepository()
         seller_repository.change_description(seller_id=seller_id, description=description)
+
+    def change_current_amount(self, item_id, seller_id, action):
+        item_repository = ItemRepository()
+        item_repository.change_current_amount(item_id, seller_id, action)

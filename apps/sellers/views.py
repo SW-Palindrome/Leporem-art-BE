@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.items.exceptions import ItemException
 from apps.orders.repositories import OrderRepository
 from apps.sellers.filters import SellerMyOrderFilterBackend
 from apps.sellers.repositories import SellerRepository
@@ -148,3 +149,19 @@ class SellerMyOrderView(GenericAPIView):
     def get_queryset(self):
         order_repository = OrderRepository()
         return order_repository.get_order_list_by_seller(self.request.user.seller.seller_id)
+
+
+class SellerControlAmountView(APIView):
+    permission_classes = [IsSeller]
+
+    def patch(self, request):
+        seller_service = SellerService()
+        try:
+            seller_service.change_current_amount(
+                request.data.get('item_id'),
+                request.user.seller.seller_id,
+                request.data.get('action'),
+            )
+            return Response({"message": "success"}, status=200)
+        except ItemException as e:
+            return Response({"error": str(e)}, status=400)

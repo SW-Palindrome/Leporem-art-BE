@@ -1,6 +1,7 @@
 from django.urls import path
 
 from apps.sellers.views import (
+    SellerControlAmountView,
     SellerDescriptionView,
     SellerInfoView,
     SellerItemView,
@@ -19,4 +20,5 @@ urlpatterns = [
     path('info', SellerMyInfoView.as_view()),
     path('info/<str:nickname>', SellerInfoView.as_view()),
     path('orders/my', SellerMyOrderView.as_view()),
+    path('current-amount', SellerControlAmountView.as_view()),
 ]

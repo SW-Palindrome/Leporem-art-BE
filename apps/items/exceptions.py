@@ -8,3 +8,11 @@ class ItemDoesNotExist(ViewedException):
 
 class BuyerDoesNotExist(ViewedException):
     """구매자 번호 오류"""
+
+
+class ItemException(Exception):
+    """작품 오류"""
+
+
+class CurrentAmountException(ItemException):
+    """잔여 수량 오류"""

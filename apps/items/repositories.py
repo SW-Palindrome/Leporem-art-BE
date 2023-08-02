@@ -5,6 +5,7 @@ from django.db.models.functions import Round
 from django.utils import timezone
 
 from apps.buyers.models import Buyer
+from apps.items.exceptions import CurrentAmountException
 from apps.items.models import Item, ItemImage, Like, RecentlyViewedItem
 from apps.sellers.models import Seller
 
@@ -178,6 +179,24 @@ class ItemRepository:
             .filter(is_liked=True)
         )
         return favorite_items
+
+    def change_current_amount(self, item_id, seller_id, action):
+        try:
+            item = Seller.objects.get(seller_id=seller_id).items.get(item_id=item_id)
+        except Item.DoesNotExist:
+            raise PermissionDenied
+
+        action = int(action)
+
+        if action == 1:
+            item.current_amount += 1
+            if item.current_amount > 99:
+                raise CurrentAmountException("The quantity of the item exceeds the limit.")
+        else:
+            item.current_amount -= 1
+            if item.current_amount < 1:
+                raise CurrentAmountException("The quantity of the item is less than 1.")
+        item.save()
 
 
 class LikeRepository:
