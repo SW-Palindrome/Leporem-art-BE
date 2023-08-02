@@ -112,3 +112,12 @@ class ViewedItemListSerializer(serializers.Serializer):
     price = serializers.IntegerField()
     thumbnail_image = serializers.CharField(source='item.thumbnail_image.image.url')
     is_liked = serializers.BooleanField()
+
+
+class FavoriteItemListSerializer(serializers.Serializer):
+    item_id = serializers.IntegerField()
+    nickname = serializers.CharField()
+    title = serializers.CharField()
+    price = serializers.IntegerField()
+    thumbnail_image = serializers.CharField(source='thumbnail_image.image.url')
+    is_liked = serializers.BooleanField()

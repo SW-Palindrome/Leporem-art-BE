@@ -8,6 +8,7 @@ from apps.items.filters import ItemFilter
 from apps.items.serializers import (
     BuyerDetailedItemSerializer,
     BuyerItemListSerializer,
+    FavoriteItemListSerializer,
     SellerDetailedItemSerializer,
     SellerItemListSerializer,
     ViewedItemListSerializer,
@@ -165,3 +166,20 @@ class ViewedItemView(APIView):
             return Response({"message": "success"}, status=200)
         except ViewedException as e:
             return Response({"error": str(e)}, status=404)
+
+
+class FavoriteItemView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        buyer = request.user.buyer.buyer_id
+        item_service = ItemService()
+
+        try:
+            favorite_items = item_service.favorite_items(buyer)
+            if favorite_items:
+                serializer = FavoriteItemListSerializer(favorite_items, many=True)
+                return Response({"items": serializer.data}, status=200)
+            return Response({"There are no recently viewed items."}, status=404)
+        except ViewedException as e:
+            return Response({"error": str(e)}, status=400)

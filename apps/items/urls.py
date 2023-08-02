@@ -2,6 +2,7 @@ from django.urls import path
 
 from apps.items.views import (
     BuyerItemView,
+    FavoriteItemView,
     FilterItemView,
     LikeItemView,
     SellerItemView,
@@ -14,4 +15,5 @@ urlpatterns = [
     path('like', LikeItemView.as_view()),
     path('detail/seller', SellerItemView.as_view()),
     path('viewed', ViewedItemView.as_view()),
+    path('favorites', FavoriteItemView.as_view()),
 ]
