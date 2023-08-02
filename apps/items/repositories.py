@@ -5,6 +5,7 @@ from django.db.models.functions import Round
 from django.utils import timezone
 
 from apps.buyers.models import Buyer
+from apps.items.exceptions import CurrentAmountException
 from apps.items.models import Item, ItemImage, Like, RecentlyViewedItem
 from apps.sellers.models import Seller
 
@@ -189,8 +190,12 @@ class ItemRepository:
 
         if action == 1:
             item.current_amount += 1
+            if item.current_amount > 99:
+                raise CurrentAmountException("The quantity of the item exceeds the limit.")
         else:
             item.current_amount -= 1
+            if item.current_amount < 1:
+                raise CurrentAmountException("The quantity of the item is less than 1.")
         item.save()
 
 
