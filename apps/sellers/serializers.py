@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework import serializers
 
 
@@ -60,3 +61,7 @@ class SellerMyOrderSerializer(serializers.Serializer):
 class TransactionSerializer(serializers.Serializer):
     total_transactions = serializers.IntegerField()
     total_rate = serializers.FloatField()
+
+
+class CurrentAmountSerializer(serializers.Serializer):
+    current_amount = serializers.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(99)])
