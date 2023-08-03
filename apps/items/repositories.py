@@ -194,7 +194,7 @@ class ItemRepository:
                 raise CurrentAmountException("The quantity of the item exceeds the limit.")
         else:
             item.current_amount -= 1
-            if item.current_amount < 1:
+            if item.current_amount < 0:
                 raise CurrentAmountException("The quantity of the item is less than 1.")
         item.save()
 
