@@ -24,6 +24,19 @@ class SellerItemListSerializer(serializers.Serializer):
     current_amount = serializers.IntegerField()
 
 
+class SellerTotalItemSerializer(serializers.Serializer):
+    total_count = serializers.SerializerMethodField()
+    items = serializers.SerializerMethodField()
+
+    def get_total_count(self, obj):
+        return obj.paginator.count
+
+    def get_items(self, obj):
+        items = self.context.get('items')
+        seller_serializer = SellerItemListSerializer(items, many=True)
+        return seller_serializer.data
+
+
 def get_images(item):
     images = item.item_images.filter(is_thumbnail=False)
     image_urls = [image.image.url for image in images]
