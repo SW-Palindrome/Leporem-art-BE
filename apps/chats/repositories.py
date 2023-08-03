@@ -14,6 +14,7 @@ class ChatRoomRepository:
                 last_message_datetime=Max('messages__write_datetime'),
                 last_message=last_message,
                 opponent_nickname=F('seller__user__nickname'),
+                opponent_user_id=F('seller__user_id'),
             )
             .select_related('seller__user')
         )
