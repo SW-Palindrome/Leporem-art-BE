@@ -10,7 +10,7 @@ from apps.items.serializers import (
     BuyerItemListSerializer,
     FavoriteItemListSerializer,
     SellerDetailedItemSerializer,
-    SellerItemListSerializer,
+    SellerTotalItemSerializer,
     ViewedItemListSerializer,
 )
 from apps.items.services import ItemService, LikeService, ViewedItemService
@@ -55,8 +55,8 @@ class FilterItemView(APIView):
             page_obj = paginator.page(page_number)
 
             if nickname:
-                seller_serializer = SellerItemListSerializer(page_obj, many=True)
-                return Response({"items": seller_serializer.data}, status=200)
+                seller_serializer = SellerTotalItemSerializer(page_obj, context={'items': page_obj})
+                return Response({"list": seller_serializer.data}, status=200)
             buyer_serializer = BuyerItemListSerializer(page_obj, many=True)
             return Response({"items": buyer_serializer.data}, status=200)
         except PageNotAnInteger:
