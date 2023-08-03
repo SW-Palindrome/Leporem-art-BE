@@ -9,6 +9,7 @@ class BuyerItemListSerializer(serializers.Serializer):
     thumbnail_image = serializers.CharField(source='thumbnail_image.image.url')
     like_count = serializers.IntegerField()
     is_liked = serializers.BooleanField()
+    current_amount = serializers.IntegerField()
 
 
 class SellerItemListSerializer(serializers.Serializer):
