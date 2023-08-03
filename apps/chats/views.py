@@ -27,7 +27,7 @@ class MessageCreateView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            MessageService().create(
+            message = MessageService().create(
                 chat_room_id=serializer.validated_data['chat_room_id'],
                 user_id=request.user.user_id,
                 text=serializer.validated_data.get('text'),
@@ -35,4 +35,4 @@ class MessageCreateView(APIView):
             )
         except ValueError as e:
             return Response({'message': str(e)}, status=400)
-        return Response({'message': 'success'}, status=201)
+        return Response({'message_id': message.message_id}, status=201)
