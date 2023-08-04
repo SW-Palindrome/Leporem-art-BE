@@ -1,13 +1,20 @@
 from rest_framework import serializers
 
 
+class MessageListSerializer(serializers.Serializer):
+    message_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
+    write_datetime = serializers.DateTimeField()
+    text = serializers.CharField(required=False)
+    image = serializers.ImageField(required=False)
+
+
 class BuyerChatRoomListSerializer(serializers.Serializer):
     chat_room_id = serializers.IntegerField()
     opponent_nickname = serializers.CharField()
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='seller.user.profile_image')
-    last_message = serializers.CharField()
-    last_message_datetime = serializers.DateTimeField()
+    message_list = MessageListSerializer(many=True, source='messages')
 
 
 class MessageCreateSerializer(serializers.Serializer):

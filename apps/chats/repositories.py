@@ -1,22 +1,20 @@
-from django.db.models import F, Max, OuterRef, Subquery
+from django.db.models import F, Max, Prefetch
 
 from apps.chats.models import ChatRoom, Message
 
 
 class ChatRoomRepository:
     def get_chat_rooms_by_buyer_id(self, buyer_id):
-        last_message = Subquery(
-            Message.objects.filter(chat_room_id=OuterRef('chat_room_id')).order_by('-write_datetime').values('text')[:1]
-        )
         return (
             ChatRoom.objects.filter(buyer_id=buyer_id)
+            .select_related('seller__user')
+            .prefetch_related(Prefetch('messages', queryset=Message.objects.order_by('write_datetime')))
             .annotate(
-                last_message_datetime=Max('messages__write_datetime'),
-                last_message=last_message,
+                max_write_datetime=Max('messages__write_datetime'),
                 opponent_nickname=F('seller__user__nickname'),
                 opponent_user_id=F('seller__user_id'),
             )
-            .select_related('seller__user')
+            .order_by('-max_write_datetime')
         )
 
 
