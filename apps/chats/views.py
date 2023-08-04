@@ -24,7 +24,7 @@ class SellerChatRoomListView(APIView):
     serializer_class = ChatRoomListSerializer
 
     def get(self, request):
-        chat_rooms = ChatRoomRepository().get_chat_rooms_by_buyer_id(request.user.seller.seller_id)
+        chat_rooms = ChatRoomRepository().get_chat_rooms_by_seller_id(request.user.seller.seller_id)
         serializer = self.serializer_class(chat_rooms, many=True)
         return Response(serializer.data)
 
