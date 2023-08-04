@@ -47,7 +47,7 @@ class KakaoLogInView(APIView):
         user = auth_service.login(id_token=request.data.get('id_token'))
         if user is None:
             return Response({'message': 'signin failed'}, status=401)
-        return Response({'user_id': user.user_id}, status=200)
+        return Response({'user_id': user.user_id, 'is_seller': user.is_seller}, status=200)
 
 
 class ValidateNicknameView(APIView):
