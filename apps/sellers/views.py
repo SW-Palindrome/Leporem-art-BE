@@ -105,7 +105,7 @@ class SellerMyInfoView(APIView):
     serializer_class = SellerMyInfoSerializer
 
     def get(self, request):
-        seller = SellerRepository().get_seller_info(request.user.user_id)
+        seller = SellerRepository().get_seller_info(request.user.seller.seller_id)
         data = self.serializer_class(seller).data
         return Response(data, status=200)
 
