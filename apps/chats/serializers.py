@@ -5,6 +5,7 @@ class MessageListSerializer(serializers.Serializer):
     message_id = serializers.IntegerField()
     user_id = serializers.IntegerField()
     write_datetime = serializers.DateTimeField()
+    is_read = serializers.BooleanField()
     text = serializers.CharField(required=False)
     image = serializers.ImageField(required=False)
 
