@@ -10,7 +10,7 @@ class MessageListSerializer(serializers.Serializer):
     image = serializers.ImageField(required=False)
 
 
-class BuyerChatRoomListSerializer(serializers.Serializer):
+class ChatRoomListSerializer(serializers.Serializer):
     chat_room_id = serializers.IntegerField()
     opponent_nickname = serializers.CharField()
     opponent_user_id = serializers.IntegerField()
