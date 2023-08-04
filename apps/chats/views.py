@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from apps.chats.repositories import ChatRoomRepository
 from apps.chats.serializers import ChatRoomListSerializer, MessageCreateSerializer
 from apps.chats.services import MessageService
+from apps.users.permissions import IsSeller
 
 
 class BuyerChatRoomListView(APIView):
@@ -19,7 +20,7 @@ class BuyerChatRoomListView(APIView):
 
 
 class SellerChatRoomListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSeller]
     serializer_class = ChatRoomListSerializer
 
     def get(self, request):
