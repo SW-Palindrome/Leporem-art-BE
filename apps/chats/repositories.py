@@ -9,20 +9,12 @@ class ChatRoomRepository:
     @transaction.atomic
     def create_by_buyer(self, buyer_id, seller_id, text, image):
         """판매자가 채팅방을 생성합니다."""
-        if buyer_id == seller_id:
-            raise ValueError('buyer_id와 seller_id가 동일합니다.')
-
         if bool(text) == bool(image):
             raise ValueError('text와 image 중 하나만 입력해주세요.')
 
         chat_room = ChatRoom.objects.create(buyer_id=buyer_id, seller_id=seller_id)
         buyer = Buyer.objects.get(buyer_id=buyer_id)
-        Message.objects.create(
-            chat_room=chat_room,
-            user_id=buyer.user_id,
-            text=text,
-            image=image,
-        )
+        MessageRepository().create(chat_room.chat_room_id, buyer.user_id, text, image)
 
     def get_chat_rooms_by_buyer_id(self, buyer_id):
         return (

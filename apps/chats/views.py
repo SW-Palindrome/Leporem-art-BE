@@ -9,7 +9,7 @@ from apps.chats.serializers import (
     ChatRoomListSerializer,
     MessageCreateSerializer,
 )
-from apps.chats.services import MessageService
+from apps.chats.services import ChatRoomService, MessageService
 from apps.users.permissions import IsSeller
 
 
@@ -41,7 +41,7 @@ class BuyerChatRoomCreateView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            chat_room = ChatRoomRepository().create_by_buyer(
+            chat_room = ChatRoomService().create_by_buyer(
                 buyer_id=request.user.buyer.buyer_id,
                 seller_id=serializer.validated_data['seller_id'],
                 text=serializer.validated_data.get('text'),
