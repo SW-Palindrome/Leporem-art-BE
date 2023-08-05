@@ -8,6 +8,7 @@ class MessageListSerializer(serializers.Serializer):
     is_read = serializers.BooleanField()
     text = serializers.CharField(required=False)
     image = serializers.ImageField(required=False)
+    uuid = serializers.UUIDField()
 
 
 class ChatRoomListSerializer(serializers.Serializer):
