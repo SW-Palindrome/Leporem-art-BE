@@ -24,6 +24,8 @@ class BuyerChatRoomCreateSerializer(serializers.Serializer):
     seller_id = serializers.IntegerField()
     text = serializers.CharField(required=False)
     image = serializers.ImageField(required=False)
+    chat_room_uuid = serializers.UUIDField(required=False)
+    message_uuid = serializers.UUIDField(required=False)
 
     def validate(self, attrs):
         if bool(attrs.get('text')) == bool(attrs.get('image')):

@@ -2,9 +2,9 @@ from apps.chats.repositories import ChatRoomRepository, MessageRepository
 
 
 class ChatRoomService:
-    def create_by_buyer(self, buyer_id, seller_id, text, image):
+    def create_by_buyer(self, buyer_id, seller_id, text, image, chat_room_uuid=None, message_uuid=None):
         chat_room_repository = ChatRoomRepository()
-        return chat_room_repository.create_by_buyer(buyer_id, seller_id, text, image)
+        return chat_room_repository.create_by_buyer(buyer_id, seller_id, text, image, chat_room_uuid, message_uuid)
 
 
 class MessageService:
