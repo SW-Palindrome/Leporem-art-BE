@@ -15,6 +15,7 @@ from apps.users.permissions import IsSeller
 
 class BuyerChatRoomView(APIView):
     permission_classes = [IsAuthenticated]
+    parser_classes = [FormParser, MultiPartParser]
 
     def get(self, request):
         chat_rooms = ChatRoomRepository().get_chat_rooms_by_buyer_id(request.user.buyer.buyer_id)
