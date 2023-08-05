@@ -11,6 +11,9 @@ class ChatRoom(TimeStampedModel):
     buyer = models.ForeignKey(Buyer, on_delete=models.PROTECT)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
 
+    class Meta:
+        unique_together = ('buyer', 'seller')
+
 
 class Message(TimeStampedModel):
     message_id = models.AutoField(primary_key=True)
