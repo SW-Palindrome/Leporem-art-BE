@@ -59,7 +59,7 @@ class MessageCreateView(APIView):
         serializer.is_valid(raise_exception=True)
         try:
             message = MessageService().create(
-                chat_room_uuid=serializer.validated_data.get['chat_room_uuid'],
+                chat_room_uuid=serializer.validated_data['chat_room_uuid'],
                 user_id=request.user.user_id,
                 text=serializer.validated_data.get('text'),
                 image=serializer.validated_data.get('image'),
