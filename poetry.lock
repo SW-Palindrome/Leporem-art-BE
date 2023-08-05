@@ -2573,16 +2573,6 @@ secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "ipaddress", "p
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
-name = "uuid"
-version = "1.30"
-description = "UUID object and generation functions (Python 2.3 or higher)"
-optional = false
-python-versions = "*"
-files = [
-    {file = "uuid-1.30.tar.gz", hash = "sha256:1f87cc004ac5120466f36c5beae48b4c48cc411968eed0eaecd3da82aa96193f"},
-]
-
-[[package]]
 name = "virtualenv"
 version = "20.24.0"
 description = "Virtual Python Environment builder"
@@ -2658,4 +2648,4 @@ test = ["websockets"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "dd5d32dc8514a15212f9edf0a7876697da5a114daff0c622a60e6ace29e41279"
+content-hash = "4e5be120bb4a940cc64dc3e6f0c66fa1d41ba11a0907d7967fb476dd7b3cb522"
