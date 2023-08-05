@@ -17,6 +17,7 @@ class ChatRoomRepository:
         chat_room = ChatRoom.objects.create(buyer_id=buyer_id, seller_id=seller_id, uuid=chat_room_uuid or uuid.uuid4())
         buyer = Buyer.objects.get(buyer_id=buyer_id)
         MessageRepository().create(chat_room.uuid, buyer.user_id, text, image, message_uuid)
+        return chat_room
 
     def get_chat_rooms_by_buyer_id(self, buyer_id):
         return (
