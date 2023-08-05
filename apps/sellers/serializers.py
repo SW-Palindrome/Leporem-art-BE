@@ -35,6 +35,8 @@ class SellerMyInfoSerializer(serializers.Serializer):
 
 
 class SellerInfoSerializer(serializers.Serializer):
+    seller_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
     nickname = serializers.CharField(max_length=20)
     profile_image = serializers.CharField(source='user.profile_image.url')
     item_count = serializers.IntegerField()
