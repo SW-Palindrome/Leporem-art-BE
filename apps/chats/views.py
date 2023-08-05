@@ -13,32 +13,16 @@ from apps.chats.services import ChatRoomService, MessageService
 from apps.users.permissions import IsSeller
 
 
-class BuyerChatRoomListView(APIView):
+class BuyerChatRoomView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = ChatRoomListSerializer
 
     def get(self, request):
         chat_rooms = ChatRoomRepository().get_chat_rooms_by_buyer_id(request.user.buyer.buyer_id)
-        serializer = self.serializer_class(chat_rooms, many=True)
+        serializer = ChatRoomListSerializer(chat_rooms, many=True)
         return Response(serializer.data)
-
-
-class SellerChatRoomListView(APIView):
-    permission_classes = [IsSeller]
-    serializer_class = ChatRoomListSerializer
-
-    def get(self, request):
-        chat_rooms = ChatRoomRepository().get_chat_rooms_by_seller_id(request.user.seller.seller_id)
-        serializer = self.serializer_class(chat_rooms, many=True)
-        return Response(serializer.data)
-
-
-class BuyerChatRoomCreateView(APIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = BuyerChatRoomCreateSerializer
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+        serializer = BuyerChatRoomCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
             chat_room = ChatRoomService().create_by_buyer(
@@ -50,6 +34,16 @@ class BuyerChatRoomCreateView(APIView):
         except ValueError as e:
             return Response({'message': str(e)}, status=400)
         return Response({'chat_room_id': chat_room.chat_room_id}, status=201)
+
+
+class SellerChatRoomListView(APIView):
+    permission_classes = [IsSeller]
+    serializer_class = ChatRoomListSerializer
+
+    def get(self, request):
+        chat_rooms = ChatRoomRepository().get_chat_rooms_by_seller_id(request.user.seller.seller_id)
+        serializer = self.serializer_class(chat_rooms, many=True)
+        return Response(serializer.data)
 
 
 class MessageCreateView(APIView):
