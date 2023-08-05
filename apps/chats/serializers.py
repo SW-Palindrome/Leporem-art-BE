@@ -8,7 +8,6 @@ class MessageListSerializer(serializers.Serializer):
     is_read = serializers.BooleanField()
     text = serializers.CharField(required=False)
     image = serializers.ImageField(required=False)
-    uuid = serializers.UUIDField()
 
 
 class ChatRoomListSerializer(serializers.Serializer):
@@ -17,15 +16,12 @@ class ChatRoomListSerializer(serializers.Serializer):
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='seller.user.profile_image')
     message_list = MessageListSerializer(many=True, source='messages')
-    uuid = serializers.UUIDField()
 
 
 class BuyerChatRoomCreateSerializer(serializers.Serializer):
     seller_id = serializers.IntegerField()
     text = serializers.CharField(required=False)
     image = serializers.ImageField(required=False)
-    chat_room_uuid = serializers.UUIDField(required=False)
-    message_uuid = serializers.UUIDField(required=False)
 
     def validate(self, attrs):
         if bool(attrs.get('text')) == bool(attrs.get('image')):
@@ -34,10 +30,9 @@ class BuyerChatRoomCreateSerializer(serializers.Serializer):
 
 
 class MessageCreateSerializer(serializers.Serializer):
-    chat_room_uuid = serializers.UUIDField()
+    chat_room_id = serializers.IntegerField()
     text = serializers.CharField(required=False)
     image = serializers.ImageField(required=False)
-    message_uuid = serializers.UUIDField(required=False)
 
     def validate(self, attrs):
         if bool(attrs.get('text')) == bool(attrs.get('image')):
