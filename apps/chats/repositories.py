@@ -34,12 +34,12 @@ class ChatRoomRepository:
     def get_chat_rooms_by_seller_id(self, seller_id):
         return (
             ChatRoom.objects.filter(seller_id=seller_id)
-            .select_related('seller__user')
+            .select_related('buyer__user')
             .prefetch_related(Prefetch('messages', queryset=Message.objects.order_by('write_datetime')))
             .annotate(
                 max_write_datetime=Max('messages__write_datetime'),
-                opponent_nickname=F('seller__user__nickname'),
-                opponent_user_id=F('seller__user_id'),
+                opponent_nickname=F('buyer__user__nickname'),
+                opponent_user_id=F('buyer__user_id'),
             )
             .order_by('-max_write_datetime')
         )
