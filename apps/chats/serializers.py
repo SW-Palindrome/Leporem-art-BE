@@ -16,6 +16,7 @@ class ChatRoomListSerializer(serializers.Serializer):
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='seller.user.profile_image')
     message_list = MessageListSerializer(many=True, source='messages')
+    uuid = serializers.UUIDField()
 
 
 class BuyerChatRoomCreateSerializer(serializers.Serializer):
@@ -30,9 +31,10 @@ class BuyerChatRoomCreateSerializer(serializers.Serializer):
 
 
 class MessageCreateSerializer(serializers.Serializer):
-    chat_room_id = serializers.IntegerField()
+    chat_room_uuid = serializers.UUIDField()
     text = serializers.CharField(required=False)
     image = serializers.ImageField(required=False)
+    message_uuid = serializers.UUIDField(required=False)
 
     def validate(self, attrs):
         if bool(attrs.get('text')) == bool(attrs.get('image')):
