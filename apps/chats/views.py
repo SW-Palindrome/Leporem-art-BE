@@ -31,6 +31,8 @@ class BuyerChatRoomView(APIView):
                 seller_id=serializer.validated_data['seller_id'],
                 text=serializer.validated_data.get('text'),
                 image=serializer.validated_data.get('image'),
+                chat_room_uuid=serializer.validated_data.get('chat_room_uuid'),
+                message_uuid=serializer.validated_data.get('message_uuid'),
             )
         except ValueError as e:
             return Response({'message': str(e)}, status=400)
@@ -57,10 +59,11 @@ class MessageCreateView(APIView):
         serializer.is_valid(raise_exception=True)
         try:
             message = MessageService().create(
-                chat_room_id=serializer.validated_data['chat_room_id'],
+                chat_room_uuid=serializer.validated_data.get['chat_room_uuid'],
                 user_id=request.user.user_id,
                 text=serializer.validated_data.get('text'),
                 image=serializer.validated_data.get('image'),
+                message_uuid=serializer.validated_data.get('message_uuid'),
             )
         except ValueError as e:
             return Response({'message': str(e)}, status=400)
