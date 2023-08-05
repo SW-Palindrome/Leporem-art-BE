@@ -1,4 +1,10 @@
-from apps.chats.repositories import MessageRepository
+from apps.chats.repositories import ChatRoomRepository, MessageRepository
+
+
+class ChatRoomService:
+    def create_by_buyer(self, buyer_id, seller_id, text, image):
+        chat_room_repository = ChatRoomRepository()
+        return chat_room_repository.create_by_buyer(buyer_id, seller_id, text, image)
 
 
 class MessageService:

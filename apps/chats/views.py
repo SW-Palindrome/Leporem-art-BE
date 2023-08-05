@@ -4,19 +4,36 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.chats.repositories import ChatRoomRepository
-from apps.chats.serializers import ChatRoomListSerializer, MessageCreateSerializer
-from apps.chats.services import MessageService
+from apps.chats.serializers import (
+    BuyerChatRoomCreateSerializer,
+    ChatRoomListSerializer,
+    MessageCreateSerializer,
+)
+from apps.chats.services import ChatRoomService, MessageService
 from apps.users.permissions import IsSeller
 
 
-class BuyerChatRoomListView(APIView):
+class BuyerChatRoomView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = ChatRoomListSerializer
 
     def get(self, request):
         chat_rooms = ChatRoomRepository().get_chat_rooms_by_buyer_id(request.user.buyer.buyer_id)
-        serializer = self.serializer_class(chat_rooms, many=True)
+        serializer = ChatRoomListSerializer(chat_rooms, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = BuyerChatRoomCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            chat_room = ChatRoomService().create_by_buyer(
+                buyer_id=request.user.buyer.buyer_id,
+                seller_id=serializer.validated_data['seller_id'],
+                text=serializer.validated_data.get('text'),
+                image=serializer.validated_data.get('image'),
+            )
+        except ValueError as e:
+            return Response({'message': str(e)}, status=400)
+        return Response({'chat_room_id': chat_room.chat_room_id}, status=201)
 
 
 class SellerChatRoomListView(APIView):
