@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
@@ -10,6 +12,7 @@ class ChatRoom(TimeStampedModel):
     chat_room_id = models.AutoField(primary_key=True)
     buyer = models.ForeignKey(Buyer, on_delete=models.PROTECT)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     class Meta:
         unique_together = ('buyer', 'seller')
@@ -23,3 +26,4 @@ class Message(TimeStampedModel):
     is_read = models.BooleanField(default=False)
     text = models.CharField(max_length=255)
     image = models.ImageField(upload_to='chats/message_image', null=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
