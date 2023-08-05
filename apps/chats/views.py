@@ -6,8 +6,9 @@ from rest_framework.views import APIView
 from apps.chats.repositories import ChatRoomRepository
 from apps.chats.serializers import (
     BuyerChatRoomCreateSerializer,
-    ChatRoomListSerializer,
+    BuyerChatRoomListSerializer,
     MessageCreateSerializer,
+    SellerChatRoomListSerializer,
 )
 from apps.chats.services import ChatRoomService, MessageService
 from apps.users.permissions import IsSeller
@@ -19,7 +20,7 @@ class BuyerChatRoomView(APIView):
 
     def get(self, request):
         chat_rooms = ChatRoomRepository().get_chat_rooms_by_buyer_id(request.user.buyer.buyer_id)
-        serializer = ChatRoomListSerializer(chat_rooms, many=True)
+        serializer = BuyerChatRoomListSerializer(chat_rooms, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -41,7 +42,7 @@ class BuyerChatRoomView(APIView):
 
 class SellerChatRoomListView(APIView):
     permission_classes = [IsSeller]
-    serializer_class = ChatRoomListSerializer
+    serializer_class = SellerChatRoomListSerializer
 
     def get(self, request):
         chat_rooms = ChatRoomRepository().get_chat_rooms_by_seller_id(request.user.seller.seller_id)

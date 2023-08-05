@@ -11,11 +11,20 @@ class MessageListSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
 
 
-class ChatRoomListSerializer(serializers.Serializer):
+class BuyerChatRoomListSerializer(serializers.Serializer):
     chat_room_id = serializers.IntegerField()
     opponent_nickname = serializers.CharField()
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='seller.user.profile_image')
+    message_list = MessageListSerializer(many=True, source='messages')
+    uuid = serializers.UUIDField()
+
+
+class SellerChatRoomListSerializer(serializers.Serializer):
+    chat_room_id = serializers.IntegerField()
+    opponent_nickname = serializers.CharField()
+    opponent_user_id = serializers.IntegerField()
+    opponent_profile_image = serializers.ImageField(source='buyer.user.profile_image')
     message_list = MessageListSerializer(many=True, source='messages')
     uuid = serializers.UUIDField()
 
