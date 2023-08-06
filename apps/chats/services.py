@@ -1,3 +1,4 @@
+from apps.chats.models import Message
 from apps.chats.repositories import ChatRoomRepository, MessageRepository
 
 
@@ -8,6 +9,41 @@ class ChatRoomService:
 
 
 class MessageService:
-    def create(self, chat_room_uuid, user_id, text, image, message_uuid=None):
+    def create(self, chat_room_uuid, user_id, message_type, message, message_uuid=None):
         message_repository = MessageRepository()
-        return message_repository.create(chat_room_uuid, user_id, text, image, message_uuid)
+        match message_type:
+            case Message.Type.TEXT:
+                return message_repository.create_text(
+                    chat_room_uuid=chat_room_uuid,
+                    user_id=user_id,
+                    text=message,
+                    message_uuid=message_uuid,
+                )
+            case Message.Type.IMAGE:
+                return message_repository.create_image(
+                    chat_room_uuid=chat_room_uuid,
+                    user_id=user_id,
+                    image=message,
+                    message_uuid=message_uuid,
+                )
+            case Message.Type.ITEM_SHARE:
+                return message_repository.create_item_share(
+                    chat_room_uuid=chat_room_uuid,
+                    user_id=user_id,
+                    item_id=message,
+                    message_uuid=message_uuid,
+                )
+            case Message.Type.ITEM_INQUIRY:
+                return message_repository.create_item_inquiry(
+                    chat_room_uuid=chat_room_uuid,
+                    user_id=user_id,
+                    item_id=message,
+                    message_uuid=message_uuid,
+                )
+            case Message.Type.ORDER:
+                return message_repository.create_order(
+                    chat_room_uuid=chat_room_uuid,
+                    user_id=user_id,
+                    order_id=message,
+                    message_uuid=message_uuid,
+                )
