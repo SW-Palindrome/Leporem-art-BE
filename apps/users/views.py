@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.shortcuts import redirect
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
@@ -99,3 +101,18 @@ class RemoveUserView(APIView):
         if not user_service.remove(request.data['nickname'], request.user.user_id):
             return Response({'message': 'remove user failed'}, status=400)
         return Response({'message': 'success'}, status=200)
+
+
+class AppleLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    APPLE_BASE_URL = "https://appleid.apple.com"
+    APPLE_AUTH_URL = f"{APPLE_BASE_URL}/auth/authorize"
+
+    def get(self, request):
+        client_id = settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT')
+        redirect_uri = 'https://dev.leporem.art/users/login/apple'
+        uri = f"{self.APPLE_AUTH_URL}?client_id={client_id}&&redirect_uri={redirect_uri}&response_type=code"
+
+        res = redirect(uri)
+        return res
