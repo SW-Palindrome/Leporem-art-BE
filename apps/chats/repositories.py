@@ -7,6 +7,7 @@ from apps.buyers.models import Buyer
 from apps.chats.models import ChatRoom, Message
 from apps.items.models import Item
 from apps.orders.models import Order
+from utils.files import create_random_filename
 
 
 class ChatRoomRepository:
@@ -72,6 +73,7 @@ class MessageRepository:
     def create_image(self, chat_room_uuid, user_id, image, message_uuid=None):
         chat_room = ChatRoom.objects.get(uuid=chat_room_uuid)
         self._validate_user_in_chat_room(chat_room, user_id)
+        image.name = create_random_filename(image.name)
 
         return Message.objects.create(
             chat_room=chat_room,
