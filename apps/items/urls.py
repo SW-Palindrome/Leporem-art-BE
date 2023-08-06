@@ -4,6 +4,7 @@ from apps.items.views import (
     BuyerItemView,
     FavoriteItemView,
     FilterItemView,
+    GuestItemView,
     LikeItemView,
     SellerItemView,
     ViewedItemView,
@@ -16,4 +17,5 @@ urlpatterns = [
     path('detail/seller', SellerItemView.as_view()),
     path('viewed', ViewedItemView.as_view()),
     path('favorites', FavoriteItemView.as_view()),
+    path('guest', GuestItemView.as_view()),
 ]
