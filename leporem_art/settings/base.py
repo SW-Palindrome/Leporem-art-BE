@@ -175,7 +175,7 @@ APPLE_CONFIG = {
     oz66KYyu8BsHEhSaAoCKr99t3y2xA7vHT3MhyT46h2XwmFxFI2WuqNeJ79rxPbIU
     vhDfYYmI
     -----END PRIVATE KEY-----''',
-    'SOCIAL_AUTH_APPLE_ID_SCOPE': ['email', 'name'],
+    'SOCIAL_AUTH_APPLE_ID_SCOPE': 'email, name',
     'SOCIAL_AUTH_APPLE_ID_EMAIL_AS_USERNAME': True,  # If you want to use email as username
 }
 
