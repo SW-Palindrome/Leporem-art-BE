@@ -22,6 +22,7 @@ class SellerItemListSerializer(serializers.Serializer):
     avg_rating = serializers.DecimalField(max_digits=2, decimal_places=1)
     time_diff = serializers.DurationField()
     current_amount = serializers.IntegerField()
+    is_liked = serializers.BooleanField()
 
 
 class SellerTotalItemSerializer(serializers.Serializer):
