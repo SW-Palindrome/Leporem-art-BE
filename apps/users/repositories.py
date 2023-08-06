@@ -88,3 +88,8 @@ class UserRepository:
 
     def get_token(self, user_id):
         return UserOAuthInfo.objects.get(user=user_id).values('refresh_token')
+
+    def refresh_token(self, user_id, token):
+        user_oauth_info = UserOAuthInfo.objects.get(user=user_id)
+        user_oauth_info.refresh_token = token
+        user_oauth_info.save()
