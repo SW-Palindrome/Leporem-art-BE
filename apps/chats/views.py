@@ -34,6 +34,7 @@ class BuyerChatRoomView(APIView):
                 image=serializer.validated_data.get('image'),
                 chat_room_uuid=serializer.validated_data.get('chat_room_uuid'),
                 message_uuid=serializer.validated_data.get('message_uuid'),
+                message_type=serializer.validated_data.get('message_type'),
             )
         except ValueError as e:
             return Response({'message': str(e)}, status=400)

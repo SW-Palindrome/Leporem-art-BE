@@ -37,6 +37,7 @@ class BuyerChatRoomCreateSerializer(serializers.Serializer):
     image = serializers.ImageField(required=False)
     chat_room_uuid = serializers.UUIDField(required=False)
     message_uuid = serializers.UUIDField(required=False)
+    message_type = serializers.ChoiceField(choices=Message.Type, default=Message.Type.TEXT)
 
     def validate(self, attrs):
         if bool(attrs.get('text')) == bool(attrs.get('image')):
