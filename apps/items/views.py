@@ -229,3 +229,20 @@ class GuestItemView(APIView):
             return Response({"message": "PageNotAnInteger"}, status=400)
         except EmptyPage:
             return Response({"message": "EmptyPage"}, status=400)
+
+
+class GuestDetailedItemView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        item_id = request.GET.get('item_id')
+
+        item_service = ItemService()
+        item = item_service.guest_detailed_item(item_id)
+        if item:
+            try:
+                serializer = BuyerDetailedItemSerializer(item)
+                return Response({"detail": serializer.data}, status=200)
+            except Exception as e:
+                return Response({"error": str(e)}, status=400)
+        return Response({"message": "ObjectDoesNotExist"}, status=404)
