@@ -25,6 +25,7 @@ class UserOAuthInfo(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_oauth_info')
     provider = models.CharField(max_length=20)
     provider_id = models.CharField(max_length=50)
+    refresh_token = models.CharField(max_length=250, null=True)
 
     class Meta:
         unique_together = ('provider', 'provider_id')
