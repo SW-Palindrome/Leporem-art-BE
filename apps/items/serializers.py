@@ -63,7 +63,7 @@ class BuyerDetailedItemSerializer(serializers.Serializer):
     thumbnail_image = serializers.CharField(source='thumbnail_image.image.url')
     images = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
-    like = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
     width = serializers.DecimalField(max_digits=6, decimal_places=2)
     depth = serializers.DecimalField(max_digits=6, decimal_places=2)
     height = serializers.DecimalField(max_digits=6, decimal_places=2)
@@ -74,7 +74,7 @@ class BuyerDetailedItemSerializer(serializers.Serializer):
     def get_category(self, obj):
         return get_category(obj)
 
-    def get_like(self, obj):
+    def get_is_liked(self, obj):
         if obj.buyer_id:
             return True
         return False

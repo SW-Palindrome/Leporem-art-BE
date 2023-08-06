@@ -44,6 +44,10 @@ class ItemService:
         items = ItemRepository().get_guest_items()
         return items
 
+    def guest_detailed_item(self, item_id):
+        detailed_item = ItemRepository().get_guest_detailed_item(item_id)
+        return detailed_item
+
 
 class LikeService:
     def check_like(self, item_id, buyer_id):

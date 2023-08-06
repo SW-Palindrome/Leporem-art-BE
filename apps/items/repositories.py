@@ -211,6 +211,15 @@ class ItemRepository:
         )
         return search_item
 
+    def get_guest_detailed_item(self, item_id):
+        like_subquery = Like.objects.filter(item_id=item_id, buyer_id=None)
+        detailed_item = Item.objects.annotate(
+            nickname=F('seller__user__nickname'),
+            temperature=F('seller__temperature'),
+            buyer_id=Subquery(like_subquery.values('buyer_id')[:1]),
+        ).get(item_id=item_id)
+        return detailed_item
+
 
 class LikeRepository:
     def get_like(self, item_id, buyer_id):
