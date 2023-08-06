@@ -40,6 +40,10 @@ class ItemService:
         except Buyer.DoesNotExist:
             raise BuyerDoesNotExist("Buyer does not exist.")
 
+    def guest_items(self):
+        items = ItemRepository().get_guest_items()
+        return items
+
 
 class LikeService:
     def check_like(self, item_id, buyer_id):
