@@ -8,9 +8,9 @@ class MessageListSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     write_datetime = serializers.DateTimeField()
     is_read = serializers.BooleanField()
-    text = serializers.CharField(required=False)
-    image = serializers.ImageField(required=False)
+    message = serializers.CharField()
     uuid = serializers.UUIDField()
+    type = serializers.CharField()
 
 
 class BuyerChatRoomListSerializer(serializers.Serializer):
