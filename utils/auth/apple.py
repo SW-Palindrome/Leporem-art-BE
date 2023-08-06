@@ -51,19 +51,19 @@ class AppleOAuth2:
         """CREATE CLIENT_SECRET"""
         headers = {
             'alg': 'ES256',
-            'kid': settings.APP_CONFIG.get('SOCIAL_AUTH_APPLE_ID_KEY'),
+            'kid': settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_KEY'),
         }
 
         payload = {
-            'iss': settings.APP_CONFIG.get('SOCIAL_AUTH_APPLE_ID_TEAM'),
+            'iss': settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_TEAM'),
             'iat': int(datetime.now().timestamp()),
             'exp': int(datetime.now() + timedelta(days=180)).timestamp(),
             'aud': "https://appleid.apple.com",
-            'sub': settings.APP_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT'),
+            'sub': settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT'),
         }
 
         client_secret = jwt.encode(
-            payload, settings.APP_CONFIG.get('SOCIAL_AUTH_APPLE_PRIVATE_KEY'), algorithms='ES256', headers=headers
+            payload, settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_PRIVATE_KEY'), algorithms='ES256', headers=headers
         ).decode("utf-8")
 
-        return settings.APP_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT'), client_secret
+        return settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT'), client_secret
