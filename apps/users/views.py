@@ -8,13 +8,9 @@ from rest_framework.views import APIView
 
 from apps.users.repositories import UserRepository
 from apps.users.services import AuthService, UserService
-from utils.auth.apple import (
-    AppleOAuth2,
-    generate_access_token,
-    refresh_token,
-    validate_token,
-)
+from utils.auth.apple import AppleOAuth2
 from utils.auth.kakao import extract_provider_id
+from utils.auth.leporemart import generate_access_token, refresh_token, validate_token
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
 from .permissions import IsStaff
