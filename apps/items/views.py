@@ -211,7 +211,7 @@ class GuestItemView(APIView):
             'search': search,
         }
 
-        items = ItemService.guset_items(self)
+        items = ItemService.guest_items(self)
         filtered_items = ItemFilter(get_params, queryset=items)
 
         paginator = Paginator(filtered_items.qs, 20)
