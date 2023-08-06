@@ -15,3 +15,4 @@ class BuyerMyOrderSerializer(serializers.Serializer):
     price = serializers.IntegerField()
     ordered_datetime = serializers.DateTimeField()
     order_status = serializers.CharField(source='get_order_status_display')
+    is_reviewed = serializers.BooleanField()
