@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from apps.chats.models import Message
+
 
 class MessageListSerializer(serializers.Serializer):
     message_id = serializers.IntegerField()
@@ -47,6 +49,7 @@ class MessageCreateSerializer(serializers.Serializer):
     text = serializers.CharField(required=False)
     image = serializers.ImageField(required=False)
     message_uuid = serializers.UUIDField(required=False)
+    type = serializers.ChoiceField(choices=Message.Type, default=Message.Type.TEXT)
 
     def validate(self, attrs):
         if bool(attrs.get('text')) == bool(attrs.get('image')):
