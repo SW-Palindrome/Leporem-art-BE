@@ -114,7 +114,7 @@ class AppleLoginUrlView(APIView):
 
     def get(self, request):
         client_id = settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT')
-        redirect_uri = 'https://dev.leporem.art/users/validate/apple'
+        redirect_uri = 'https://dev.leporem.art/users/login/apple'
         uri = f"{self.APPLE_AUTH_URL}?response_type=code&\
         client_id={client_id}&\
         response_mode=query&\
