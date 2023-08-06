@@ -85,3 +85,6 @@ class UserRepository:
             refresh_token=refresh_token,
         )
         return user_info
+
+    def get_token(self, user_id):
+        return UserOAuthInfo.objects.get(user=user_id).values('refresh_token')
