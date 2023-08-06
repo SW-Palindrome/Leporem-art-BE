@@ -1,6 +1,7 @@
 import re
 from typing import Optional
 
+from django.conf import settings
 from django.db import IntegrityError
 from rest_framework.exceptions import AuthenticationFailed
 
@@ -12,7 +13,6 @@ from apps.users.exceptions import (
 )
 from apps.users.models import User
 from apps.users.repositories import UserRepository
-from leporem_art import settings
 from utils.auth.kakao import extract_provider_id as kakao_extract_provider_id
 from utils.auth.kakao import validate_id_token as kakao_validate_id_token
 
@@ -69,6 +69,20 @@ class AuthService:
                 raise AuthenticationFailed('No such user')
 
         return user
+
+    def apple_signup(self, provider, provider_id, refresh_token, is_agree_privacy, is_agree_ads, nickname):
+        user_repository = UserRepository()
+        buyer_repository = BuyerRepository()
+        if not self.check_nickname(nickname):
+            raise DuplicateNicknameException
+        try:
+            user = user_repository.apple_signup(
+                provider, provider_id, refresh_token, is_agree_privacy, is_agree_ads, nickname
+            )
+        except IntegrityError:
+            raise DuplicateUserInfoException
+        buyer_repository.register(user.user_id)
+        return True
 
 
 class UserService:

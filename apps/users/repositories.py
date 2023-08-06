@@ -68,3 +68,20 @@ class UserRepository:
     def get_user_info(self, user_id):
         user = User.objects.get(user_id=user_id)
         return user
+
+    @transaction.atomic
+    def apple_signup(self, provider, provider_id, refresh_token, is_agree_privacy, is_agree_ads, nickname):
+        user_info = User.objects.create(
+            is_agree_privacy=is_agree_privacy,
+            is_agree_ads=is_agree_ads,
+            nickname=nickname,
+            is_seller=False,
+            is_staff=False,
+        )
+        UserOAuthInfo.objects.create(
+            user=user_info,
+            provider=provider,
+            provider_id=provider_id,
+            refresh_token=refresh_token,
+        )
+        return user_info

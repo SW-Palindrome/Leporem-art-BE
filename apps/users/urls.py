@@ -2,6 +2,9 @@ from django.conf import settings
 from django.urls import path
 
 from apps.users.views import (
+    AppleLoginUrlView,
+    AppleLoginView,
+    AppleSignUpView,
     ChangeNicknameView,
     ChangeProfileImageView,
     KakaoLogInView,
@@ -16,6 +19,9 @@ urlpatterns = [
     path('validate/nickname/<str:nickname>', ValidateNicknameView.as_view()),
     path('nickname', ChangeNicknameView.as_view()),
     path('profile-image', ChangeProfileImageView.as_view()),
+    path('login/apple', AppleLoginUrlView.as_view()),
+    path('validate/apple', AppleLoginView.as_view()),
+    path('signup/apple', AppleSignUpView.as_view()),
 ]
 
 if settings.DEBUG:
