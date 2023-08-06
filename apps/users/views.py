@@ -6,7 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.users.repositories import UserRepository
 from apps.users.services import AuthService, UserService
+from utils.auth.apple import AppleOAuth2
 from utils.auth.kakao import extract_provider_id
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
@@ -116,3 +118,22 @@ class AppleLoginView(APIView):
 
         res = redirect(uri)
         return res
+
+
+class AppleCallbackView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    PROVIDER = "APPLE"
+
+    def get(self, request):
+        """자체 token 생성 및 검증 필요"""
+        data = request.query_params
+        code = data.get('code')
+
+        apple_oauth = AppleOAuth2()
+        user_details = apple_oauth.do_auth(code)
+
+        user_repository = UserRepository()
+        if user_repository.login(self.PROVIDER, user_details.get('sub')):
+            return Response({"message": "login successful"}, status=200)
+        return Response({"message": user_details}, status=404)
