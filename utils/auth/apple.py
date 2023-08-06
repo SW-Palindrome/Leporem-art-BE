@@ -3,10 +3,7 @@ from datetime import datetime, timedelta
 import jwt
 import requests
 from django.conf import settings
-from rest_framework.exceptions import AuthenticationFailed
 from social_core.utils import handle_http_errors
-
-from apps.users.repositories import UserRepository
 
 
 class AppleOAuth2:
@@ -70,70 +67,3 @@ class AppleOAuth2:
         ).decode("utf-8")
 
         return settings.APP_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT'), client_secret
-
-
-def generate_access_token(payload, type):
-    if type == "access":
-        exp = datetime.now() + timedelta(hours=3)
-    elif type == "refresh":
-        exp = datetime.now() + timedelta(days=180)
-    else:
-        raise Exception("Invalid token type.")
-
-    token_payload = {
-        'user_id': payload.user_id,
-        'exp': exp,
-        'iat': datetime.now(),
-    }
-
-    token = jwt.encode(token_payload, settings.JWT_SECRET_KEY, settings.JWT_ALGORITHM).decode('utf-8')
-
-    return token
-
-
-def validate_token(request):
-    try:
-        token = request.headers.get("AUTHORIZATION")
-        if not token:
-            return None
-        decoded = jwt.decode(token, settings.JWT_AUTH.get("JWT_SECRET_KEY"), algorithms=["HS256"])
-        provider = decoded.get("provider")
-        email = decoded.get("email")
-        user = UserRepository().apple_login(provider, email)
-        return user, None
-    except jwt.exceptions.DecodeError:
-        msg = {
-            "message": "잘못된 토큰입니다.",
-            "code": "JWT_403_INVALID_ACCESSTOKEN",
-        }
-        raise AuthenticationFailed(msg)
-    except jwt.ExpiredSignatureError:
-        msg = {
-            "message": "토큰이 만료되었습니다.",
-            "code": "JWT_403_EXPIRED_ACCESSTOKEN",
-        }
-        raise AuthenticationFailed(msg)
-
-
-def refresh_token(request):
-    try:
-        refresh_token = request.headers.get('refresh_token')
-        if not refresh_token:
-            msg = {
-                "message": "refresh_token을 보내주세요.",
-                "code": "JWT_400_NOT_FOUND_TOKEN",
-            }
-            raise AuthenticationFailed(msg)
-        decoded = jwt.decode(refresh_token, settings.JWT_AUTH("JWT_SECRET_KEY"), settings.JWT_AUTH("JWT_ALGORITHM"))
-
-        payload = {'provider': decoded.get("provider"), 'email': decoded.get("email")}
-        access_token = generate_access_token(payload, "access")
-        refresh_token = generate_access_token(payload, "refresh")
-
-        return {"email": decoded.get("email"), "access_token": access_token, "refresh_token": refresh_token}
-    except jwt.ExpiredSignatureError:
-        msg = {
-            "message": "refresh_token이 만료되었습니다.",
-            "code": "JWT_401_TOKEN_EXPIRED",
-        }
-        raise AuthenticationFailed(msg)
