@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 import pymysql
@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.sellers',
     'apps.items',
+    "dj_rest_auth",
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -139,6 +141,7 @@ REST_FRAMEWORK = {
         'apps.users.authentications.OIDCAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -160,3 +163,23 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 # Setting AWS_QUERYSTRING_AUTH to False removes query parameter authentication from generated URLs.
 # https://django-storages.readthedocs.io/en/1.5.0/backends/amazon-S3.html
 AWS_QUERYSTRING_AUTH = False
+
+APPLE_CONFIG = {
+    'SOCIAL_AUTH_APPLE_ID_CLIENT': 'com.palindrome.leporemart',  # Your client_id com.application.your, aka "Service ID"
+    'SOCIAL_AUTH_APPLE_ID_TEAM': 'BH6CVTK388',  # Your Team ID, ie K2232113
+    'SOCIAL_AUTH_APPLE_ID_KEY': '8FM8MZ2XUC',  # Your Key ID, ie Y2P99J3N81K
+    'SOCIAL_AUTH_APPLE_ID_SECRET': '''
+    -----BEGIN PRIVATE KEY-----
+    MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgVElWMtuZjXsfCBIR
+    Mv3Ims/BSOlGpQL6KUeLp/DuOqigCgYIKoZIzj0DAQehRANCAATs5MXLjb0XmSAw
+    oz66KYyu8BsHEhSaAoCKr99t3y2xA7vHT3MhyT46h2XwmFxFI2WuqNeJ79rxPbIU
+    vhDfYYmI
+    -----END PRIVATE KEY-----''',
+    'SOCIAL_AUTH_APPLE_ID_SCOPE': ['email', 'name'],
+    'SOCIAL_AUTH_APPLE_ID_EMAIL_AS_USERNAME': True,  # If you want to use email as username
+}
+
+AUTHENTICATION_BACKENDS = [
+    "social_core.backends.oauth",
+    "social_core.backends.apple.AppleIdAuth",
+]
