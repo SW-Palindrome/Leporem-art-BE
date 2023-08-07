@@ -168,13 +168,12 @@ APPLE_CONFIG = {
     'SOCIAL_AUTH_APPLE_ID_CLIENT': 'leporemart.palindrome.com',  # Your client_id com.application.your, aka "Service ID"
     'SOCIAL_AUTH_APPLE_ID_TEAM': 'BH6CVTK388',  # Your Team ID, ie K2232113
     'SOCIAL_AUTH_APPLE_ID_KEY': '8FM8MZ2XUC',  # Your Key ID, ie Y2P99J3N81K
-    'SOCIAL_AUTH_APPLE_ID_SECRET': '''
-    -----BEGIN PRIVATE KEY-----
-    MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgVElWMtuZjXsfCBIR
-    Mv3Ims/BSOlGpQL6KUeLp/DuOqigCgYIKoZIzj0DAQehRANCAATs5MXLjb0XmSAw
-    oz66KYyu8BsHEhSaAoCKr99t3y2xA7vHT3MhyT46h2XwmFxFI2WuqNeJ79rxPbIU
-    vhDfYYmI
-    -----END PRIVATE KEY-----''',
+    'SOCIAL_AUTH_APPLE_ID_SECRET': '''-----BEGIN PRIVATE KEY-----
+        MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgVElWMtuZjXsfCBIR
+        Mv3Ims/BSOlGpQL6KUeLp/DuOqigCgYIKoZIzj0DAQehRANCAATs5MXLjb0XmSAw
+        oz66KYyu8BsHEhSaAoCKr99t3y2xA7vHT3MhyT46h2XwmFxFI2WuqNeJ79rxPbIU
+        vhDfYYmI
+        -----END PRIVATE KEY-----''',
     'SOCIAL_AUTH_APPLE_ID_SCOPE': 'email, name',
     'SOCIAL_AUTH_APPLE_ID_EMAIL_AS_USERNAME': True,  # If you want to use email as username
 }
