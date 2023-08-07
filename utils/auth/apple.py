@@ -63,7 +63,7 @@ class AppleOAuth2:
         }
 
         client_secret = jwt.encode(
-            payload, settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_PRIVATE_KEY'), algorithm='ES256', headers=headers
+            payload, settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_SECRET'), algorithm='ES256', headers=headers
         ).decode("utf-8")
 
         return settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT'), client_secret
