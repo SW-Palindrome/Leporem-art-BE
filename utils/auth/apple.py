@@ -25,7 +25,7 @@ class AppleOAuth2:
             'client_secret': client_secret,
             'code': code,
             'grant_type': 'authorization_code',
-            'redirect_uri': 'https://dev.leporem.art/users/login/apple',
+            'redirect_uri': 'https://dev.leporem.art/users/validate/apple',
         }
         """client secret 유효성 검사"""
         res = requests.post(AppleOAuth2.ACCESS_TOKEN_URL, data=data, headers=headers)
@@ -56,14 +56,14 @@ class AppleOAuth2:
 
         payload = {
             'iss': settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_TEAM'),
-            'iat': int(datetime.now().timestamp()),
-            'exp': int(datetime.now() + timedelta(days=180)).timestamp(),
+            'iat': int(datetime.utcnow().timestamp()),
+            'exp': int((datetime.utcnow() + timedelta(days=180)).timestamp()),
             'aud': "https://appleid.apple.com",
             'sub': settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT'),
         }
 
         client_secret = jwt.encode(
-            payload, settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_PRIVATE_KEY'), algorithms='ES256', headers=headers
+            payload, settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_PRIVATE_KEY'), algorithm='ES256', headers=headers
         ).decode("utf-8")
 
         return settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT'), client_secret
