@@ -105,8 +105,8 @@ class SellerService:
             colors=colors,
         )
 
-    def get_presigned_url_to_post_shorts(self):
-        return create_presigned_url(f'{Item.shorts.field.upload_to}{str(uuid.uuid4())}')
+    def get_presigned_url_to_post_shorts(self, extension='mp4'):
+        return create_presigned_url(f'{Item.shorts.field.upload_to}{str(uuid.uuid4())}.{extension}')
 
     def change_description(self, seller_id, description):
         seller_repository = SellerRepository()

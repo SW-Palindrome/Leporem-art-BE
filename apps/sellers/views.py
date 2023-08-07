@@ -55,7 +55,8 @@ class SellerUploadShortsUrlView(APIView):
     permission_classes = [IsSeller]
 
     def get(self, request):
-        return Response(SellerService().get_presigned_url_to_post_shorts())
+        extension = request.GET.get('extension', 'mp4')
+        return Response(SellerService().get_presigned_url_to_post_shorts(extension))
 
 
 class SellerItemView(APIView):
