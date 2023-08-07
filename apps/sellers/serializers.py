@@ -14,7 +14,6 @@ class SellerItemSerializer(serializers.Serializer):
     amount = serializers.IntegerField()
     title = serializers.CharField(max_length=46)
     description = serializers.CharField(max_length=255)
-    shorts = serializers.FileField()
     width = serializers.DecimalField(max_digits=6, decimal_places=2, required=False)
     depth = serializers.DecimalField(max_digits=6, decimal_places=2, required=False)
     height = serializers.DecimalField(max_digits=6, decimal_places=2, required=False)
