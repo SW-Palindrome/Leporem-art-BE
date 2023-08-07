@@ -14,6 +14,12 @@ from apps.orders.repositories import OrderRepository, ReviewRepository
 
 
 class OrderService:
+    def get_order_info(self, order_id, user_id):
+        order = OrderRepository().get_order(order_id)
+        if user_id not in [order.buyer.user_id, order.item.seller.user_id]:
+            raise OrderPermissionException('주문자 혹은 판매자가 아닙니다.')
+        return order
+
     def order(self, buyer_id, item_id):
         item = ItemRepository().get_item(item_id)
         buyer = BuyerRepository().get_buyer(buyer_id)

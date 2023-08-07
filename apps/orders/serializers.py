@@ -1,6 +1,17 @@
 from rest_framework import serializers
 
 
+class OrderInfoSerializer(serializers.Serializer):
+    order_id = serializers.IntegerField()
+    item_id = serializers.IntegerField()
+    item_title = serializers.CharField(source='item.title')
+    item_thumbnail_image = serializers.CharField(source='item.thumbnail_image.image.url')
+    price = serializers.IntegerField()
+    ordered_datetime = serializers.DateTimeField()
+    order_status = serializers.CharField(source='get_order_status_display')
+    seller_nickname = serializers.CharField(source='item.seller.user.nickname')
+
+
 class OrderSerializer(serializers.Serializer):
     item_id = serializers.IntegerField()
 
