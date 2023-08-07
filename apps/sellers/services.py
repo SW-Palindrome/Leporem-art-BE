@@ -44,7 +44,7 @@ class SellerService:
     ):
         item_repository = ItemRepository()
 
-        shorts = ContentFile('', name=str(uuid.uuid4()))
+        shorts = ContentFile('', name=uuid.uuid4())
         thumbnail_image.name = create_random_filename(thumbnail_image.name)
         for image in images:
             image.name = create_random_filename(image.name)
