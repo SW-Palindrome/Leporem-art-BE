@@ -24,6 +24,7 @@ class OrderRepository:
         )
         item.current_amount -= 1
         item.save()
+        return order
 
     def get_order(self, order_id):
         return Order.objects.get(order_id=order_id)
