@@ -129,7 +129,6 @@ class AppleLoginView(APIView):
     def get(self, request):
         data = request.query_params
         code = data.get('code')
-
         apple_oauth = AppleOAuth2()
         user_details = apple_oauth.do_auth(code)
 
