@@ -54,7 +54,7 @@ class SellerService:
             max_amount=max_amount,
             title=title,
             description=description,
-            shorts=shorts_url,
+            shorts_url=shorts_url,
             width=width,
             depth=depth,
             height=height,
