@@ -96,7 +96,7 @@ class SellerItemView(APIView):
                 current_amount=serializer.validated_data['amount'],
                 title=serializer.validated_data['title'],
                 description=serializer.validated_data['description'],
-                shorts=serializer.validated_data['shorts'],
+                shorts_url=serializer.validated_data['shorts_url'],
                 width=serializer.validated_data.get('width'),
                 depth=serializer.validated_data.get('depth'),
                 height=serializer.validated_data.get('height'),

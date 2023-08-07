@@ -72,7 +72,7 @@ class SellerService:
         current_amount,
         title,
         description,
-        shorts,
+        shorts_url,
         width,
         depth,
         height,
@@ -83,7 +83,6 @@ class SellerService:
     ):
         item_repository = ItemRepository()
 
-        shorts.name = create_random_filename(shorts.name)
         thumbnail_image.name = create_random_filename(thumbnail_image.name)
         for image in images:
             image.name = create_random_filename(image.name)
@@ -95,7 +94,7 @@ class SellerService:
             current_amount=current_amount,
             title=title,
             description=description,
-            shorts=shorts,
+            shorts_url=shorts_url,
             width=width,
             depth=depth,
             height=height,
