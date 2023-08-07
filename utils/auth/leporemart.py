@@ -7,24 +7,24 @@ from rest_framework.exceptions import AuthenticationFailed
 from apps.users.repositories import UserRepository
 
 
-def generate_access_token(payload, type):
-    if type == "access":
+def generate_access_token(payload, kind):
+    if kind == "access":
         exp = datetime.now() + timedelta(hours=3)
-    elif type == "refresh":
+    elif kind == "refresh":
         exp = datetime.now() + timedelta(days=180)
     else:
         raise Exception("Invalid token type.")
 
     token_payload = {
-        'provider': payload.provider,
-        'email': payload.email,
-        'exp': exp,
-        'iat': datetime.now(),
+        'provider': payload['provider'],
+        'email': payload['email'],
+        'exp': int(exp.timestamp()),
+        'iat': int(datetime.now().timestamp()),
     }
+    key = settings.JWT_AUTH['JWT_SECRET_KEY'].encode('utf-8')
+    token = jwt.encode(token_payload, key, settings.JWT_AUTH['JWT_ALGORITHM'])
 
-    token = jwt.encode(token_payload, settings.JWT_SECRET_KEY, settings.JWT_ALGORITHM).decode('utf-8')
-
-    return token
+    return token, token_payload['exp']
 
 
 def validate_token(request):
