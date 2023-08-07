@@ -1,11 +1,13 @@
+import uuid
 from typing import Optional
 
+from apps.items.models import Item
 from apps.items.repositories import ItemRepository
 from apps.sellers.models import Seller
 from apps.sellers.repositories import SellerRepository
 from apps.users.models import User
 from utils.email.aws import send_email
-from utils.files import create_random_filename
+from utils.files import create_presigned_url, create_random_filename
 
 
 class SellerRegisterService:
@@ -103,6 +105,9 @@ class SellerService:
             categories=categories,
             colors=colors,
         )
+
+    def get_presigned_url_to_post_shorts(self):
+        return create_presigned_url(f'{Item.shorts.field.upload_to}{str(uuid.uuid4())}')
 
     def change_description(self, seller_id, description):
         seller_repository = SellerRepository()

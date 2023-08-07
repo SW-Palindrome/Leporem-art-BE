@@ -8,6 +8,7 @@ from apps.sellers.views import (
     SellerMyInfoView,
     SellerMyOrderView,
     SellerRegisterView,
+    SellerUploadShortsUrlView,
     SellerVerifyView,
 )
 
@@ -21,4 +22,5 @@ urlpatterns = [
     path('info/<str:nickname>', SellerInfoView.as_view()),
     path('orders/my', SellerMyOrderView.as_view()),
     path('current-amount', SellerControlAmountView.as_view()),
+    path('shorts/upload-url', SellerUploadShortsUrlView.as_view()),
 ]

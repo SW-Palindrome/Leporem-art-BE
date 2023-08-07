@@ -51,6 +51,13 @@ class SellerVerifyView(APIView):
         return Response({'message': 'fail'})
 
 
+class SellerUploadShortsUrlView(APIView):
+    permission_classes = [IsSeller]
+
+    def get(self, request):
+        return Response(SellerService().get_presigned_url_to_post_shorts())
+
+
 class SellerItemView(APIView):
     permission_classes = [IsSeller]
     parser_classes = [MultiPartParser]
