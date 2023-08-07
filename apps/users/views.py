@@ -129,14 +129,16 @@ class AppleLoginView(APIView):
     def get(self, request):
         data = request.query_params
         code = data.get('code')
+
         apple_oauth = AppleOAuth2()
         user_details = apple_oauth.do_auth(code)
 
         user_repository = UserRepository()
+
         if user_repository.login(self.PROVIDER, user_details.get('sub')):
             if validate_token(data.get('access_token')):
                 return Response({"message": "login successful"}, status=200)
-        return Response({"message": "signup required", "data": user_details}, status=404)
+        return Response({"message": "signup required", "user_data": user_details['sub']}, status=404)
 
 
 class AppleSignUpView(APIView):
@@ -146,26 +148,26 @@ class AppleSignUpView(APIView):
 
     def post(self, request):
         """자체 token, refresh token 생성 필요"""
-        user_details = request.data.get('user_details')
+        user_data = request.data.get('user_data')
         is_agree_privacy = request.data.get('is_agree_privacy')
         is_agree_ads = request.data.get('is_agree_ads')
         nickname = request.data.get('nickname')
 
         auth_service = AuthService()
 
-        payload = {'provider': self.PROVIDER, 'email': user_details['sub']}
+        payload = {'provider': self.PROVIDER, 'email': user_data}
+
+        access_token, access_exp = generate_access_token(payload, "access")
+        refresh_token, refresh_exp = generate_access_token(payload, "refresh")
+
+        response_data = {
+            'access_token': access_token,
+            'refresh_token': refresh_token,
+            'access_exp': access_exp,
+        }
 
         try:
-            access_token = generate_access_token(payload, "access")
-            refresh_token = generate_access_token(payload, "refresh")
-            auth_service.apple_signup(
-                self.PROVIDER, user_details['sub'], refresh_token, is_agree_privacy, is_agree_ads, nickname
-            )
-            response_data = {
-                'email': user_details['sub'],
-                'access_token': access_token,
-                'refresh_token': refresh_token,
-            }
+            auth_service.apple_signup(self.PROVIDER, user_data, refresh_token, is_agree_privacy, is_agree_ads, nickname)
         except DuplicateNicknameException:
             return Response({'message': 'duplicate nickname'}, status=400)
         except DuplicateUserInfoException:
