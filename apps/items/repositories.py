@@ -19,7 +19,7 @@ class ItemRepository:
         max_amount,
         title,
         description,
-        shorts,
+        shorts_url,
         width,
         depth,
         height,
@@ -36,7 +36,7 @@ class ItemRepository:
             current_amount=max_amount,
             title=title,
             description=description,
-            shorts=shorts,
+            shorts=shorts_url,
             width=width,
             depth=depth,
             height=height,
@@ -71,6 +71,7 @@ class ItemRepository:
         current_amount,
         title,
         description,
+        shorts,
         width,
         depth,
         height,
@@ -87,6 +88,7 @@ class ItemRepository:
         item.price = price
         item.title = title
         item.description = description
+        item.shorts = shorts
         item.width = width
         item.depth = depth
         item.height = height
