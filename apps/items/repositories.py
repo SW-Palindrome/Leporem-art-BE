@@ -71,6 +71,7 @@ class ItemRepository:
         current_amount,
         title,
         description,
+        shorts,
         width,
         depth,
         height,
@@ -87,6 +88,7 @@ class ItemRepository:
         item.price = price
         item.title = title
         item.description = description
+        item.shorts = shorts
         item.width = width
         item.depth = depth
         item.height = height

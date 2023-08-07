@@ -60,12 +60,13 @@ class SellerItemView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             seller_service = SellerService()
-            _, shorts_upload_url = seller_service.register_item(
+            seller_service.register_item(
                 seller_id=request.user.seller.seller_id,
                 price=serializer.validated_data['price'],
                 max_amount=serializer.validated_data['amount'],
                 title=serializer.validated_data['title'],
                 description=serializer.validated_data['description'],
+                shorts=serializer.validated_data['shorts'],
                 width=serializer.validated_data.get('width'),
                 depth=serializer.validated_data.get('depth'),
                 height=serializer.validated_data.get('height'),
@@ -74,7 +75,7 @@ class SellerItemView(APIView):
                 categories=serializer.validated_data.get('categories', []),
                 colors=serializer.validated_data.get('colors', []),
             )
-            return Response({'shorts_upload_url': shorts_upload_url})
+            return Response({'message': 'success'})
 
     def patch(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -87,6 +88,7 @@ class SellerItemView(APIView):
                 current_amount=serializer.validated_data['amount'],
                 title=serializer.validated_data['title'],
                 description=serializer.validated_data['description'],
+                shorts=serializer.validated_data['shorts'],
                 width=serializer.validated_data.get('width'),
                 depth=serializer.validated_data.get('depth'),
                 height=serializer.validated_data.get('height'),

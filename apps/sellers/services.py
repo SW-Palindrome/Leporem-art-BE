@@ -1,14 +1,11 @@
-import uuid
 from typing import Optional
-
-from django.core.files.base import ContentFile
 
 from apps.items.repositories import ItemRepository
 from apps.sellers.models import Seller
 from apps.sellers.repositories import SellerRepository
 from apps.users.models import User
 from utils.email.aws import send_email
-from utils.files import create_presigned_url, create_random_filename
+from utils.files import create_random_filename
 
 
 class SellerRegisterService:
@@ -34,6 +31,7 @@ class SellerService:
         max_amount,
         title,
         description,
+        shorts,
         width,
         depth,
         height,
@@ -44,12 +42,12 @@ class SellerService:
     ):
         item_repository = ItemRepository()
 
-        shorts = ContentFile('', name=uuid.uuid4())
+        shorts.name = create_random_filename(shorts.name)
         thumbnail_image.name = create_random_filename(thumbnail_image.name)
         for image in images:
             image.name = create_random_filename(image.name)
 
-        item = item_repository.register(
+        item_repository.register(
             seller_id=seller_id,
             price=price,
             max_amount=max_amount,
@@ -64,10 +62,6 @@ class SellerService:
             categories=categories,
             colors=colors,
         )
-        return item, self.get_presigned_url_to_post_shorts(item)
-
-    def get_presigned_url_to_post_shorts(self, item):
-        return create_presigned_url(item.shorts.name)
 
     def modify_item(
         self,
@@ -77,6 +71,7 @@ class SellerService:
         current_amount,
         title,
         description,
+        shorts,
         width,
         depth,
         height,
@@ -87,6 +82,7 @@ class SellerService:
     ):
         item_repository = ItemRepository()
 
+        shorts.name = create_random_filename(shorts.name)
         thumbnail_image.name = create_random_filename(thumbnail_image.name)
         for image in images:
             image.name = create_random_filename(image.name)
@@ -98,6 +94,7 @@ class SellerService:
             current_amount=current_amount,
             title=title,
             description=description,
+            shorts=shorts,
             width=width,
             depth=depth,
             height=height,
