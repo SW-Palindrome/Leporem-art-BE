@@ -4,8 +4,27 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
 from apps.orders.exceptions import OrderException, ReviewException
-from apps.orders.serializers import OrderSerializer, ReviewSerializer
+from apps.orders.repositories import OrderRepository
+from apps.orders.serializers import (
+    OrderInfoSerializer,
+    OrderSerializer,
+    ReviewSerializer,
+)
 from apps.orders.services import OrderService, ReviewService
+
+
+class OrderInfoView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderInfoSerializer
+
+    def get(self, request, order_id):
+        order_repository = OrderRepository()
+        try:
+            order = order_repository.get_order(order_id=order_id)
+        except OrderException as e:
+            return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(order)
+        return Response(serializer.data)
 
 
 class OrderRegisterView(APIView):
