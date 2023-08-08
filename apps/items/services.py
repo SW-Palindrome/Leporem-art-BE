@@ -24,9 +24,9 @@ class ItemService:
             return None
         return detailed_item
 
-    def detailed_item_review(self, item_id):
+    def detailed_item_review(self, item_id, seller_id):
         item_repository = ItemRepository()
-        reviews = item_repository.detailed_item_review(item_id)
+        reviews = item_repository.detailed_item_review(item_id, seller_id)
         if not reviews:
             return None
         return reviews
