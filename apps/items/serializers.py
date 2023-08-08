@@ -86,9 +86,6 @@ class ReviewSerializer(serializers.Serializer):
     writer = serializers.CharField()
     write_dt = serializers.DateTimeField()
 
-    class Meta:
-        fields = ('comment', 'rating', 'writer', 'write_dt')
-
 
 class SellerDetailedItemSerializer(serializers.Serializer):
     item_id = serializers.IntegerField()
