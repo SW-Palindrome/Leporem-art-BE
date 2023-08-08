@@ -11,6 +11,7 @@ from apps.orders.serializers import (
     ReviewSerializer,
 )
 from apps.orders.services import OrderService, ReviewService
+from apps.sellers.services import SellerService
 
 
 class OrderInfoView(APIView):
@@ -65,6 +66,8 @@ class OrderDeliveryCompleteView(APIView):
             order_service.complete_delivery(request.user.seller.seller_id, order_id)
         except OrderException as e:
             return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
+        seller_service = SellerService()
+        seller_service.change_temperature(request.user.seller.seller_id, 5)
         return Response(status=HTTP_201_CREATED)
 
 
