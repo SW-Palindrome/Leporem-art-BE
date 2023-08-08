@@ -28,6 +28,11 @@ def validate_id_token(id_token: str) -> bool:
             공개키는 일정 기간 캐싱(Caching)하여 사용할 것을 권장하며, 지나치게 빈번한 요청 시 요청이 차단될 수 있으므로 유의
         4. JWT 서명 검증을 지원하는 라이브러리를 사용해 공개키로 서명 검증
     """
+    import requests
+
+    response = requests.get('https://api.leporem.art/items/guest')
+    print(response.json())
+
     try:
         header, payload, signature = id_token.split('.')
     except ValueError:
