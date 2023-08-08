@@ -22,6 +22,12 @@ functions:
       - httpApi: '*'
     environment:
       ENV: prod
+    vpc:
+      securityGroupIds:
+        - sg-049fc72c81717d244
+      subnetIds:
+        - subnet-0179d5879df06c46a
+        - subnet-07ef708add89fd9e6
 
 custom:
   pythonRequirements:
