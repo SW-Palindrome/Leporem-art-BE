@@ -1,4 +1,4 @@
-service: leporem-art
+service: leporem-art-production
 
 frameworkVersion: '3'
 
@@ -21,17 +21,17 @@ functions:
     events:
       - httpApi: '*'
     environment:
-      ENV: ${opt:stage, 'dev'}
+      ENV: prod
 
 custom:
   pythonRequirements:
     dockerizePip: true
 
   customDomain:
-    domainName: ${opt:stage, 'dev'}.leporem.art
+    domainName: api.leporem.art
     certificateName: '*.leporem.art'
     endpointType: 'regional'
-    stage: ${opt:stage, 'dev'}
+    stage: prod
     basePath: ''
     createRoute53Record: true
     apiType: http
