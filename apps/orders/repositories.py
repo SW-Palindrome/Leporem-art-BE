@@ -66,13 +66,18 @@ class OrderRepository:
         item.save()
 
     def get_order_list_by_seller(self, seller_id):
-        return Order.objects.filter(item__seller_id=seller_id).select_related('item', 'buyer__user', 'order_status')
+        return (
+            Order.objects.filter(item__seller_id=seller_id)
+            .select_related('item', 'buyer__user', 'order_status')
+            .order_by('-ordered_datetime')
+        )
 
     def get_order_list_by_buyer(self, buyer_id):
         return (
             Order.objects.filter(buyer_id=buyer_id)
             .select_related('item', 'order_status')
             .annotate(is_reviewed=Exists(Review.objects.filter(order=OuterRef('pk'))))
+            .order_by('-ordered_datetime')
         )
 
 

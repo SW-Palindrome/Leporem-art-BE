@@ -3,9 +3,9 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 from .base import *
 
-AWS_STORAGE_BUCKET_NAME = 'leporem-art-media-dev'
+AWS_STORAGE_BUCKET_NAME = 'leporem-art-media-prod'
 
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Sentry 설정
