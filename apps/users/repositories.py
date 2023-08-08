@@ -22,9 +22,10 @@ class UserRepository:
         return User.objects.get(nickname=settings.TEST_STAFF_NICKNAME)
 
     @transaction.atomic
-    def signup(self, provider, provider_id, is_agree_privacy, is_agree_ads, nickname):
+    def signup(self, provider, provider_id, is_agree_privacy, is_agree_terms, is_agree_ads, nickname):
         user_info = User.objects.create(
             is_agree_privacy=is_agree_privacy,
+            is_agree_terms=is_agree_terms,
             is_agree_ads=is_agree_ads,
             nickname=nickname,
             is_seller=False,
@@ -70,9 +71,12 @@ class UserRepository:
         return user
 
     @transaction.atomic
-    def apple_signup(self, provider, provider_id, refresh_token, is_agree_privacy, is_agree_ads, nickname):
+    def apple_signup(
+        self, provider, provider_id, refresh_token, is_agree_privacy, is_agree_terms, is_agree_ads, nickname
+    ):
         user_info = User.objects.create(
             is_agree_privacy=is_agree_privacy,
+            is_agree_terms=is_agree_terms,
             is_agree_ads=is_agree_ads,
             nickname=nickname,
             is_seller=False,

@@ -35,13 +35,15 @@ class AuthService:
             return True
         return False
 
-    def signup(self, provider, provider_id, is_agree_privacy, is_agree_ads, nickname):
+    def signup(self, provider, provider_id, is_agree_privacy, is_agree_terms, is_agree_ads, nickname):
         user_repository = UserRepository()
         buyer_repository = BuyerRepository()
         if not self.check_nickname(nickname):
             raise DuplicateNicknameException
         try:
-            user = user_repository.signup(provider, provider_id, is_agree_privacy, is_agree_ads, nickname)
+            user = user_repository.signup(
+                provider, provider_id, is_agree_privacy, is_agree_terms, is_agree_ads, nickname
+            )
         except IntegrityError:
             raise DuplicateUserInfoException
         buyer_repository.register(user.user_id)
@@ -70,14 +72,16 @@ class AuthService:
 
         return user
 
-    def apple_signup(self, provider, provider_id, refresh_token, is_agree_privacy, is_agree_ads, nickname):
+    def apple_signup(
+        self, provider, provider_id, refresh_token, is_agree_privacy, is_agree_terms, is_agree_ads, nickname
+    ):
         user_repository = UserRepository()
         buyer_repository = BuyerRepository()
         if not self.check_nickname(nickname):
             raise DuplicateNicknameException
         try:
             user = user_repository.apple_signup(
-                provider, provider_id, refresh_token, is_agree_privacy, is_agree_ads, nickname
+                provider, provider_id, refresh_token, is_agree_privacy, is_agree_terms, is_agree_ads, nickname
             )
         except IntegrityError:
             raise DuplicateUserInfoException

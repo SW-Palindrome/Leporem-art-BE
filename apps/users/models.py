@@ -10,6 +10,7 @@ class User(AbstractBaseUser, TimeStampedModel):
     profile_image = models.ImageField(upload_to='user/profile_images/', default='user/profile_images/default.png')
     inactive_datetime = models.DateTimeField(null=True)
     is_agree_privacy = models.BooleanField(default=False)
+    is_agree_terms = models.BooleanField(default=False)
     is_agree_ads = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
     is_seller = models.BooleanField(null=False)
