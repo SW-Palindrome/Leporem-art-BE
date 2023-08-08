@@ -122,9 +122,9 @@ class SellerItemView(APIView):
         item_service = ItemService()
         item = item_service.seller_detailed_item(item_id, seller_id)
         if item:
-            reviews = item_service.detailed_item_review(item_id)
+            reviews = item_service.detailed_item_review(item_id, seller_id)
             try:
-                serializer = SellerDetailedItemSerializer(item, many=True, context={'reviews': reviews})
+                serializer = SellerDetailedItemSerializer(item, context={'reviews': reviews})
                 return Response({"detail": serializer.data}, status=200)
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
