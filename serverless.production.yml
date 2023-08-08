@@ -24,10 +24,9 @@ functions:
       ENV: prod
     vpc:
       securityGroupIds:
-        - sg-049fc72c81717d244
+        - sg-0cb0dd5e30baec000
       subnetIds:
-        - subnet-0179d5879df06c46a
-        - subnet-07ef708add89fd9e6
+        - subnet-035df05ef63fc1027
 
 custom:
   pythonRequirements:
