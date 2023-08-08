@@ -27,12 +27,13 @@ class KakaoSignUpView(APIView):
     def post(self, request):
         provider_id = extract_provider_id(request.data.get('id_token'))
         is_agree_privacy = request.data.get('is_agree_privacy')
+        is_agree_terms = request.data.get('is_agree_terms')
         is_agree_ads = request.data.get('is_agree_ads')
         nickname = request.data.get('nickname')
         auth_service = AuthService()
 
         try:
-            auth_service.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_ads, nickname)
+            auth_service.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_terms, is_agree_ads, nickname)
         except DuplicateNicknameException:
             return Response({'message': 'duplicate nickname'}, status=400)
         except DuplicateUserInfoException:
@@ -150,6 +151,7 @@ class AppleSignUpView(APIView):
         """자체 token, refresh token 생성 필요"""
         user_data = request.data.get('user_data')
         is_agree_privacy = request.data.get('is_agree_privacy')
+        is_agree_terms = request.data.get('is_agree_terms')
         is_agree_ads = request.data.get('is_agree_ads')
         nickname = request.data.get('nickname')
 
@@ -167,7 +169,9 @@ class AppleSignUpView(APIView):
         }
 
         try:
-            auth_service.apple_signup(self.PROVIDER, user_data, refresh_token, is_agree_privacy, is_agree_ads, nickname)
+            auth_service.apple_signup(
+                self.PROVIDER, user_data, refresh_token, is_agree_privacy, is_agree_terms, is_agree_ads, nickname
+            )
         except DuplicateNicknameException:
             return Response({'message': 'duplicate nickname'}, status=400)
         except DuplicateUserInfoException:
