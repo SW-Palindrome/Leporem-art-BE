@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import redirect
 from rest_framework import permissions
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -50,7 +51,10 @@ class KakaoLogInView(APIView):
 
     def post(self, request):
         auth_service = AuthService()
-        user = auth_service.login(id_token=request.data.get('id_token'))
+        try:
+            user = auth_service.login(id_token=request.data.get('id_token'))
+        except AuthenticationFailed as e:
+            return Response({'message': str(e)}, status=401)
         if user is None:
             return Response({'message': 'signin failed'}, status=401)
         return Response({'user_id': user.user_id, 'is_seller': user.is_seller, 'nickname': user.nickname}, status=200)
