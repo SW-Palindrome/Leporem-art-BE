@@ -7,6 +7,7 @@ from django.utils import timezone
 from apps.buyers.models import Buyer
 from apps.items.exceptions import CurrentAmountException
 from apps.items.models import Item, ItemImage, Like, RecentlyViewedItem
+from apps.orders.models import Review
 from apps.sellers.models import Seller
 
 
@@ -151,15 +152,15 @@ class ItemRepository:
         ).filter(item_id=item_id, seller=seller_id)
         return detailed_item
 
-    def detailed_item_review(self, item_id):
+    def detailed_item_review(self, item_id, seller_id):
         reviews = (
-            Item.objects.annotate(
-                comment=F('orders__review__comment'),
-                rating=F('orders__review__rating'),
-                writer=F('orders__buyer__user__nickname'),
-                write_dt=F('orders__review__modified'),
+            Review.objects.annotate(
+                item_id=F('order__item__item_id'),
+                seller_id=F('order__item__seller'),
+                writer=F('order__buyer__user__nickname'),
+                write_dt=F('modified'),
             )
-            .filter(item_id=item_id)
+            .filter(item_id=item_id, seller_id=seller_id)
             .order_by('-write_dt')
         )
         return reviews
