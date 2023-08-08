@@ -149,7 +149,7 @@ class ItemRepository:
         detailed_item = Item.objects.annotate(
             nickname=F('seller__user__nickname'),
             temperature=F('seller__temperature'),
-        ).filter(item_id=item_id, seller=seller_id)
+        ).get(item_id=item_id, seller=seller_id)
         return detailed_item
 
     def detailed_item_review(self, item_id, seller_id):
