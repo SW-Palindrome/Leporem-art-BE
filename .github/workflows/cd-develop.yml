@@ -1,16 +1,16 @@
-name: CD
+name: CD DEVELOP
 
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     env:
-      ENV: prod
+      ENV: dev
       AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
       AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
@@ -34,4 +34,4 @@ jobs:
 
       - run: npm ci
       - name: Install Plugin and Deploy
-        run: npx serverless deploy --config serverless.production.yml --stage ${{env.ENV}}
+        run: npx serverless deploy --config serverless.dev.yml --stage ${{env.ENV}}

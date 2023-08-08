@@ -1,0 +1,46 @@
+service: leporem-art
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.10
+  region: ap-northeast-2
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+          - 'SES:SendEmail'
+          - 'S3:*'
+          Resource: '*'
+
+functions:
+  api:
+    handler: leporem_art/asgi.handler
+    events:
+      - httpApi: '*'
+    environment:
+      ENV: dev
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+
+  customDomain:
+    domainName: dev.leporem.art
+    certificateName: '*.leporem.art'
+    endpointType: 'regional'
+    stage: dev
+    basePath: ''
+    createRoute53Record: true
+    apiType: http
+    autoDomain: true
+
+plugins:
+  - serverless-python-requirements
+  - serverless-domain-manager
+
+package:
+  exclude:
+    - node_modules/**
