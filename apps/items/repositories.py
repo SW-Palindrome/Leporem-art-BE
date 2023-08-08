@@ -196,13 +196,10 @@ class ItemRepository:
         item.save()
 
     def get_guest_items(self):
-        avg_rating_subquery = Subquery(
-            Item.objects.annotate(avg_rating=Round(Avg('orders__review__rating'), 1)).values('avg_rating')[:1]
-        )
         search_item = Item.objects.order_by('-display_dt').annotate(
             nickname=F('seller__user__nickname'),
             like_count=Count('likes'),
-            avg_rating=avg_rating_subquery,
+            avg_rating=Round(Avg('orders__review__rating'), 1),
             time_diff=timezone.now() - F('display_dt'),
             is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer_id=None)),
         )
