@@ -62,9 +62,8 @@ class OrderService:
 
         if order.order_status.status not in [
             OrderStatus.Status.ORDERED.value,
-            OrderStatus.Status.DELIVERY_STARTED.value,
         ]:
-            raise InvalidOrderStatusException('주문 완료 및 배송중 상태에서만 주문 취소가 가능합니다.')
+            raise InvalidOrderStatusException('주문 완료 상태에서만 주문 취소가 가능합니다.')
 
         return OrderRepository().cancel(order_id)
 
