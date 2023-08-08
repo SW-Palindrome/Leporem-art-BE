@@ -57,7 +57,7 @@ class AuthService:
 
         user = None
 
-        if settings.DEBUG and id_token == settings.TEST_ID_TOKEN:
+        if id_token == settings.TEST_ID_TOKEN:
             user = user_repository.login_with_test_user()
 
         try:

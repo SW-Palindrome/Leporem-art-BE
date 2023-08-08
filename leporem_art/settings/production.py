@@ -5,7 +5,7 @@ from .base import *
 
 AWS_STORAGE_BUCKET_NAME = 'leporem-art-media-prod'
 
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 # Sentry 설정
