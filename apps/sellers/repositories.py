@@ -66,3 +66,10 @@ class SellerRepository:
         seller = Seller.objects.get(seller_id=seller_id)
         seller.description = description
         seller.save()
+
+    def change_temperature(self, seller_id, number):
+        seller = Seller.objects.get(seller_id=seller_id)
+        seller.temperature += number
+        if seller.temperature >= 100:
+            seller.temperature = 100
+        seller.save()
