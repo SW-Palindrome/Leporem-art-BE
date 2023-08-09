@@ -13,7 +13,7 @@ from utils.files import create_presigned_url, create_random_filename
 
 
 class SellerRegisterService:
-    SENDER = 'email@leporem.art'
+    SENDER = 'noreply@leporem.art'
 
     def send_verify_email(self, user: User, email: str):
         verify_email = SellerRepository().create_verify_email(user=user, email=email)
