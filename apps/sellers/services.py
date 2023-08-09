@@ -1,6 +1,8 @@
 import uuid
 from typing import Optional
 
+from jinja2 import Template
+
 from apps.items.models import Item
 from apps.items.repositories import ItemRepository
 from apps.sellers.models import Seller
@@ -15,7 +17,9 @@ class SellerRegisterService:
 
     def send_verify_email(self, user: User, email: str):
         verify_email = SellerRepository().create_verify_email(user=user, email=email)
-        send_email(self.SENDER, email, '본인인증 이메일 요청', verify_email.verify_code)
+        template = Template(open('utils/email/templates/email.html').read())
+        rendered_html = template.render(verify_code=verify_email.verify_code)
+        send_email(self.SENDER, email, '본인인증 이메일 요청', rendered_html)
 
     def verify(self, user: User, verify_code: str) -> Optional[Seller]:
         seller_repository = SellerRepository()

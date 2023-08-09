@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>학생 이메일 인증코드</title>
+    <style>
+        body {
+            background-color: #9D00E7;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            padding-top: 10px;
+        }
+
+        img {
+          height: 96px;
+          margin-right: 20px;
+          padding-left: 16%;
+        }
+
+        hr {
+            margin-top: 15px;
+            width : 80%;
+            border-width: 0.3px;
+            background-color: white;
+        }
+
+        .code-containter {
+            padding-top: 10px;
+            line-height: 0.5;
+            padding-left: 8%;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: #FFC164;
+        }
+
+        .text-container {
+            margin-top: 10px;
+            padding-left: 8%;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-container">
+        <img src="https://leporem-art-media-prod.s3.ap-northeast-2.amazonaws.com/email/titlee.png" alt="사진">
+    </div>
+    <div> <hr class='hr-solid'/> </div>
+    <div class="code-containter">
+        <h2>인증번호 :</h2>
+        <h3>{{verify_code}}</h3>
+    </div>
+    <div class="text-container">
+        <p>안녕하세요!</p> <br/>
+        <p>공예쁨의 학생 확인 메일입니다. </p>
+        <p>상기 코드를 입력하여 학생임을 인증하여 주시기 바랍니다.</p> <br/>
+        <p>손으로 만든 물건의 가치를 전달해보세요!</p>
+        <p>palindrome team</p>
+    </div>
+</body>
+</html>
