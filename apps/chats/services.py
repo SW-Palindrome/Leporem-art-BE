@@ -12,7 +12,7 @@ class ChatRoomService:
     def create_by_buyer(self, buyer_id, seller_id, text, image, message_type, chat_room_uuid=None, message_uuid=None):
         chat_room_repository = ChatRoomRepository()
         message_service = MessageService()
-        chat_room = chat_room_repository.create_by_buyer(buyer_id, seller_id, text, image, chat_room_uuid, message_uuid)
+        chat_room = chat_room_repository.create_by_buyer(buyer_id, seller_id, chat_room_uuid)
         message_service.create(
             chat_room_uuid=chat_room_uuid,
             user_id=BuyerRepository().get_buyer(buyer_id=buyer_id).user_id,
