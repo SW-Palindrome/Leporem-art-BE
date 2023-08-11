@@ -54,9 +54,9 @@ class KakaoLogInView(APIView):
         try:
             user = auth_service.login(id_token=request.data.get('id_token'))
         except AuthenticationFailed as e:
-            return Response({'message': str(e)}, status=401)
+            return Response({'message': str(e)}, status=403)
         if user is None:
-            return Response({'message': 'signin failed'}, status=401)
+            return Response({'message': 'signin failed'}, status=403)
         return Response({'user_id': user.user_id, 'is_seller': user.is_seller, 'nickname': user.nickname}, status=200)
 
 
