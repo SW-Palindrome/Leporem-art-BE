@@ -103,6 +103,6 @@ class ViewedItemService:
             viewed_items = viewed_item_repository.get_viewed_items(buyer_id)
             if viewed_items:
                 return viewed_items
-            raise ItemDoesNotExist("Item does not exist.")
+            return None
         except Buyer.DoesNotExist:
             raise BuyerDoesNotExist("Buyer does not exist.")
