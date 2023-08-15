@@ -128,7 +128,7 @@ class ItemRepository:
     def get_items(self, buyer_id):
         search_item = Item.objects.order_by('-display_dt').annotate(
             nickname=F('seller__user__nickname'),
-            like_count=Count('likes'),
+            like_count=Count('likes', distinct=True),
             avg_rating=Round(Avg('orders__review__rating'), 1),
             time_diff=timezone.now() - F('display_dt'),
             is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer_id=buyer_id)),
@@ -199,7 +199,7 @@ class ItemRepository:
     def get_guest_items(self):
         search_item = Item.objects.order_by('-display_dt').annotate(
             nickname=F('seller__user__nickname'),
-            like_count=Count('likes'),
+            like_count=Count('likes', distinct=True),
             avg_rating=Round(Avg('orders__review__rating'), 1),
             time_diff=timezone.now() - F('display_dt'),
             is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer_id=None)),
