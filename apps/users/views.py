@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from apps.users.repositories import UserRepository
 from apps.users.services import AuthService, UserService
 from utils.auth.apple import AppleOAuth2
-from utils.auth.kakao import extract_provider_id
+from utils.auth.kakao import extract_provider_id, validate_id_token
 from utils.auth.leporemart import generate_access_token, refresh_token
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
@@ -26,21 +26,42 @@ class KakaoSignUpView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        provider_id = extract_provider_id(request.data.get('id_token'))
+        id_token = request.data.get('id_token')
+        if not validate_id_token(id_token):
+            return Response({'message': 'invalid id_token'}, status=400)
+
+        provider_id = extract_provider_id(id_token)
         is_agree_privacy = request.data.get('is_agree_privacy')
         is_agree_terms = request.data.get('is_agree_terms')
         is_agree_ads = request.data.get('is_agree_ads')
         nickname = request.data.get('nickname')
         auth_service = AuthService()
 
+        access_token, access_exp = generate_access_token(self.PROVIDER, extract_provider_id(id_token), "access")
+        user_refresh_token, refresh_exp = generate_access_token(self.PROVIDER, extract_provider_id(id_token), "refresh")
+
+        response_data = {
+            'access_token': access_token,
+            'refresh_token': user_refresh_token,
+            'access_exp': access_exp,
+        }
+
         try:
-            auth_service.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_terms, is_agree_ads, nickname)
+            auth_service.signup(
+                provider=self.PROVIDER,
+                provider_id=provider_id,
+                refresh_token=user_refresh_token,
+                is_agree_privacy=is_agree_privacy,
+                is_agree_terms=is_agree_terms,
+                is_agree_ads=is_agree_ads,
+                nickname=nickname,
+            )
         except DuplicateNicknameException:
             return Response({'message': 'duplicate nickname'}, status=400)
         except DuplicateUserInfoException:
             return Response({'message': 'duplicate user info'}, status=400)
 
-        return Response({'message': 'success'}, status=201)
+        return Response({'message': 'success', 'data': response_data}, status=201)
 
 
 class KakaoLogInView(APIView):
@@ -51,13 +72,31 @@ class KakaoLogInView(APIView):
 
     def post(self, request):
         auth_service = AuthService()
+        id_token = request.data.get('id_token')
+
         try:
             user = auth_service.login(id_token=request.data.get('id_token'))
         except AuthenticationFailed as e:
             return Response({'message': str(e)}, status=403)
         if user is None:
             return Response({'message': 'signin failed'}, status=403)
-        return Response({'user_id': user.user_id, 'is_seller': user.is_seller, 'nickname': user.nickname}, status=200)
+
+        access_token, access_exp = generate_access_token(self.PROVIDER, extract_provider_id(id_token), "access")
+        user_refresh_token, refresh_exp = generate_access_token(self.PROVIDER, extract_provider_id(id_token), "refresh")
+
+        UserRepository().refresh_token(user.user_id, user_refresh_token)
+
+        return Response(
+            {
+                'user_id': user.user_id,
+                'is_seller': user.is_seller,
+                'nickname': user.nickname,
+                'access_token': access_token,
+                'refresh_token': user_refresh_token,
+                'access_exp': access_exp,
+            },
+            status=200,
+        )
 
 
 class ValidateNicknameView(APIView):
@@ -144,6 +183,7 @@ class AppleCallBackView(APIView):
         if user:
             access_token, access_exp = generate_access_token(self.PROVIDER, user_details['sub'], "access")
             refresh_token, refresh_exp = generate_access_token(self.PROVIDER, user_details['sub'], "refresh")
+            user_repository.refresh_token(user.user_id, refresh_token)
 
             response_data = {
                 'user_id': user.user_id,
@@ -153,7 +193,7 @@ class AppleCallBackView(APIView):
                 'refresh_token': refresh_token,
                 'access_exp': access_exp,
             }
-            return Response({"message": "leporem art login required", "data": response_data}, status=200)
+            return Response({"message": "success", "data": response_data}, status=200)
         return Response({"message": "signup required", "user_data": user_details['sub']}, status=404)
 
 
@@ -182,7 +222,7 @@ class AppleSignUpView(APIView):
         }
 
         try:
-            auth_service.apple_signup(
+            auth_service.signup(
                 self.PROVIDER, user_data, refresh_token, is_agree_privacy, is_agree_terms, is_agree_ads, nickname
             )
         except DuplicateNicknameException:
