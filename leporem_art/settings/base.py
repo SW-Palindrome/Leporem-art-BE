@@ -164,7 +164,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 AWS_QUERYSTRING_AUTH = False
 
 APPLE_CONFIG = {
-    'SOCIAL_AUTH_APPLE_ID_CLIENT': 'leporemart.palindrome.com',  # Your client_id com.application.your, aka "Service ID"
+    'SOCIAL_AUTH_APPLE_ID_CLIENT': 'com.palindrome.leporemart',  # Your client_id com.application.your, aka "Service ID"
     'SOCIAL_AUTH_APPLE_ID_TEAM': 'BH6CVTK388',  # Your Team ID, ie K2232113
     'SOCIAL_AUTH_APPLE_ID_KEY': '8FM8MZ2XUC',  # Your Key ID, ie Y2P99J3N81K
     'SOCIAL_AUTH_APPLE_ID_SECRET': """
