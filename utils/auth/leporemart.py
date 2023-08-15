@@ -43,6 +43,13 @@ def validate_token(request):
         provider = decoded.get("provider")
         email = decoded.get("email")
         user = UserRepository().login(provider, email)
+        if user is None:
+            raise AuthenticationFailed(
+                {
+                    "message": "잘못된 토큰입니다.",
+                    "code": "JWT_403_INVALID_ACCESSTOKEN",
+                }
+            )
         return user
     except jwt.exceptions.DecodeError:
         msg = {
