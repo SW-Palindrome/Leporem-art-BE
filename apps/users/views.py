@@ -37,8 +37,8 @@ class KakaoSignUpView(APIView):
         nickname = request.data.get('nickname')
         auth_service = AuthService()
 
-        access_token, access_exp = generate_access_token(self.PROVIDER, id_token, "access")
-        user_refresh_token, refresh_exp = generate_access_token(self.PROVIDER, id_token, "refresh")
+        access_token, access_exp = generate_access_token(self.PROVIDER, extract_provider_id(id_token), "access")
+        user_refresh_token, refresh_exp = generate_access_token(self.PROVIDER, extract_provider_id(id_token), "refresh")
 
         response_data = {
             'access_token': access_token,
@@ -81,8 +81,8 @@ class KakaoLogInView(APIView):
         if user is None:
             return Response({'message': 'signin failed'}, status=403)
 
-        access_token, access_exp = generate_access_token(self.PROVIDER, id_token, "access")
-        user_refresh_token, refresh_exp = generate_access_token(self.PROVIDER, id_token, "refresh")
+        access_token, access_exp = generate_access_token(self.PROVIDER, extract_provider_id(id_token), "access")
+        user_refresh_token, refresh_exp = generate_access_token(self.PROVIDER, extract_provider_id(id_token), "refresh")
 
         UserRepository().refresh_token(user.user_id, user_refresh_token)
 
@@ -193,7 +193,7 @@ class AppleCallBackView(APIView):
                 'refresh_token': refresh_token,
                 'access_exp': access_exp,
             }
-            return Response({"message": "leporem art login required", "data": response_data}, status=200)
+            return Response({"message": "success", "data": response_data}, status=200)
         return Response({"message": "signup required", "user_data": user_details['sub']}, status=404)
 
 
