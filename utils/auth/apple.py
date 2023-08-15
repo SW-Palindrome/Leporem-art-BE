@@ -27,7 +27,7 @@ class AppleOAuth2:
             'client_secret': client_secret,
             'code': code,
             'grant_type': 'authorization_code',
-            'redirect_uri': 'https://dev.leporem.art/users/validate/apple',
+            'redirect_uri': 'https://dev.leporem.art/users/login/apple',
         }
         """client secret 유효성 검사"""
         res = requests.post(self.APPLE_AUTH_TOKEN_URL, data=data, headers=headers)
