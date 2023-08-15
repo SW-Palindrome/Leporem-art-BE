@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from apps.users.repositories import UserRepository
 from apps.users.services import AuthService, UserService
 from utils.auth.apple import AppleOAuth2
-from utils.auth.kakao import extract_provider_id
+from utils.auth.kakao import extract_provider_id, validate_id_token
 from utils.auth.leporemart import generate_access_token, refresh_token, validate_token
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
@@ -26,21 +26,44 @@ class KakaoSignUpView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        provider_id = extract_provider_id(request.data.get('id_token'))
+        id_token = request.data.get('user_data')
+        if not validate_id_token(id_token):
+            return Response({'message': 'invalid id_token'}, status=400)
+
+        provider_id = extract_provider_id(id_token)
         is_agree_privacy = request.data.get('is_agree_privacy')
         is_agree_terms = request.data.get('is_agree_terms')
         is_agree_ads = request.data.get('is_agree_ads')
         nickname = request.data.get('nickname')
         auth_service = AuthService()
 
+        payload = {'provider': self.PROVIDER, 'email': id_token}
+
+        access_token, access_exp = generate_access_token(payload, "access")
+        refresh_token, refresh_exp = generate_access_token(payload, "refresh")
+
+        response_data = {
+            'access_token': access_token,
+            'refresh_token': refresh_token,
+            'access_exp': access_exp,
+        }
+
         try:
-            auth_service.signup(self.PROVIDER, provider_id, is_agree_privacy, is_agree_terms, is_agree_ads, nickname)
+            auth_service.signup(
+                provider=self.PROVIDER,
+                provider_id=provider_id,
+                refresh_token=refresh_token,
+                is_agree_privacy=is_agree_privacy,
+                is_agree_terms=is_agree_terms,
+                is_agree_ads=is_agree_ads,
+                nickname=nickname,
+            )
         except DuplicateNicknameException:
             return Response({'message': 'duplicate nickname'}, status=400)
         except DuplicateUserInfoException:
             return Response({'message': 'duplicate user info'}, status=400)
 
-        return Response({'message': 'success'}, status=201)
+        return Response({'message': 'success', 'data': response_data}, status=201)
 
 
 class KakaoLogInView(APIView):
@@ -173,7 +196,7 @@ class AppleSignUpView(APIView):
         }
 
         try:
-            auth_service.apple_signup(
+            auth_service.signup(
                 self.PROVIDER, user_data, refresh_token, is_agree_privacy, is_agree_terms, is_agree_ads, nickname
             )
         except DuplicateNicknameException:

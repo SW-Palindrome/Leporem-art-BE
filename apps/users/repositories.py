@@ -21,23 +21,6 @@ class UserRepository:
     def login_with_test_user(self):
         return User.objects.get(nickname=settings.TEST_STAFF_NICKNAME)
 
-    @transaction.atomic
-    def signup(self, provider, provider_id, is_agree_privacy, is_agree_terms, is_agree_ads, nickname):
-        user_info = User.objects.create(
-            is_agree_privacy=is_agree_privacy,
-            is_agree_terms=is_agree_terms,
-            is_agree_ads=is_agree_ads,
-            nickname=nickname,
-            is_seller=False,
-            is_staff=False,
-        )
-        UserOAuthInfo.objects.create(
-            user=user_info,
-            provider=provider,
-            provider_id=provider_id,
-        )
-        return user_info
-
     def check_nickname(self, nickname):
         if User.objects.filter(nickname=nickname).exists():
             return True
@@ -71,9 +54,7 @@ class UserRepository:
         return user
 
     @transaction.atomic
-    def apple_signup(
-        self, provider, provider_id, refresh_token, is_agree_privacy, is_agree_terms, is_agree_ads, nickname
-    ):
+    def signup(self, provider, provider_id, refresh_token, is_agree_privacy, is_agree_terms, is_agree_ads, nickname):
         user_info = User.objects.create(
             is_agree_privacy=is_agree_privacy,
             is_agree_terms=is_agree_terms,
