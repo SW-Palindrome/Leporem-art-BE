@@ -26,7 +26,7 @@ class KakaoSignUpView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        id_token = request.data.get('user_data')
+        id_token = request.data.get('id_token')
         if not validate_id_token(id_token):
             return Response({'message': 'invalid id_token'}, status=400)
 
@@ -37,14 +37,12 @@ class KakaoSignUpView(APIView):
         nickname = request.data.get('nickname')
         auth_service = AuthService()
 
-        payload = {'provider': self.PROVIDER, 'email': id_token}
-
-        access_token, access_exp = generate_access_token(payload, "access")
-        refresh_token, refresh_exp = generate_access_token(payload, "refresh")
+        access_token, access_exp = generate_access_token(self.PROVIDER, id_token, "access")
+        user_refresh_token, refresh_exp = generate_access_token(self.PROVIDER, id_token, "refresh")
 
         response_data = {
             'access_token': access_token,
-            'refresh_token': refresh_token,
+            'refresh_token': user_refresh_token,
             'access_exp': access_exp,
         }
 
@@ -52,7 +50,7 @@ class KakaoSignUpView(APIView):
             auth_service.signup(
                 provider=self.PROVIDER,
                 provider_id=provider_id,
-                refresh_token=refresh_token,
+                refresh_token=user_refresh_token,
                 is_agree_privacy=is_agree_privacy,
                 is_agree_terms=is_agree_terms,
                 is_agree_ads=is_agree_ads,
@@ -74,13 +72,31 @@ class KakaoLogInView(APIView):
 
     def post(self, request):
         auth_service = AuthService()
+        id_token = request.data.get('id_token')
+
         try:
             user = auth_service.login(id_token=request.data.get('id_token'))
         except AuthenticationFailed as e:
             return Response({'message': str(e)}, status=403)
         if user is None:
             return Response({'message': 'signin failed'}, status=403)
-        return Response({'user_id': user.user_id, 'is_seller': user.is_seller, 'nickname': user.nickname}, status=200)
+
+        access_token, access_exp = generate_access_token(self.PROVIDER, id_token, "access")
+        user_refresh_token, refresh_exp = generate_access_token(self.PROVIDER, id_token, "refresh")
+
+        UserRepository().refresh_token(user.user_id, user_refresh_token)
+
+        return Response(
+            {
+                'user_id': user.user_id,
+                'is_seller': user.is_seller,
+                'nickname': user.nickname,
+                'access_token': access_token,
+                'refresh_token': user_refresh_token,
+                'access_exp': access_exp,
+            },
+            status=200,
+        )
 
 
 class ValidateNicknameView(APIView):
@@ -167,6 +183,7 @@ class AppleCallBackView(APIView):
         if user:
             access_token, access_exp = generate_access_token(self.PROVIDER, user_details['sub'], "access")
             refresh_token, refresh_exp = generate_access_token(self.PROVIDER, user_details['sub'], "refresh")
+            user_repository.refresh_token(user.user_id, refresh_token)
 
             response_data = {
                 'user_id': user.user_id,
