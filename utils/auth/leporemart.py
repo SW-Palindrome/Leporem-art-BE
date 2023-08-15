@@ -82,7 +82,7 @@ def refresh_token(request):
         else:
             access_token = generate_access_token(payload, "access")
 
-        return {"email": decoded.get("email"), "access_token": access_token, "refresh_token": refresh_token}
+        return {"access_token": access_token, "refresh_token": refresh_token}
     except jwt.exceptions.DecodeError:
         msg = {
             "message": "잘못된 토큰입니다.",
