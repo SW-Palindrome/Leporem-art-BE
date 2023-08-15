@@ -11,7 +11,7 @@ from apps.users.repositories import UserRepository
 from apps.users.services import AuthService, UserService
 from utils.auth.apple import AppleOAuth2
 from utils.auth.kakao import extract_provider_id, validate_id_token
-from utils.auth.leporemart import generate_access_token, refresh_token, validate_token
+from utils.auth.leporemart import generate_access_token, refresh_token
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
 from .permissions import IsStaff
@@ -142,14 +142,14 @@ class AppleLoginUrlView(APIView):
 
     def get(self, request):
         client_id = settings.APPLE_CONFIG.get('SOCIAL_AUTH_APPLE_ID_CLIENT')
-        redirect_uri = 'https://dev.leporem.art/users/validate/apple'
+        redirect_uri = 'https://dev.leporem.art/users/login/apple'
         uri = f"{self.APPLE_AUTH_URL}?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}"
 
         res = redirect(uri)
         return res
 
 
-class AppleLoginView(APIView):
+class AppleCallBackView(APIView):
     permission_classes = [permissions.AllowAny]
 
     PROVIDER = "APPLE"
@@ -162,10 +162,21 @@ class AppleLoginView(APIView):
         user_details = apple_oauth.do_auth(code)
 
         user_repository = UserRepository()
+        user = user_repository.login(self.PROVIDER, user_details.get('sub'))
 
-        if user_repository.login(self.PROVIDER, user_details.get('sub')):
-            if validate_token(data.get('access_token')):
-                return Response({"message": "login successful"}, status=200)
+        if user:
+            access_token, access_exp = generate_access_token(self.PROVIDER, user_details['sub'], "access")
+            refresh_token, refresh_exp = generate_access_token(self.PROVIDER, user_details['sub'], "refresh")
+
+            response_data = {
+                'user_id': user.user_id,
+                'is_seller': user.is_seller,
+                'nickname': user.nickname,
+                'access_token': access_token,
+                'refresh_token': refresh_token,
+                'access_exp': access_exp,
+            }
+            return Response({"message": "leporem art login required", "data": response_data}, status=200)
         return Response({"message": "signup required", "user_data": user_details['sub']}, status=404)
 
 
@@ -184,10 +195,8 @@ class AppleSignUpView(APIView):
 
         auth_service = AuthService()
 
-        payload = {'provider': self.PROVIDER, 'email': user_data}
-
-        access_token, access_exp = generate_access_token(payload, "access")
-        refresh_token, refresh_exp = generate_access_token(payload, "refresh")
+        access_token, access_exp = generate_access_token(self.PROVIDER, user_data, "access")
+        refresh_token, refresh_exp = generate_access_token(self.PROVIDER, user_data, "refresh")
 
         response_data = {
             'access_token': access_token,
