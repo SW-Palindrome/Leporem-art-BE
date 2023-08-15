@@ -237,3 +237,16 @@ class RefreshTokenView(APIView):
     def post(self, request):
         response_data = refresh_token(request)
         return Response({"message": "token refreshed successful", "data": response_data}, status=200)
+
+
+class MyInfoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response(
+            {
+                'user_id': request.user.user_id,
+                'is_seller': request.user.is_seller,
+                'nickname': request.user.nickname,
+            }
+        )

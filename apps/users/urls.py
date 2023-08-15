@@ -9,6 +9,7 @@ from apps.users.views import (
     ChangeProfileImageView,
     KakaoLogInView,
     KakaoSignUpView,
+    MyInfoView,
     RefreshTokenView,
     RemoveUserView,
     ValidateNicknameView,
@@ -24,6 +25,7 @@ urlpatterns = [
     path('login/apple', AppleCallBackView.as_view()),
     path('signup/apple', AppleSignUpView.as_view()),
     path('refresh', RefreshTokenView.as_view()),
+    path('info/my', MyInfoView.as_view()),
 ]
 
 if settings.DEBUG:
