@@ -7,7 +7,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from apps.users.repositories import UserRepository
 
 
-def generate_access_token(payload, kind):
+def generate_access_token(provider, provider_id, kind):
     if kind == "access":
         exp = datetime.now() + timedelta(hours=3)
     elif kind == "refresh":
@@ -16,8 +16,8 @@ def generate_access_token(payload, kind):
         raise Exception("Invalid token type.")
 
     token_payload = {
-        'provider': payload['provider'],
-        'email': payload['email'],
+        'provider': provider,
+        'email': provider_id,
         'exp': int(exp.timestamp()),
         'iat': int(datetime.now().timestamp()),
     }
@@ -35,7 +35,7 @@ def validate_token(request):
         decoded = jwt.decode(token, settings.JWT_AUTH.get("JWT_SECRET_KEY"), algorithms=["HS256"])
         provider = decoded.get("provider")
         email = decoded.get("email")
-        user = UserRepository().apple_login(provider, email)
+        user = UserRepository().login(provider, email)
         return user, None
     except jwt.exceptions.DecodeError:
         msg = {
