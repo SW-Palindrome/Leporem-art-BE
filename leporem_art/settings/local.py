@@ -8,10 +8,10 @@ ALLOWED_HOSTS = []
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db-leporemart',
+        'NAME': 'db-leporemart-dev',
         'USER': 'palindrome',
         'PASSWORD': 'dikqU8-jyqjac-ruxxyf',
-        'HOST': 'leporem-art-db.ckbfh3nhrtug.ap-northeast-2.rds.amazonaws.com',
+        'HOST': 'db.leporem.art',
         'PORT': '3306',
     }
 }
