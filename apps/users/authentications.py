@@ -1,10 +1,8 @@
-import jwt
-from django.conf import settings
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
-from apps.users.repositories import UserRepository
 from apps.users.services import AuthService
+from utils.auth.leporemart import validate_token
 
 
 class OIDCAuthentication(BaseAuthentication):
@@ -30,24 +28,5 @@ class OIDCAuthentication(BaseAuthentication):
             return user, None
 
         """apple login user"""
-        try:
-            token = request.headers.get("AUTHORIZATION")
-            if not token:
-                return None
-            decoded = jwt.decode(token, settings.JWT_AUTH.get("JWT_SECRET_KEY"), algorithms=["HS256"])
-            provider = decoded.get("provider")
-            email = decoded.get("email")
-            user = UserRepository().login(provider, email)
-            return user, None
-        except jwt.exceptions.DecodeError:
-            msg = {
-                "message": "Invalid Token",
-                "code": "JWT_403_INVALID_ACCESSTOKEN",
-            }
-            raise AuthenticationFailed(msg)
-        except jwt.ExpiredSignatureError:
-            msg = {
-                "message": "Expired Token",
-                "code": "JWT_403_EXPIRED_ACCESSTOKEN",
-            }
-            raise AuthenticationFailed(msg)
+        user = validate_token(request)
+        return user, None
