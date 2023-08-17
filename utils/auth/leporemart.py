@@ -68,7 +68,7 @@ def validate_token(request):
 def refresh_token(request):
     user_repository = UserRepository()
     try:
-        refresh_token = request.headers.get('refresh_token')
+        refresh_token = request.data.get('refresh_token')
         if not refresh_token:
             msg = {
                 "message": "refresh_token을 보내주세요.",
@@ -77,17 +77,18 @@ def refresh_token(request):
             raise AuthenticationFailed(msg)
         decoded = jwt.decode(refresh_token, settings.JWT_AUTH("JWT_SECRET_KEY"), settings.JWT_AUTH("JWT_ALGORITHM"))
 
-        payload = {'provider': decoded.get("provider"), 'email': decoded.get("email")}
+        provider = decoded.get("provider")
+        provider_id = decoded.get("email")
 
         if decoded.get('exp') < int(datetime.now().timestamp()):
             if user_repository.get_token(request.user.user_id) == refresh_token:
-                access_token = generate_access_token(payload, "access")
-                refresh_token = generate_access_token(payload, "refresh")
+                access_token = generate_access_token(provider, provider_id, "access")
+                refresh_token = generate_access_token(provider, provider_id, "refresh")
                 user_repository.refresh_token(request.user.user_id, refresh_token)
             else:
                 raise AuthenticationFailed({"message": "토큰이 일치하지 않습니다."})
         else:
-            access_token = generate_access_token(payload, "access")
+            access_token = generate_access_token(provider, provider_id, "access")
 
         return {"access_token": access_token, "refresh_token": refresh_token}
     except jwt.exceptions.DecodeError:
