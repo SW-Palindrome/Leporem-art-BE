@@ -82,15 +82,15 @@ def refresh_token(request):
 
         if decoded.get('exp') < int(datetime.now().timestamp()):
             if user_repository.get_token(request.user.user_id) == refresh_token:
-                access_token = generate_access_token(provider, provider_id, "access")
-                refresh_token = generate_access_token(provider, provider_id, "refresh")
+                access_token, access_token_exp = generate_access_token(provider, provider_id, "access")
+                refresh_token, refresh_exp = generate_access_token(provider, provider_id, "refresh")
                 user_repository.refresh_token(request.user.user_id, refresh_token)
             else:
                 raise AuthenticationFailed({"message": "토큰이 일치하지 않습니다."})
         else:
-            access_token = generate_access_token(provider, provider_id, "access")
+            access_token, access_token_exp = generate_access_token(provider, provider_id, "access")
 
-        return {"access_token": access_token, "refresh_token": refresh_token}
+        return {"access_token": access_token, "refresh_token": refresh_token, "access_exp": access_token_exp}
     except jwt.exceptions.DecodeError:
         msg = {
             "message": "잘못된 토큰입니다.",
