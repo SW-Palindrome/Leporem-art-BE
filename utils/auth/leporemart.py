@@ -75,7 +75,7 @@ def refresh_token(request):
                 "code": "JWT_400_NOT_FOUND_TOKEN",
             }
             raise AuthenticationFailed(msg)
-        decoded = jwt.decode(refresh_token, settings.JWT_AUTH("JWT_SECRET_KEY"), settings.JWT_AUTH("JWT_ALGORITHM"))
+        decoded = jwt.decode(refresh_token, settings.JWT_AUTH["JWT_SECRET_KEY"], settings.JWT_AUTH["JWT_ALGORITHM"])
 
         provider = decoded.get("provider")
         provider_id = decoded.get("email")
