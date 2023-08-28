@@ -17,7 +17,7 @@ from apps.items.serializers import (
 from apps.items.services import ItemService, LikeService, ViewedItemService
 
 
-class FilterItemView(APIView):
+class ItemsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
