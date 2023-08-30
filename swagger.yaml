@@ -1,0 +1,308 @@
+openapi: 3.0.3
+info:
+  title: 공예쁨 Swagger
+  description: |-
+    공예쁨 서비스를 위한 개발 서버 전용 API SPEC 입니다.
+  version: 1.0.11
+servers:
+  - url: https://dev.leporem.art
+components:
+  securitySchemes:
+    leporemartTokenAuth:
+      type: http
+      scheme: bearer
+security:
+  - leporemartTokenAuth: []
+tags:
+  - name: users
+    description: 사용자 관리
+  - name: buyers
+    description: 구매자 관리
+  - name: sellers
+    description: 판매자 관리
+
+paths:
+  /users/signup/kakao:
+    post:
+      tags:
+        - users
+      summary: 카카오 회원가입
+      description: 카카오로 회원가입합니다.
+      requestBody:
+        description: ID 토큰을 통하여 카카오 회원가입을 처리합니다.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+                  example: Leporemart33!
+                is_argree_privacy:
+                  type: boolean
+                  example: true
+                is_agree_terms:
+                  type: boolean
+                  example: true
+                is_agree_ads:
+                  type: boolean
+                  example: true
+                nickname:
+                  type: string
+                  example: 공예쁨
+        required: true
+      responses:
+        '201':
+          description: 회원가입 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IktBS0FPIiwiZW1haWwiOiIyOTE5MzQ2MzEwIiwiZXhwIjoxNjkyMTE2MDU1LCJpYXQiOjE2OTIxMDUyNTV9.gjxXxYzfNzVHCRNSQgKDO2QRdjzPi_WnMKEbRX8G7mg
+                      refresh_token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IktBS0FPIiwiZW1haWwiOiIyOTE5MzQ2MzEwIiwiZXhwIjoxNzA3NjU3MjU1LCJpYXQiOjE2OTIxMDUyNTV9.ZjwtgdnADBuw-Hkv5rxRXnv8br5s0UWz3ym0FhvbHG4
+                      access_exp: 
+                        type: integer
+                        example: 1692116055
+        '400':
+          description: 회원가입 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 실패 원인
+                    example: duplicate nickname
+  
+  /users/login/kakao:
+    post:
+      tags:
+        - users
+      summary: 카카오 로그인 API
+      description: 카카오 로그인 url 입니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+                  example: eyJraWQiOiI5ZjI1MmRhZGQ1ZjIzM2Y5M2QyZmE1MjhkMTJmZWEiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI4YWVhYzliYjE4ZjQyMDYwYTIzMzI4ODU1NzdiOGNiOSIsInN1YiI6IjI5MTkzNDYzMTAiLCJhdXRoX3RpbWUiOjE2OTIxMDQyOTEsImlzcyI6Imh0dHBzOi8va2F1dGgua2FrYW8uY29tIiwiZXhwIjoxNjkyMTQ3NDkxLCJpYXQiOjE2OTIxMDQyOTF9.aC8-RvYFfoNLf8ZrL1MjwQoQWQ8CGVnc4SwDWFTsUfqwso08XwKdbR6YueK0d3uZShc50XSo94afruuV622MSvvtrYXFG4MtGTYu3BrmxeTnHyzTMVVEdYb5mpgOodbALWQH_BFepfZ-c8bry5hMELZSpDxDy-DidfhCuFDTOc1bq1phXwCk4b6vMXf9Ggfa8dAXzlEmMSVrAvsOc_4N4QF14NOnFVLJMVvzx6J9Upih7MowaAIx74zSeATbOifkGx9NwGDqVekC3GzVcddQdwNEgFDP_X0rKa4m9v8Y8JpLezB17TENzHjBsPtmCewvZp2HODMtDXF4-jW_v3Q3tA
+        required: true          
+      responses:
+        '200':
+          description: 카카오 로그인 성공, 공예쁨에 존재하는 사용자
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  is_seller:
+                    type: boolean
+                    example: true
+                  nickname:
+                    type: string
+                    example: 공예쁨
+                  access_token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IktBS0FPIiwiZW1haWwiOiIyOTE5MzQ2MzEwIiwiZXhwIjoxNjkyMTE2MDU1LCJpYXQiOjE2OTIxMDUyNTV9.gjxXxYzfNzVHCRNSQgKDO2QRdjzPi_WnMKEbRX8G7mg
+                  refresh_token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IktBS0FPIiwiZW1haWwiOiIyOTE5MzQ2MzEwIiwiZXhwIjoxNzA3NjU3MjU1LCJpYXQiOjE2OTIxMDUyNTV9.ZjwtgdnADBuw-Hkv5rxRXnv8br5s0UWz3ym0FhvbHG4
+                  access_exp:
+                    type: integer
+                    example: 1692116055
+        '403':
+          description: 카카오 로그인 성공, 공예쁨에 존재하지 않는 사용자
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: signin failed
+
+
+  /users/redirect/apple:
+    get:
+      tags: 
+        - users
+      summary: 애플 로그인 Redirect URI
+      description: 애플 로그인 리다이렉트 uri 입니다.
+      responses:
+        '200':
+          description: 애플 로그인 성공, 공예쁨에 존재하는 사용자
+          content:
+            application/json:
+              example:
+                message: success
+                data:
+                  user_id: 4
+                  is_seller: false
+                  nickname: 옥지얌
+                  access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IkFQUExFIiwiZW1haWwiOiIwMDAzMTkuYWIwYjk0NTNhMWE5NDgxNzhiOGQ4MWE5NzRjN2YwMTUuMTcyMiIsImV4cCI6MTY5MjAzOTA4NCwiaWF0IjoxNjkyMDI4Mjg0fQ.-Y5RtpVnB1zXQksA9fNKXYCB3D_qMfInXMTYbLp8NNE
+                  refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IkFQUExFIiwiZW1haWwiOiIwMDAzMTkuYWIwYjk0NTNhMWE5NDgxNzhiOGQ4MWE5NzRjN2YwMTUuMTcyMiIsImV4cCI6MTcwNzU4MDI4NCwiaWF0IjoxNjkyMDI4Mjg0fQ.XWeYAH80bEMfwQCG9bQTrd-46zP5bACEKSw9cSBLRiU
+                  access_exp: 1692039084
+        '404':
+          description: 애플 로그인 성공, 공예쁨에 존재하지 않는 사용자
+          content:
+            application/json:
+              example:
+                message: signup required
+                user_data: 000319.ab0b9453a1a948178b8d81a974c7f015.1722
+  
+  /users/login/apple:
+    get:
+      tags: 
+        - users
+      summary: 애플 로그인
+      description: 애플 로그인입니다.
+      parameters:
+        - in: query
+          name: code
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: 애플 로그인 성공, 공예쁨에 존재하는 사용자
+          content:
+            application/json:
+              example:
+                message: success
+                data:
+                  user_id: 4
+                  is_seller: false
+                  nickname: 옥지얌
+                  access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IkFQUExFIiwiZW1haWwiOiIwMDAzMTkuYWIwYjk0NTNhMWE5NDgxNzhiOGQ4MWE5NzRjN2YwMTUuMTcyMiIsImV4cCI6MTY5MjAzOTA4NCwiaWF0IjoxNjkyMDI4Mjg0fQ.-Y5RtpVnB1zXQksA9fNKXYCB3D_qMfInXMTYbLp8NNE
+                  refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IkFQUExFIiwiZW1haWwiOiIwMDAzMTkuYWIwYjk0NTNhMWE5NDgxNzhiOGQ4MWE5NzRjN2YwMTUuMTcyMiIsImV4cCI6MTcwNzU4MDI4NCwiaWF0IjoxNjkyMDI4Mjg0fQ.XWeYAH80bEMfwQCG9bQTrd-46zP5bACEKSw9cSBLRiU
+                  access_exp: 1692039084
+        '404':
+          description: 애플 로그인 성공, 공예쁨에 존재하지 않는 사용자
+          content:
+            application/json:
+              example:
+                message: signup required
+                user_data: 000319.ab0b9453a1a948178b8d81a974c7f015.1722
+
+  /users/signup/apple:
+    post:
+      tags:
+        - users
+      summary: 애플 회원가입
+      description: 애플 로그인 유저 회원가입입니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                user_data: 
+                  type: string
+                  example: 000319.ab0b9453a1a948178b8d81a974c7f015.1722
+                is_argree_privacy:
+                  type: boolean
+                  example: true
+                is_agree_terms:
+                  type: boolean
+                  example: true
+                is_agree_ads:
+                  type: boolean
+                  example: false
+                nickname:
+                  type: string
+                  example: 옥지얌
+        required: true
+      responses:
+        '201':
+          description: 회원가입 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: signup successful
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IkFQUExFIiwiZW1haWwiOiIwMDAzMTkuYWIwYjk0NTNhMWE5NDgxNzhiOGQ4MWE5NzRjN2YwMTUuMTcyMiIsImV4cCI6MTY5MjAzOTA4NCwiaWF0IjoxNjkyMDI4Mjg0fQ.-Y5RtpVnB1zXQksA9fNKXYCB3D_qMfInXMTYbLp8NNE
+                      refresh_token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IkFQUExFIiwiZW1haWwiOiIwMDAzMTkuYWIwYjk0NTNhMWE5NDgxNzhiOGQ4MWE5NzRjN2YwMTUuMTcyMiIsImV4cCI6MTcwNzU4MDI4NCwiaWF0IjoxNjkyMDI4Mjg0fQ.XWeYAH80bEMfwQCG9bQTrd-46zP5bACEKSw9cSBLRiU
+                      access_exp:
+                        type: integer
+                        example: 1692039084
+        '400':
+          description: 회원가입 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 실패원인
+                    example: | 
+                      {"example1": "duplicate nickname", "example2": "duplicate user info"}
+                
+  /users/refresh:
+    post:
+      tags:
+        - users
+      summary: 토큰 재발급
+      description: 토큰 재발급입니다.
+      parameters:
+        - in: header
+          name: refresh_token
+          required: true
+          schema:
+            type: string
+          description: refresh_token value
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 토큰 갱신 성공
+          content:
+            application/json:
+              example:
+                message: token refreshed successful
+                data:
+                  access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IkFQUExFIiwiZW1haWwiOiIwMDAzMTkuYWIwYjk0NTNhMWE5NDgxNzhiOGQ4MWE5NzRjN2YwMTUuMTcyMiIsImV4cCI6MTY5MjAzOTA4NCwiaWF0IjoxNjkyMDI4Mjg0fQ.-Y5RtpVnB1zXQksA9fNKXYCB3D_qMfInXMTYbLp8NNE
+                  refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IkFQUExFIiwiZW1haWwiOiIwMDAzMTkuYWIwYjk0NTNhMWE5NDgxNzhiOGQ4MWE5NzRjN2YwMTUuMTcyMiIsImV4cCI6MTcwNzU4MDI4NCwiaWF0IjoxNjkyMDI4Mjg0fQ.XWeYAH80bEMfwQCG9bQTrd-46zP5bACEKSw9cSBLRiU
+
+        '400':
+          description: refresh token 존재하지 않습니다.
+          content:
+            application/json:
+              example:
+                message: refresh_token을 보내주세요.
+                code: JWT_400_NOT_FOUND_TOKEN
+
+        '403':
+          description: 잘못된 토큰입니다.
+          content:
+            application/json:
+              example:
+                message: 잘못된 토큰입니다.
+                code: JWT_403_INVALID_ACCESSTOKEN
