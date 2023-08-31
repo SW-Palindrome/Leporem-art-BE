@@ -1,5 +1,6 @@
 from random import randint
 
+from django.db import transaction
 from django.db.models import Case, Count, F, OuterRef, Subquery, Sum, When
 from django.db.models.functions import Round
 
@@ -16,6 +17,7 @@ class SellerRepository:
     def verify_code(self, user: User, verify_code: str) -> VerifyEmail:
         return VerifyEmail.objects.filter(user=user, verify_code=verify_code).last()
 
+    @transaction.atomic
     def register(self, user: User, email: str) -> Seller:
         user.is_seller = True
         user.save()
