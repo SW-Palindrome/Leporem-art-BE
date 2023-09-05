@@ -126,12 +126,18 @@ class ItemRepository:
         return Item.objects.get(item_id=item_id)
 
     def get_items(self, buyer_id):
-        search_item = Item.objects.order_by('-display_dt').annotate(
-            nickname=F('seller__user__nickname'),
-            like_count=Count('likes', distinct=True),
-            avg_rating=Round(Avg('orders__review__rating'), 1),
-            time_diff=timezone.now() - F('display_dt'),
-            is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer_id=buyer_id)),
+        search_item = (
+            Item.objects.order_by('-display_dt')
+            .filter(
+                seller__user__inactive_datetime__isnull=True,
+            )
+            .annotate(
+                nickname=F('seller__user__nickname'),
+                like_count=Count('likes', distinct=True),
+                avg_rating=Round(Avg('orders__review__rating'), 1),
+                time_diff=timezone.now() - F('display_dt'),
+                is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer_id=buyer_id)),
+            )
         )
         return search_item
 
@@ -197,12 +203,18 @@ class ItemRepository:
         item.save()
 
     def get_guest_items(self):
-        search_item = Item.objects.order_by('-display_dt').annotate(
-            nickname=F('seller__user__nickname'),
-            like_count=Count('likes', distinct=True),
-            avg_rating=Round(Avg('orders__review__rating'), 1),
-            time_diff=timezone.now() - F('display_dt'),
-            is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer_id=None)),
+        search_item = (
+            Item.objects.filter(
+                seller__user__inactive_datetime__isnull=True,
+            )
+            .order_by('-display_dt')
+            .annotate(
+                nickname=F('seller__user__nickname'),
+                like_count=Count('likes', distinct=True),
+                avg_rating=Round(Avg('orders__review__rating'), 1),
+                time_diff=timezone.now() - F('display_dt'),
+                is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer_id=None)),
+            )
         )
         return search_item
 

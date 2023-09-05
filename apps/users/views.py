@@ -14,7 +14,6 @@ from utils.auth.kakao import extract_provider_id, validate_id_token
 from utils.auth.leporemart import generate_access_token, refresh_token
 
 from .exceptions import DuplicateNicknameException, DuplicateUserInfoException
-from .permissions import IsStaff
 from .serializers import ChangeNicknameSerializer, ChangeProfileImageSerializer
 
 
@@ -140,16 +139,6 @@ class ChangeProfileImageView(APIView):
         return Response({'message': 'success'}, status=200)
 
 
-class RemoveUserView(APIView):
-    permission_classes = [IsStaff]
-
-    def delete(self, request):
-        user_service = UserService()
-        if not user_service.remove(request.data['nickname'], request.user.user_id):
-            return Response({'message': 'remove user failed'}, status=400)
-        return Response({'message': 'success'}, status=200)
-
-
 class AppleLoginUrlView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -250,3 +239,12 @@ class MyInfoView(APIView):
                 'nickname': request.user.nickname,
             }
         )
+
+
+class InactiveUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user_service = UserService()
+        user_service.inactive(request.user.user_id)
+        return Response({'message': 'success'}, status=200)

@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.urls import path
 
 from apps.users.views import (
@@ -7,11 +6,11 @@ from apps.users.views import (
     AppleSignUpView,
     ChangeNicknameView,
     ChangeProfileImageView,
+    InactiveUserView,
     KakaoLogInView,
     KakaoSignUpView,
     MyInfoView,
     RefreshTokenView,
-    RemoveUserView,
     ValidateNicknameView,
 )
 
@@ -26,9 +25,5 @@ urlpatterns = [
     path('signup/apple', AppleSignUpView.as_view()),
     path('refresh', RefreshTokenView.as_view()),
     path('info/my', MyInfoView.as_view()),
+    path('inactive', InactiveUserView.as_view()),
 ]
-
-if settings.DEBUG:
-    urlpatterns += [
-        path('remove', RemoveUserView.as_view()),
-    ]
