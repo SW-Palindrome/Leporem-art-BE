@@ -86,3 +86,8 @@ class UserRepository:
         user.inactive_datetime = timezone.now()
         user.save()
         user.user_oauth_info.delete()
+
+        if user.is_seller:
+            seller = user.seller
+            seller.email = None
+            seller.save()
