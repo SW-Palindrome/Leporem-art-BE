@@ -79,7 +79,7 @@ class UserRepository:
         user = User.objects.get(user_id=user_id)
         user.inactive_datetime = timezone.now()
         user.save()
-        user.user_oauth_info.delete()
+        user.user_oauth_info.all().delete()
 
         if user.is_seller:
             seller = user.seller

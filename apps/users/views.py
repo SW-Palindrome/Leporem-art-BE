@@ -239,3 +239,12 @@ class MyInfoView(APIView):
                 'nickname': request.user.nickname,
             }
         )
+
+
+class InactiveUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user_service = UserService()
+        user_service.inactive(request.user.user_id)
+        return Response({'message': 'success'}, status=200)
