@@ -77,3 +77,7 @@ class UserService:
     def change_profile_image(self, user_id, profile_image):
         user_repository = UserRepository()
         user_repository.change_profile_image(user_id, profile_image)
+
+    def inactive(self, user_id):
+        user_repository = UserRepository()
+        user_repository.inactive(user_id)
