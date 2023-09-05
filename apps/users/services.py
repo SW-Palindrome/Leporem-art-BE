@@ -77,10 +77,3 @@ class UserService:
     def change_profile_image(self, user_id, profile_image):
         user_repository = UserRepository()
         user_repository.change_profile_image(user_id, profile_image)
-
-    def remove(self, user_nickname, staff_id):
-        """회원 삭제"""
-        user_repository = UserRepository()
-        if not user_repository.check_is_staff(staff_id):
-            return False
-        return user_repository.remove(user_nickname)

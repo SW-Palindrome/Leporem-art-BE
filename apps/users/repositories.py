@@ -43,13 +43,6 @@ class UserRepository:
             return True
         return False
 
-    def remove(self, user_nickname):
-        user = User.objects.get(nickname=user_nickname)
-        if user.is_seller:
-            user.seller.delete()
-        user.delete()
-        return True
-
     def get_user_info(self, user_id):
         user = User.objects.get(user_id=user_id)
         return user
@@ -82,6 +75,7 @@ class UserRepository:
 
     @transaction.atomic
     def inactive(self, user_id):
+        """회원 탈퇴"""
         user = User.objects.get(user_id=user_id)
         user.inactive_datetime = timezone.now()
         user.save()

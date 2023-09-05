@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.urls import path
 
 from apps.users.views import (
@@ -11,7 +10,6 @@ from apps.users.views import (
     KakaoSignUpView,
     MyInfoView,
     RefreshTokenView,
-    RemoveUserView,
     ValidateNicknameView,
 )
 
@@ -27,8 +25,3 @@ urlpatterns = [
     path('refresh', RefreshTokenView.as_view()),
     path('info/my', MyInfoView.as_view()),
 ]
-
-if settings.DEBUG:
-    urlpatterns += [
-        path('remove', RemoveUserView.as_view()),
-    ]
