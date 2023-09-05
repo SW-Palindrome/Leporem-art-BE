@@ -1,6 +1,7 @@
 from typing import Optional
 
 from django.db import transaction
+from django.utils import timezone
 
 from apps.users.models import User, UserOAuthInfo
 from leporem_art import settings
@@ -42,13 +43,6 @@ class UserRepository:
             return True
         return False
 
-    def remove(self, user_nickname):
-        user = User.objects.get(nickname=user_nickname)
-        if user.is_seller:
-            user.seller.delete()
-        user.delete()
-        return True
-
     def get_user_info(self, user_id):
         user = User.objects.get(user_id=user_id)
         return user
@@ -78,3 +72,16 @@ class UserRepository:
         user_oauth_info = UserOAuthInfo.objects.get(user=user_id)
         user_oauth_info.refresh_token = token
         user_oauth_info.save()
+
+    @transaction.atomic
+    def inactive(self, user_id):
+        """회원 탈퇴"""
+        user = User.objects.get(user_id=user_id)
+        user.inactive_datetime = timezone.now()
+        user.save()
+        user.user_oauth_info.all().delete()
+
+        if user.is_seller:
+            seller = user.seller
+            seller.email = None
+            seller.save()
