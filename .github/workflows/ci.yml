@@ -5,6 +5,11 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      mysqldb:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
 
     steps:
       - uses: actions/checkout@v3
@@ -24,14 +29,6 @@ jobs:
           poetry run flake8
           poetry run black --check .
           poetry run isort --check .
-
-      - name: Set up MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql version: '8.0'
-          mysql user: 'palindrome'
-          mysql password: ${{ secrets.MYSQL_PASSWORD }}
-          mysql database: 'db-leporemart-test'
 
       - name: Run tests
         run: |
