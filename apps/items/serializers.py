@@ -1,18 +1,7 @@
 from rest_framework import serializers
 
 
-class BuyerItemListSerializer(serializers.Serializer):
-    item_id = serializers.IntegerField()
-    nickname = serializers.CharField()
-    title = serializers.CharField()
-    price = serializers.IntegerField()
-    thumbnail_image = serializers.CharField(source='thumbnail_image.image.url')
-    like_count = serializers.IntegerField()
-    is_liked = serializers.BooleanField()
-    current_amount = serializers.IntegerField()
-
-
-class SellerItemListSerializer(serializers.Serializer):
+class ItemSerializer(serializers.Serializer):
     item_id = serializers.IntegerField()
     nickname = serializers.CharField()
     title = serializers.CharField()
@@ -25,7 +14,7 @@ class SellerItemListSerializer(serializers.Serializer):
     is_liked = serializers.BooleanField()
 
 
-class SellerTotalItemSerializer(serializers.Serializer):
+class ItemsSerializer(serializers.Serializer):
     total_count = serializers.SerializerMethodField()
     items = serializers.SerializerMethodField()
 
@@ -34,7 +23,7 @@ class SellerTotalItemSerializer(serializers.Serializer):
 
     def get_items(self, obj):
         items = self.context.get('items')
-        seller_serializer = SellerItemListSerializer(items, many=True)
+        seller_serializer = ItemSerializer(items, many=True)
         return seller_serializer.data
 
 
