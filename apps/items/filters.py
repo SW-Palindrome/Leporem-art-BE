@@ -6,10 +6,6 @@ from django.db.models import Case, F, Q, Value, When
 
 
 class OrderingFilter(django_filters.OrderingFilter):
-    def get_ordering_value(self, param):
-        field_name = self.param_map.get(param, param)
-        return field_name
-
     def filter(self, qs, value):
         if not value:
             return qs
