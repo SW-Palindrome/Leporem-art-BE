@@ -9,6 +9,7 @@ from apps.items.filters import ItemFilter
 from apps.items.serializers import (
     BuyerDetailedItemSerializer,
     FavoriteItemListSerializer,
+    ItemSerializer,
     ItemsSerializer,
     SellerDetailedItemSerializer,
     ViewedItemListSerializer,
@@ -16,7 +17,103 @@ from apps.items.serializers import (
 from apps.items.services import ItemService, LikeService, ViewedItemService
 
 
+class FilterItemView(APIView):
+    permissions_classes = [IsAuthenticated]
+
+    def get(self, request):
+        buyer_id = request.user.buyer.buyer_id
+
+        item_service = ItemService()
+        items = item_service.filter_items(buyer_id)
+
+        page_number = request.GET.get('page', 1)
+        ordering = request.GET.get('ordering')
+        category = request.GET.get('category')
+        nickname = request.GET.get('nickname')
+        search = request.GET.get('search')
+        price = request.GET.get('price')
+
+        if price:
+            price_min, price_max = price.split(',')
+        else:
+            price_min, price_max = None, None
+
+        get_params = {
+            'ordering': ordering,
+            'price_min': price_min,
+            'price_max': price_max,
+            'category': category,
+            'nickname': nickname,
+            'search': search,
+        }
+
+        filtered_items = ItemFilter(get_params, queryset=items)
+
+        paginator = Paginator(filtered_items.qs, 20)
+
+        try:
+            page_number = int(page_number)
+            page_obj = paginator.page(page_number)
+
+            if nickname:
+                seller_serializer = ItemsSerializer(page_obj, context={'items': page_obj})
+                return Response({"list": seller_serializer.data}, status=200)
+            buyer_serializer = ItemSerializer(page_obj, many=True)
+            return Response({"items": buyer_serializer.data}, status=200)
+        except PageNotAnInteger:
+            return Response({"message": "PageNotAnInteger"}, status=400)
+        except EmptyPage:
+            return Response({"message": "EmptyPage"}, status=400)
+
+
+class GuestItemView(APIView):
+    permissions_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        page_number = request.GET.get('page', 1)
+        ordering = request.GET.get('ordering')
+        category = request.GET.get('category')
+        nickname = request.GET.get('nickname')
+        search = request.GET.get('search')
+        price = request.GET.get('price')
+
+        if price:
+            price_min, price_max = price.split(',')
+        else:
+            price_min, price_max = None, None
+
+        get_params = {
+            'ordering': ordering,
+            'price_min': price_min,
+            'price_max': price_max,
+            'category': category,
+            'nickname': nickname,
+            'search': search,
+        }
+
+        items = ItemService.guest_items(self)
+        filtered_items = ItemFilter(get_params, queryset=items)
+
+        paginator = Paginator(filtered_items.qs, 20)
+
+        try:
+            page_number = int(page_number)
+            page_obj = paginator.page(page_number)
+
+            if nickname:
+                seller_serializer = ItemsSerializer(page_obj, context={'items': page_obj})
+                return Response({"list": seller_serializer.data}, status=200)
+            buyer_serializer = ItemSerializer(page_obj, many=True)
+            return Response({"items": buyer_serializer.data}, status=200)
+        except PageNotAnInteger:
+            return Response({"message": "PageNotAnInteger"}, status=400)
+        except EmptyPage:
+            return Response({"message": "EmptyPage"}, status=400)
+
+
 class ItemsView(APIView):
+    """전체 작품 리스트 통합 api"""
+
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
