@@ -65,6 +65,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "request.middleware.RequestMiddleware",
 ]
 
 ROOT_URLCONF = "leporem_art.urls"
