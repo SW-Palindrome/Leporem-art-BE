@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'apps.items',
     "dj_rest_auth",
     'rest_framework.authtoken',
-    'request',
 ]
 
 MIDDLEWARE = [
