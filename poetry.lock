@@ -694,21 +694,6 @@ files = [
 Django = ">=3.2"
 
 [[package]]
-name = "django-request"
-version = "1.6.3"
-description = "django-request is a statistics module for django. It stores requests in a database for admins to see, it can also be used to get statistics on who is online etc."
-optional = false
-python-versions = "*"
-files = [
-    {file = "django-request-1.6.3.tar.gz", hash = "sha256:9b3093f92113dcd41076dafc3ba01165f7a141a2fbea292a79ce644412b4adea"},
-    {file = "django_request-1.6.3-py3-none-any.whl", hash = "sha256:f5b27cb2f5bea676b4f84f6991363de57d1897758588ea16116f90ef4ea4ab76"},
-]
-
-[package.dependencies]
-Django = ">=2.2"
-python-dateutil = "*"
-
-[[package]]
 name = "django-s3-storage"
 version = "0.14.0"
 description = "Django Amazon S3 file storage."
@@ -2792,4 +2777,4 @@ test = ["websockets"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "5b09ab66fcce7a00a02c37baba72b8fec58c0b696dd45a5cdc7c13295c651ad5"
+content-hash = "d90638611539e42b63936f5b0fed38884322b7396b16e10e38b2c07a5fdcc8d9"
