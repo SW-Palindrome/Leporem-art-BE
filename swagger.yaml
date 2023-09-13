@@ -258,14 +258,13 @@ paths:
           description: 회원가입 실패
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: 실패원인
-                    example: | 
-                      {"example1": "duplicate nickname", "example2": "duplicate user info"}
+              examples:
+                duplicate nickname:
+                  value:
+                    message: 중복된 닉네임입니다.
+                duplicate user info:
+                  value:
+                    message: 중복된 유저 정보입니다.
                 
   /users/refresh:
     post:
