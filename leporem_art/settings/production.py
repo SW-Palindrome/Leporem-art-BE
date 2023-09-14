@@ -8,21 +8,22 @@ AWS_STORAGE_BUCKET_NAME = 'leporem-art-media-prod'
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
+# Load SSM
+ssm = boto3.client("ssm", region_name="ap-northeast-2")
+
 # Sentry 설정
+dsn = ssm.get_parameter(Name='/leporem_art/settings/production/sentry', WithDecryption=True)['Parameter']['Value']
+
 sentry_sdk.init(
-    dsn="https://0f4e241425e74741a4f8340ab95c4ba9@app.glitchtip.com/3492",
+    dsn=dsn,
     integrations=[DjangoIntegration()],
     auto_session_tracking=False,
     traces_sample_rate=0,
 )
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db-leporemart',
-        'USER': 'palindrome',
-        'PASSWORD': 'dikqU8-jyqjac-ruxxyf',
-        'HOST': 'db.leporem.art',
-        'PORT': '3306',
-    }
-}
+# DATABASE 설정
+param_db = ssm.get_parameter(Name='/leporem_art/settings/production/DATABASES', WithDecryption=True)['Parameter'][
+    'Value'
+]
+DATABASES = {'default': {}}
+[DATABASES['default'].setdefault(i.split(':')[0], i.split(':')[1]) for i in param_db.split('\n') if i != '']
