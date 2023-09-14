@@ -351,25 +351,23 @@ paths:
           content:
             application/json:
               example:
-                data: {
-                  list: {
-                      total_count: 1,
-                      items: [
-                          {
-                              item_id: 1,
-                              nickname: 하잉,
-                              title: zzㅋㅋ123,
-                              price: 2345,
-                              thumbnail_image: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/a54e4678-da0e-4098-aec9-40cd440be128.jpg",
-                              like_count: 1,
-                              avg_rating: null,
-                              time_diff: "32 22:40:07.055202",
-                              current_amount: 0,
-                              is_liked: false
-                          }
-                      ]
-                  }
-              }
+                list: {
+                    total_count: 1,
+                    items: [
+                        {
+                            item_id: 1,
+                            nickname: 하잉,
+                            title: zzㅋㅋ123,
+                            price: 2345,
+                            thumbnail_image: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/a54e4678-da0e-4098-aec9-40cd440be128.jpg",
+                            like_count: 1,
+                            avg_rating: null,
+                            time_diff: "32 22:40:07.055202",
+                            current_amount: 0,
+                            is_liked: false
+                        }
+                    ]
+                }
         '400':
           description: 전체 작품 조회 실패
           content:
@@ -424,24 +422,22 @@ paths:
           content:
             application/json:
               example:
-                data: {
-                  list: {
-                    total_count: 1,
-                    items: [
-                      {
-                        item_id: 1,
-                        nickname: 하잉,
-                        title: zzㅋㅋ123,
-                        price: 2345,
-                        thumbnail_image: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/a54e4678-da0e-4098-aec9-40cd440be128.jpg",
-                        like_count: 1,
-                        avg_rating: null,
-                        time_diff: "32 22:40:07.055202",
-                        current_amount: 0,
-                        is_liked: false
-                      }
-                    ]
-                  }
+                list: {
+                  total_count: 1,
+                  items: [
+                    {
+                      item_id: 1,
+                      nickname: 하잉,
+                      title: zzㅋㅋ123,
+                      price: 2345,
+                      thumbnail_image: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/a54e4678-da0e-4098-aec9-40cd440be128.jpg",
+                      like_count: 1,
+                      avg_rating: null,
+                      time_diff: "32 22:40:07.055202",
+                      current_amount: 0,
+                      is_liked: false
+                    }
+                  ]
                 }
         '400':
           description: 전체 작품 조회 실패
@@ -494,24 +490,22 @@ paths:
           content:
             application/json:
               example:
-                data: {
-                  list: {
-                    total_count: 1,
-                    items: [
-                      {
-                        item_id: 1,
-                        nickname: 하잉,
-                        title: zzㅋㅋ123,
-                        price: 2345,
-                        thumbnail_image: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/a54e4678-da0e-4098-aec9-40cd440be128.jpg",
-                        like_count: 1,
-                        avg_rating: null,
-                        time_diff: "32 22:40:07.055202",
-                        current_amount: 0,
-                        is_liked: false
-                      }
-                    ]
-                  }
+                list: {
+                  total_count: 1,
+                  items: [
+                    {
+                      item_id: 1,
+                      nickname: 하잉,
+                      title: zzㅋㅋ123,
+                      price: 2345,
+                      thumbnail_image: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/a54e4678-da0e-4098-aec9-40cd440be128.jpg",
+                      like_count: 1,
+                      avg_rating: null,
+                      time_diff: "32 22:40:07.055202",
+                      current_amount: 0,
+                      is_liked: false
+                    }
+                  ]
                 }
         '400':
           description: 전체 작품 조회 실패
