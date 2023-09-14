@@ -8,13 +8,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db-leporemart-dev',
-        'USER': 'palindrome',
-        'PASSWORD': 'dikqU8-jyqjac-ruxxyf',
-        'HOST': 'db.leporem.art',
-        'PORT': '3306',
-    }
-}
+# Load SSM
+ssm = boto3.client("ssm", region_name="ap-northeast-2")
+
+# DATABASE 설정
+param_db = ssm.get_parameter(Name='/leporem_art/settings/develop/DATABASES', WithDecryption=True)['Parameter']['Value']
+DATABASES = {'default': {}}
+[DATABASES['default'].setdefault(i.split(':')[0], i.split(':')[1]) for i in param_db.split('\n') if i != '']
