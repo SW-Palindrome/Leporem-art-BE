@@ -36,7 +36,7 @@ class SellerChatRoomListSerializer(serializers.Serializer):
     opponent_nickname = serializers.CharField()
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='buyer.user.profile_image')
-    message_list = MessageSerializer(source='last_message')
+    last_message = MessageSerializer()
     uuid = serializers.UUIDField()
 
 
