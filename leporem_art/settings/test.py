@@ -2,6 +2,8 @@ import os
 
 from .base import *
 
+AWS_STORAGE_BUCKET_NAME = 'leporem-art-media-test'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
