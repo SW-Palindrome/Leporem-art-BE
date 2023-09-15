@@ -11,3 +11,8 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
+SECRET_KEY = ""
+param_apple = ""
+dsn = ""
+param_db = ""
