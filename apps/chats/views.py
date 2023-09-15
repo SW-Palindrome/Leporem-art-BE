@@ -1,3 +1,4 @@
+from rest_framework.generics import ListAPIView
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -41,14 +42,12 @@ class BuyerChatRoomView(APIView):
         return Response({'chat_room_id': chat_room.chat_room_id}, status=201)
 
 
-class SellerChatRoomListView(APIView):
+class SellerChatRoomListView(ListAPIView):
     permission_classes = [IsSeller]
     serializer_class = SellerChatRoomListSerializer
 
-    def get(self, request):
-        chat_rooms = ChatRoomRepository().get_chat_rooms_by_seller_id(request.user.seller.seller_id)
-        serializer = self.serializer_class(chat_rooms, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return ChatRoomRepository().get_chat_rooms_by_seller_id(self.request.user.seller.seller_id)
 
 
 class MessageCreateView(APIView):
