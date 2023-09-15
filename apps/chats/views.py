@@ -9,6 +9,7 @@ from apps.chats.serializers import (
     BuyerChatRoomCreateSerializer,
     BuyerChatRoomListSerializer,
     MessageCreateSerializer,
+    SellerChatRoomListAllMessagesSerializer,
     SellerChatRoomListSerializer,
 )
 from apps.chats.services import ChatRoomService, MessageService
@@ -44,10 +45,15 @@ class BuyerChatRoomView(APIView):
 
 class SellerChatRoomListView(ListAPIView):
     permission_classes = [IsSeller]
-    serializer_class = SellerChatRoomListSerializer
 
     def get_queryset(self):
         return ChatRoomRepository().get_chat_rooms_by_seller_id(self.request.user.seller.seller_id)
+
+    def get_serializer_class(self):
+        # TODO: 추후 default로 마지막 메세지만 보여주는 것으로 변경
+        if self.request.query_params.get('only_last_message'):
+            return SellerChatRoomListSerializer
+        return SellerChatRoomListAllMessagesSerializer
 
 
 class MessageCreateView(APIView):

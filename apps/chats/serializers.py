@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.chats.models import Message
 
 
-class MessageListSerializer(serializers.Serializer):
+class MessageSerializer(serializers.Serializer):
     message_id = serializers.IntegerField()
     user_id = serializers.IntegerField()
     write_datetime = serializers.DateTimeField()
@@ -18,7 +18,16 @@ class BuyerChatRoomListSerializer(serializers.Serializer):
     opponent_nickname = serializers.CharField()
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='seller.user.profile_image')
-    message_list = MessageListSerializer(many=True, source='messages')
+    message_list = MessageSerializer(many=True, source='messages')
+    uuid = serializers.UUIDField()
+
+
+class SellerChatRoomListAllMessagesSerializer(serializers.Serializer):
+    chat_room_id = serializers.IntegerField()
+    opponent_nickname = serializers.CharField()
+    opponent_user_id = serializers.IntegerField()
+    opponent_profile_image = serializers.ImageField(source='buyer.user.profile_image')
+    message_list = MessageSerializer(many=True, source='messages')
     uuid = serializers.UUIDField()
 
 
@@ -27,7 +36,7 @@ class SellerChatRoomListSerializer(serializers.Serializer):
     opponent_nickname = serializers.CharField()
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='buyer.user.profile_image')
-    message_list = MessageListSerializer(many=True, source='messages')
+    message_list = MessageSerializer(source='last_message')
     uuid = serializers.UUIDField()
 
 
