@@ -11,7 +11,3 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
-SECRET_KEY = ""
-APPLE_CONFIG = ""
-dsn = ""
