@@ -774,6 +774,38 @@ files = [
 tests = ["asttokens", "littleutils", "pytest", "rich"]
 
 [[package]]
+name = "factory-boy"
+version = "3.3.0"
+description = "A versatile test fixtures replacement based on thoughtbot's factory_bot for Ruby."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "factory_boy-3.3.0-py2.py3-none-any.whl", hash = "sha256:a2cdbdb63228177aa4f1c52f4b6d83fab2b8623bf602c7dedd7eb83c0f69c04c"},
+    {file = "factory_boy-3.3.0.tar.gz", hash = "sha256:bc76d97d1a65bbd9842a6d722882098eb549ec8ee1081f9fb2e8ff29f0c300f1"},
+]
+
+[package.dependencies]
+Faker = ">=0.7.0"
+
+[package.extras]
+dev = ["Django", "Pillow", "SQLAlchemy", "coverage", "flake8", "isort", "mongoengine", "sqlalchemy-utils", "tox", "wheel (>=0.32.0)", "zest.releaser[recommended]"]
+doc = ["Sphinx", "sphinx-rtd-theme", "sphinxcontrib-spelling"]
+
+[[package]]
+name = "faker"
+version = "19.6.1"
+description = "Faker is a Python package that generates fake data for you."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "Faker-19.6.1-py3-none-any.whl", hash = "sha256:64c8513c53c3a809075ee527b323a0ba61517814123f3137e4912f5d43350139"},
+    {file = "Faker-19.6.1.tar.gz", hash = "sha256:5d6b7880b3bea708075ddf91938424453f07053a59f8fa0453c1870df6ff3292"},
+]
+
+[package.dependencies]
+python-dateutil = ">=2.4"
+
+[[package]]
 name = "fastjsonschema"
 version = "2.17.1"
 description = "Fastest Python implementation of JSON schema"
@@ -2777,4 +2809,4 @@ test = ["websockets"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "d90638611539e42b63936f5b0fed38884322b7396b16e10e38b2c07a5fdcc8d9"
+content-hash = "7d92a6d589dc20ab575d4fc5258240168f8795a239316f380fea9ad7270e73f6"
