@@ -20,14 +20,11 @@ pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load SSM
-ssm = boto3.client("ssm", region_name="ap-northeast-2")
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ssm.get_parameter(Name='/leporem_art/settings/base/SECRET_KEY', WithDecryption=True)['Parameter']['Value']
+SECRET_KEY = 'secret'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
@@ -167,11 +164,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 AWS_QUERYSTRING_AUTH = False
 
 # APPLE Oauth Settings
-param_apple = ssm.get_parameter(Name='/leporem_art/settings/base/APPLE_CONFIG', WithDecryption=True)['Parameter'][
-    'Value'
-]
 APPLE_CONFIG = {}
-[APPLE_CONFIG.setdefault(i.split(':')[0], i.split(':')[1]) for i in param_apple.split(',\n') if i != '']
 
 AUTHENTICATION_BACKENDS = [
     "social_core.backends.oauth",
