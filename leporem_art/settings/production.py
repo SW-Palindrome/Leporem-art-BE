@@ -54,3 +54,11 @@ APPLE_CONFIG = {
     'SOCIAL_AUTH_APPLE_ID_EMAIL_AS_USERNAME': json_apple['SOCIAL_AUTH_APPLE_ID_EMAIL_AS_USERNAME'],
     'SOCIAL_AUTH_APPLE_ID_PUBLIC': json_apple['SOCIAL_AUTH_APPLE_ID_PUBLIC'],
 }
+
+# Firebase Admin SDK setup
+param_firebase = ssm.get_parameter(Name='/leporem_art/settings/base/FIREBASE_CONFIG', WithDecryption=True)['Parameter'][
+    'Value'
+]
+FIREBASE_CONFIG = json.loads(param_firebase)
+cred = credentials.Certificate(FIREBASE_CONFIG)
+firebase_admin.initialize_app(cred)
