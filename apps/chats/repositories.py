@@ -41,6 +41,9 @@ class ChatRoomRepository:
             .order_by('-max_write_datetime')
         )
 
+    def get_chat_room_by_uuid(self, chat_room_uuid):
+        return ChatRoom.objects.get(uuid=chat_room_uuid)
+
 
 class MessageRepository:
     def _validate_user_in_chat_room(self, chat_room, user_id):
@@ -116,3 +119,6 @@ class MessageRepository:
             uuid=message_uuid or uuid.uuid4(),
             type=Message.Type.ORDER,
         )
+
+    def get_messages_by_chat_room_uuid(self, chat_room_uuid):
+        return Message.objects.filter(chat_room__uuid=chat_room_uuid).order_by('-write_datetime')

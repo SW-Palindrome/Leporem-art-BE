@@ -38,6 +38,7 @@ django-extensions = "^3.2.3"
 notebook = "^6.5.4"
 pre-commit = "^3.3.3"
 pytest-django = "^4.5.2"
+factory-boy = "^3.3.0"
 
 [build-system]
 requires = ["poetry-core"]

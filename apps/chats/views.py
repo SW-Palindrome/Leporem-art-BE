@@ -1,17 +1,21 @@
+from rest_framework.generics import ListAPIView
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.chats.repositories import ChatRoomRepository
+from apps.chats.repositories import ChatRoomRepository, MessageRepository
 from apps.chats.serializers import (
     BuyerChatRoomCreateSerializer,
+    BuyerChatRoomListAllMessagesSerializer,
     BuyerChatRoomListSerializer,
     MessageCreateSerializer,
+    MessageSerializer,
+    SellerChatRoomListAllMessagesSerializer,
     SellerChatRoomListSerializer,
 )
 from apps.chats.services import ChatRoomService, MessageService
-from apps.users.permissions import IsSeller
+from apps.users.permissions import IsInChatRoom, IsSeller
 
 
 class BuyerChatRoomView(APIView):
@@ -20,8 +24,13 @@ class BuyerChatRoomView(APIView):
 
     def get(self, request):
         chat_rooms = ChatRoomRepository().get_chat_rooms_by_buyer_id(request.user.buyer.buyer_id)
-        serializer = BuyerChatRoomListSerializer(chat_rooms, many=True)
-        return Response(serializer.data)
+        serializer = self._get_serializer_class()
+        return Response(serializer(chat_rooms, many=True).data)
+
+    def _get_serializer_class(self):
+        if self.request.query_params.get('only_last_message'):
+            return BuyerChatRoomListSerializer
+        return BuyerChatRoomListAllMessagesSerializer
 
     def post(self, request):
         serializer = BuyerChatRoomCreateSerializer(data=request.data)
@@ -41,14 +50,33 @@ class BuyerChatRoomView(APIView):
         return Response({'chat_room_id': chat_room.chat_room_id}, status=201)
 
 
-class SellerChatRoomListView(APIView):
+class SellerChatRoomListView(ListAPIView):
     permission_classes = [IsSeller]
-    serializer_class = SellerChatRoomListSerializer
+    pagination_class = None
 
-    def get(self, request):
-        chat_rooms = ChatRoomRepository().get_chat_rooms_by_seller_id(request.user.seller.seller_id)
-        serializer = self.serializer_class(chat_rooms, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return ChatRoomRepository().get_chat_rooms_by_seller_id(self.request.user.seller.seller_id)
+
+    def get_serializer_class(self):
+        # TODO: 추후 default로 마지막 메세지만 보여주는 것으로 변경
+        if self.request.query_params.get('only_last_message'):
+            return SellerChatRoomListSerializer
+        return SellerChatRoomListAllMessagesSerializer
+
+
+class ChatRoomMessageListView(ListAPIView):
+    permission_classes = [IsInChatRoom]
+    serializer_class = MessageSerializer
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request, self.get_object())
+        return super().list(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return MessageRepository().get_messages_by_chat_room_uuid(self.kwargs['chat_room_uuid'])
+
+    def get_object(self):
+        return ChatRoomRepository().get_chat_room_by_uuid(self.kwargs['chat_room_uuid'])
 
 
 class MessageCreateView(APIView):
