@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from apps.chats.repositories import ChatRoomRepository
 from apps.chats.serializers import (
     BuyerChatRoomCreateSerializer,
+    BuyerChatRoomListAllMessagesSerializer,
     BuyerChatRoomListSerializer,
     MessageCreateSerializer,
     SellerChatRoomListAllMessagesSerializer,
@@ -22,8 +23,13 @@ class BuyerChatRoomView(APIView):
 
     def get(self, request):
         chat_rooms = ChatRoomRepository().get_chat_rooms_by_buyer_id(request.user.buyer.buyer_id)
-        serializer = BuyerChatRoomListSerializer(chat_rooms, many=True)
-        return Response(serializer.data)
+        serializer = self._get_serializer_class()
+        return Response(serializer(chat_rooms, many=True).data)
+
+    def _get_serializer_class(self):
+        if self.request.query_params.get('only_last_message'):
+            return BuyerChatRoomListSerializer
+        return BuyerChatRoomListAllMessagesSerializer
 
     def post(self, request):
         serializer = BuyerChatRoomCreateSerializer(data=request.data)

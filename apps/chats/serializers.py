@@ -13,12 +13,21 @@ class MessageSerializer(serializers.Serializer):
     type = serializers.CharField()
 
 
-class BuyerChatRoomListSerializer(serializers.Serializer):
+class BuyerChatRoomListAllMessagesSerializer(serializers.Serializer):
     chat_room_id = serializers.IntegerField()
     opponent_nickname = serializers.CharField()
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='seller.user.profile_image')
     message_list = MessageSerializer(many=True, source='messages')
+    uuid = serializers.UUIDField()
+
+
+class BuyerChatRoomListSerializer(serializers.Serializer):
+    chat_room_id = serializers.IntegerField()
+    opponent_nickname = serializers.CharField()
+    opponent_user_id = serializers.IntegerField()
+    opponent_profile_image = serializers.ImageField(source='seller.user.profile_image')
+    last_message = MessageSerializer()
     uuid = serializers.UUIDField()
 
 

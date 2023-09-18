@@ -25,6 +25,10 @@ class TestBuyerChatRoomView:
     def chat_room_2(self, buyer):
         return ChatRoomFactory(buyer=buyer)
 
+    @pytest.fixture
+    def messages_for_chat_room_1(self, chat_room_1):
+        return MessageFactory.create_batch(5, chat_room=chat_room_1)
+
     def test_get_chat_room_list(self, client, buyer, user, chat_room_1, chat_room_2):
         force_login(client, user)
         response = client.get('/chats/buyer')
@@ -48,6 +52,18 @@ class TestBuyerChatRoomView:
         assert message_list[0]['message']
         assert message_list[0]['uuid']
         assert message_list[0]['type']
+
+    def test_get_chat_room_list_show_only_last_message(
+        self, client, user, buyer, chat_room_1, messages_for_chat_room_1
+    ):
+        force_login(client, user)
+        response = client.get('/chats/buyer', {'only_last_message': True})
+        assert response.status_code == 200
+        data = response.json()
+
+        assert len(data) == 1
+        assert data[0]['last_message']
+        assert not data[0].get('message_list')
 
 
 @pytest.mark.django_db
