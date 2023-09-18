@@ -2,32 +2,21 @@ import uuid
 
 import pytest
 
-from apps.buyers.models import Buyer
 from apps.chats.models import ChatRoom
 from apps.chats.repositories import ChatRoomRepository
-from apps.sellers.models import Seller
-from apps.users.models import User
+from tests.buyers.factories import BuyerFactory
+from tests.sellers.factories import SellerFactory
 
 
 @pytest.mark.django_db
 class TestChatRoomRepository:
     @pytest.fixture
     def buyer(self):
-        user = User.objects.create(
-            nickname='구매자',
-            is_seller=False,
-            is_staff=False,
-        )
-        return Buyer.objects.create(user=user)
+        return BuyerFactory()
 
     @pytest.fixture
     def seller(self):
-        user = User.objects.create(
-            nickname='판매자',
-            is_seller=True,
-            is_staff=False,
-        )
-        return Seller.objects.create(user=user)
+        return SellerFactory()
 
     def test_create_by_buyer(self, buyer, seller):
         ChatRoomRepository().create_by_buyer(

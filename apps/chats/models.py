@@ -17,6 +17,10 @@ class ChatRoom(TimeStampedModel):
     class Meta:
         unique_together = ('buyer', 'seller')
 
+    @property
+    def last_message(self):
+        return self.messages.order_by('write_datetime').last()
+
 
 class Message(TimeStampedModel):
     class Type(models.TextChoices):
