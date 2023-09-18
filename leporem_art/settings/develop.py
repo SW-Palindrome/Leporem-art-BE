@@ -15,5 +15,14 @@ SECRET_KEY = ssm.get_parameter(Name='/leporem_art/settings/base/SECRET_KEY', Wit
 
 # DATABASE 설정
 param_db = ssm.get_parameter(Name='/leporem_art/settings/develop/DATABASES', WithDecryption=True)['Parameter']['Value']
-DATABASES = {'default': {}}
-[DATABASES['default'].setdefault(i.split(':')[0], i.split(':')[1]) for i in param_db.split('\n') if i != '']
+json_db = json.loads(param_db)
+DATABASES = {
+    'default': {
+        'ENGINE': json_db['ENGINE'],
+        'NAME': json_db['NAME'],
+        'USER': json_db['USER'],
+        'PASSWORD': json_db['PASSWORD'],
+        'HOST': json_db['HOST'],
+        'PORT': json_db['PORT'],
+    }
+}
