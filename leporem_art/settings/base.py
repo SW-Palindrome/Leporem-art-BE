@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import json
 from datetime import timedelta
 from pathlib import Path
 
+import boto3
 import pymysql
 
 pymysql.install_as_MySQLdb()
@@ -19,12 +21,11 @@ pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-hs5l-zi%l-ojy3gpjml!5snrnh@^bd*y887jn9ut(6cla7e$#6"
+SECRET_KEY = 'secret'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
@@ -163,23 +164,8 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 # https://django-storages.readthedocs.io/en/1.5.0/backends/amazon-S3.html
 AWS_QUERYSTRING_AUTH = False
 
-APPLE_CONFIG = {
-    'SOCIAL_AUTH_APPLE_ID_CLIENT': 'com.leporemart.palindrome',  # Your client_id com.application.your,
-    'SOCIAL_AUTH_APPLE_ID_SERVICE': 'palindrome.leporemart.com',
-    'SOCIAL_AUTH_APPLE_ID_TEAM': 'D234TS7KXD',  # Your Team ID, ie K2232113
-    'SOCIAL_AUTH_APPLE_ID_KEY': 'NA7Y28XKC3',  # Your Key ID, ie Y2P99J3N81K
-    'SOCIAL_AUTH_APPLE_ID_SECRET': """
------BEGIN PRIVATE KEY-----
-MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg44PxEtiUjLEkrNsD
-KSDPOQAb2hZrefp7o0Q6mGPoJQWgCgYIKoZIzj0DAQehRANCAARUxWK7ikPbxPeG
-E5+diJB+sWBCOdmb78ja4yqGaw6Je1630yjnhUWeuHXwgOjYgm700OsZfDeS9ntE
-gOCKtm9b
------END PRIVATE KEY-----
-    """,
-    'SOCIAL_AUTH_APPLE_ID_SCOPE': 'email, name',
-    'SOCIAL_AUTH_APPLE_ID_EMAIL_AS_USERNAME': True,  # If you want to use email as username
-    'SOCIAL_AUTH_APPLE_ID_PUBLIC': "1JiU4l3YCeT4o0gVmxGTEK1IXR-Ghdg5Bzka12tzmtdCxU00ChH66aV-4HRBjF1t95IsaeHeDFRgmF0lJbTDTqa6_VZo2hc0zTiUAsGLacN6slePvDcR1IMucQGtPP5tGhIbU-HKabsKOFdD4VQ5PCXifjpN9R-1qOR571BxCAl4u1kUUIePAAJcBcqGRFSI_I1j_jbN3gflK_8ZNmgnPrXA0kZXzj1I7ZHgekGbZoxmDrzYm2zmja1MsE5A_JX7itBYnlR41LOtvLRCNtw7K3EFlbfB6hkPL-Swk5XNGbWZdTROmaTNzJhV-lWT0gGm6V1qWAK2qOZoIDa_3Ud0Gw",
-}
+# APPLE Oauth Settings
+APPLE_CONFIG = {}
 
 AUTHENTICATION_BACKENDS = [
     "social_core.backends.oauth",

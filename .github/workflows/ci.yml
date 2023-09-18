@@ -5,6 +5,9 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ENV: test
+
     services:
       mysqldb:
         image: mysql:8.0
