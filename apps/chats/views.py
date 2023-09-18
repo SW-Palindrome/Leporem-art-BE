@@ -52,6 +52,7 @@ class BuyerChatRoomView(APIView):
 
 class SellerChatRoomListView(ListAPIView):
     permission_classes = [IsSeller]
+    pagination_class = None
 
     def get_queryset(self):
         return ChatRoomRepository().get_chat_rooms_by_seller_id(self.request.user.seller.seller_id)

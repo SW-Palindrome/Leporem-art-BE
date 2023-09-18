@@ -140,3 +140,39 @@ class TestSellerChatRoomListView:
         assert len(data) == 1
         assert data[0]['last_message']
         assert not data[0].get('message_list')
+
+
+@pytest.mark.django_db
+class TestChatRoomMessageListView:
+    @pytest.fixture
+    def user(self):
+        return UserFactory()
+
+    @pytest.fixture
+    def user_not_in_chat_room(self):
+        return UserFactory()
+
+    @pytest.fixture
+    def buyer(self, user):
+        return BuyerFactory(user=user)
+
+    @pytest.fixture
+    def chat_room(self, buyer):
+        return ChatRoomFactory(buyer=buyer)
+
+    @pytest.fixture
+    def messages(self, chat_room):
+        return MessageFactory.create_batch(30, chat_room=chat_room)
+
+    def test_list_messages(self, client, user, buyer, chat_room, messages):
+        force_login(client, user)
+        response = client.get(f'/chats/chat-rooms/{chat_room.uuid}/messages')
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data['count'] == 31
+
+    def test_list_messages_with_user_not_in_chat_room(self, client, user_not_in_chat_room, chat_room):
+        force_login(client, user_not_in_chat_room)
+        response = client.get(f'/chats/chat-rooms/{chat_room.uuid}/messages')
+        assert response.status_code == 403
