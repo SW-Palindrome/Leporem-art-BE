@@ -74,3 +74,7 @@ class MessageCreateSerializer(serializers.Serializer):
         if bool(attrs.get('text')) == bool(attrs.get('image')):
             raise serializers.ValidationError('text와 image 중 하나만 입력해주세요.')
         return attrs
+
+
+class ChatRoomMessageListView(serializers.Serializer):
+    messages = MessageSerializer(many=True)

@@ -4,17 +4,18 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.chats.repositories import ChatRoomRepository
+from apps.chats.repositories import ChatRoomRepository, MessageRepository
 from apps.chats.serializers import (
     BuyerChatRoomCreateSerializer,
     BuyerChatRoomListAllMessagesSerializer,
     BuyerChatRoomListSerializer,
     MessageCreateSerializer,
+    MessageSerializer,
     SellerChatRoomListAllMessagesSerializer,
     SellerChatRoomListSerializer,
 )
 from apps.chats.services import ChatRoomService, MessageService
-from apps.users.permissions import IsSeller
+from apps.users.permissions import IsInChatRoom, IsSeller
 
 
 class BuyerChatRoomView(APIView):
@@ -60,6 +61,21 @@ class SellerChatRoomListView(ListAPIView):
         if self.request.query_params.get('only_last_message'):
             return SellerChatRoomListSerializer
         return SellerChatRoomListAllMessagesSerializer
+
+
+class ChatRoomMessageListView(ListAPIView):
+    permission_classes = [IsInChatRoom]
+    serializer_class = MessageSerializer
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request, self.get_object())
+        return super().list(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return MessageRepository().get_messages_by_chat_room_uuid(self.kwargs['chat_room_uuid'])
+
+    def get_object(self):
+        return ChatRoomRepository().get_chat_room_by_uuid(self.kwargs['chat_room_uuid'])
 
 
 class MessageCreateView(APIView):
