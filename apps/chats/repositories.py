@@ -26,7 +26,7 @@ class ChatRoomRepository:
                 opponent_nickname=F('seller__user__nickname'),
                 opponent_user_id=F('seller__user_id'),
                 unread_count=Count(
-                    'messages', filter=Q(messages__is_read=False, messages__user_id=F('buyer__user_id'))
+                    'messages', filter=Q(messages__is_read=False, messages__user_id=F('seller__user_id'))
                 ),
             )
             .order_by('-max_write_datetime')
@@ -42,7 +42,7 @@ class ChatRoomRepository:
                 opponent_nickname=F('buyer__user__nickname'),
                 opponent_user_id=F('buyer__user_id'),
                 unread_count=Count(
-                    'messages', filter=Q(messages__is_read=False, messages__user_id=F('seller__user_id'))
+                    'messages', filter=Q(messages__is_read=False, messages__user_id=F('buyer__user_id'))
                 ),
             )
             .order_by('-max_write_datetime')
