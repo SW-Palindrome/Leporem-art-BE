@@ -10,6 +10,7 @@ from apps.chats.serializers import (
     BuyerChatRoomListAllMessagesSerializer,
     BuyerChatRoomListSerializer,
     MessageCreateSerializer,
+    MessageReadSerializer,
     MessageSerializer,
     SellerChatRoomListAllMessagesSerializer,
     SellerChatRoomListSerializer,
@@ -101,3 +102,18 @@ class MessageCreateView(APIView):
         except ValueError as e:
             return Response({'message': str(e)}, status=400)
         return Response({'message_id': message.message_id}, status=201)
+
+
+class MessageReadView(APIView):
+    serializer_class = MessageReadSerializer
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        MessageService().read(
+            user_id=request.user.user_id,
+            chat_room_uuid=serializer.validated_data['chat_room_uuid'],
+            message_uuid=serializer.validated_data['message_uuid'],
+        )
+        return Response(status=204)

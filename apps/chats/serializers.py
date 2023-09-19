@@ -78,5 +78,6 @@ class MessageCreateSerializer(serializers.Serializer):
         return attrs
 
 
-class ChatRoomMessageListView(serializers.Serializer):
-    messages = MessageSerializer(many=True)
+class MessageReadSerializer(serializers.Serializer):
+    chat_room_uuid = serializers.UUIDField()
+    message_uuid = serializers.UUIDField()
