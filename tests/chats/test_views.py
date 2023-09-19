@@ -188,3 +188,12 @@ class TestChatRoomMessageListView:
         force_login(client, user_not_in_chat_room)
         response = client.get(f'/chats/chat-rooms/{chat_room.uuid}/messages')
         assert response.status_code == 403
+
+    def test_list_messages_with_message_uuid(self, client, user, buyer, chat_room, messages):
+        force_login(client, user)
+        message = messages[5]
+        response = client.get(f'/chats/chat-rooms/{chat_room.uuid}/messages', {'message_uuid': message.uuid})
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data['count'] == 6
