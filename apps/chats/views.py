@@ -73,7 +73,10 @@ class ChatRoomMessageListView(ListAPIView):
         return super().list(request, *args, **kwargs)
 
     def get_queryset(self):
-        return MessageRepository().get_messages_by_chat_room_uuid(self.kwargs['chat_room_uuid'])
+        return MessageRepository().get_messages_by_chat_room_uuid(
+            chat_room_uuid=self.kwargs['chat_room_uuid'],
+            message_uuid=self.request.query_params.get('message_uuid'),
+        )
 
     def get_object(self):
         return ChatRoomRepository().get_chat_room_by_uuid(self.kwargs['chat_room_uuid'])
