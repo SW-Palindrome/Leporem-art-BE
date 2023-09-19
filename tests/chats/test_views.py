@@ -65,6 +65,7 @@ class TestBuyerChatRoomView:
         data = response.json()
 
         assert len(data) == 1
+        assert data[0]['unread_count'] == 6
         assert data[0]['last_message']
         assert not data[0].get('message_list')
 
@@ -141,6 +142,7 @@ class TestSellerChatRoomListView:
         data = response.json()
 
         assert len(data) == 1
+        assert data[0]['unread_count'] == 6
         assert data[0]['last_message']
         assert not data[0].get('message_list')
 
