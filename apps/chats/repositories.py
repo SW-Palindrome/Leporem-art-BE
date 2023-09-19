@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import transaction
-from django.db.models import F, Max, Prefetch
+from django.db.models import Count, F, Max, Prefetch, Q
 from django.utils import timezone
 
 from apps.chats.models import ChatRoom, Message
@@ -25,6 +25,9 @@ class ChatRoomRepository:
                 max_write_datetime=Max('messages__write_datetime'),
                 opponent_nickname=F('seller__user__nickname'),
                 opponent_user_id=F('seller__user_id'),
+                unread_count=Count(
+                    'messages', filter=Q(messages__is_read=False, messages__user_id=F('buyer__user_id'))
+                ),
             )
             .order_by('-max_write_datetime')
         )
@@ -38,6 +41,9 @@ class ChatRoomRepository:
                 max_write_datetime=Max('messages__write_datetime'),
                 opponent_nickname=F('buyer__user__nickname'),
                 opponent_user_id=F('buyer__user_id'),
+                unread_count=Count(
+                    'messages', filter=Q(messages__is_read=False, messages__user_id=F('seller__user_id'))
+                ),
             )
             .order_by('-max_write_datetime')
         )

@@ -21,10 +21,6 @@ class ChatRoom(TimeStampedModel):
     def last_message(self):
         return self.messages.order_by('write_datetime').last()
 
-    @property
-    def unread_count(self):
-        return self.messages.filter(is_read=False).count()
-
 
 class Message(TimeStampedModel):
     class Type(models.TextChoices):

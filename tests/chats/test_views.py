@@ -29,8 +29,9 @@ class TestBuyerChatRoomView:
         return ChatRoomFactory(buyer=buyer)
 
     @pytest.fixture
-    def messages_for_chat_room_1(self, chat_room_1):
-        return MessageFactory.create_batch(5, chat_room=chat_room_1)
+    def messages_for_chat_room_1(self, user, buyer, chat_room_1):
+        MessageFactory.create_batch(5, chat_room=chat_room_1, user_id=user.user_id)
+        MessageFactory.create_batch(5, chat_room=chat_room_1)
 
     def test_get_chat_room_list(self, client, buyer, user, chat_room_1, chat_room_2):
         force_login(client, user)
@@ -89,7 +90,8 @@ class TestSellerChatRoomListView:
         return ChatRoomFactory(seller=seller)
 
     @pytest.fixture
-    def messages_for_chat_room_1(self, chat_room_1):
+    def messages_for_chat_room_1(self, user, seller, chat_room_1):
+        MessageFactory.create_batch(5, user_id=user.user_id, chat_room=chat_room_1)
         return MessageFactory.create_batch(5, chat_room=chat_room_1)
 
     @pytest.fixture
@@ -142,7 +144,7 @@ class TestSellerChatRoomListView:
         data = response.json()
 
         assert len(data) == 1
-        assert data[0]['unread_count'] == 6
+        assert data[0]['unread_count'] == 5
         assert data[0]['last_message']
         assert not data[0].get('message_list')
 
