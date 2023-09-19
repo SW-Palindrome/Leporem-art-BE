@@ -2,6 +2,7 @@ import uuid
 
 from django.db import transaction
 from django.db.models import F, Max, Prefetch
+from django.utils import timezone
 
 from apps.chats.models import ChatRoom, Message
 from apps.items.models import Item
@@ -120,5 +121,9 @@ class MessageRepository:
             type=Message.Type.ORDER,
         )
 
-    def get_messages_by_chat_room_uuid(self, chat_room_uuid):
-        return Message.objects.filter(chat_room__uuid=chat_room_uuid).order_by('-write_datetime')
+    def get_messages_by_chat_room_uuid(self, chat_room_uuid, message_uuid=None):
+        write_datetime = Message.objects.get(uuid=message_uuid).write_datetime if message_uuid else timezone.now()
+        return Message.objects.filter(
+            chat_room__uuid=chat_room_uuid,
+            write_datetime__lte=write_datetime,
+        ).order_by('-write_datetime')
