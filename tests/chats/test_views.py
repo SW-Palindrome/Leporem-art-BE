@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 import pytest
+from django.utils import timezone
 
 from tests.buyers.factories import BuyerFactory
 from tests.chats.factories import ChatRoomFactory, MessageFactory
@@ -162,7 +165,16 @@ class TestChatRoomMessageListView:
 
     @pytest.fixture
     def messages(self, chat_room):
-        return MessageFactory.create_batch(30, chat_room=chat_room)
+        messages = []
+        first_message = chat_room.last_message
+        write_datetime = timezone.now() - timedelta(days=10)
+        first_message.write_datetime = write_datetime
+        first_message.save()
+        messages.append(first_message)
+        for _ in range(30):
+            write_datetime += timedelta(minutes=1)
+            messages.append(MessageFactory(chat_room=chat_room, write_datetime=write_datetime))
+        return messages
 
     def test_list_messages(self, client, user, buyer, chat_room, messages):
         force_login(client, user)
