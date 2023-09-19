@@ -125,5 +125,5 @@ class MessageRepository:
         write_datetime = Message.objects.get(uuid=message_uuid).write_datetime if message_uuid else timezone.now()
         return Message.objects.filter(
             chat_room__uuid=chat_room_uuid,
-            write_datetime__lte=write_datetime,
+            write_datetime__lt=write_datetime,
         ).order_by('-write_datetime')
