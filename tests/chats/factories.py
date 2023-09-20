@@ -15,7 +15,7 @@ class ChatRoomFactory(factory.django.DjangoModelFactory):
         if not create:
             return
 
-        return MessageFactory(chat_room=self)
+        return MessageFactory(chat_room=self, user_id=self.buyer.user_id)
 
 
 class MessageFactory(factory.django.DjangoModelFactory):

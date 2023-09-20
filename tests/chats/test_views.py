@@ -3,6 +3,7 @@ from datetime import timedelta
 import pytest
 from django.utils import timezone
 
+from apps.chats.models import Message
 from tests.buyers.factories import BuyerFactory
 from tests.chats.factories import ChatRoomFactory, MessageFactory
 from tests.sellers.factories import SellerFactory
@@ -17,20 +18,29 @@ class TestBuyerChatRoomView:
         return UserFactory()
 
     @pytest.fixture
+    def user_sender(self):
+        return UserFactory()
+
+    @pytest.fixture
     def buyer(self, user):
         return BuyerFactory(user=user)
 
     @pytest.fixture
-    def chat_room_1(self, buyer):
-        return ChatRoomFactory(buyer=buyer)
+    def seller(self, user_sender):
+        return SellerFactory(user=user_sender)
+
+    @pytest.fixture
+    def chat_room_1(self, buyer, seller):
+        return ChatRoomFactory(buyer=buyer, seller=seller)
 
     @pytest.fixture
     def chat_room_2(self, buyer):
         return ChatRoomFactory(buyer=buyer)
 
     @pytest.fixture
-    def messages_for_chat_room_1(self, chat_room_1):
-        return MessageFactory.create_batch(5, chat_room=chat_room_1)
+    def messages_for_chat_room_1(self, user, buyer, user_sender, chat_room_1):
+        MessageFactory.create_batch(5, chat_room=chat_room_1, user_id=user.user_id)
+        MessageFactory.create_batch(5, chat_room=chat_room_1, user_id=user_sender.user_id)
 
     def test_get_chat_room_list(self, client, buyer, user, chat_room_1, chat_room_2):
         force_login(client, user)
@@ -65,6 +75,7 @@ class TestBuyerChatRoomView:
         data = response.json()
 
         assert len(data) == 1
+        assert data[0]['unread_count'] == 5
         assert data[0]['last_message']
         assert not data[0].get('message_list')
 
@@ -76,28 +87,33 @@ class TestSellerChatRoomListView:
         return UserFactory()
 
     @pytest.fixture
-    def buyer(self, user):
-        return BuyerFactory(user=user)
+    def user_sender(self):
+        return UserFactory()
+
+    @pytest.fixture
+    def buyer(self, user_sender):
+        return BuyerFactory(user=user_sender)
 
     @pytest.fixture
     def seller(self, user):
         return SellerFactory(user=user)
 
     @pytest.fixture
-    def chat_room_1(self, seller):
-        return ChatRoomFactory(seller=seller)
+    def chat_room_1(self, seller, buyer):
+        return ChatRoomFactory(seller=seller, buyer=buyer)
 
     @pytest.fixture
-    def messages_for_chat_room_1(self, chat_room_1):
-        return MessageFactory.create_batch(5, chat_room=chat_room_1)
+    def messages_for_chat_room_1(self, user, user_sender, seller, chat_room_1):
+        MessageFactory.create_batch(5, user_id=user.user_id, chat_room=chat_room_1)
+        MessageFactory.create_batch(5, chat_room=chat_room_1, user_id=user_sender.user_id)
 
     @pytest.fixture
     def chat_room_2(self, seller):
         return ChatRoomFactory(seller=seller)
 
     @pytest.fixture
-    def chat_room_as_buyer(self, seller, buyer):
-        return ChatRoomFactory(buyer=seller.user.buyer)
+    def chat_room_as_buyer(self, buyer):
+        return ChatRoomFactory(buyer=buyer)
 
     def test_get_chat_room_list(self, client, seller, chat_room_1, chat_room_2):
         user = seller.user
@@ -141,6 +157,7 @@ class TestSellerChatRoomListView:
         data = response.json()
 
         assert len(data) == 1
+        assert data[0]['unread_count'] == 6
         assert data[0]['last_message']
         assert not data[0].get('message_list')
 
@@ -197,3 +214,37 @@ class TestChatRoomMessageListView:
         data = response.json()
 
         assert data['count'] == 5
+
+
+@pytest.mark.django_db
+class TsetMessageReadView:
+    @pytest.fixture
+    def user_message_sender(self):
+        return UserFactory()
+
+    @pytest.fixture
+    def user_message_receiver(self):
+        return UserFactory()
+
+    @pytest.fixture
+    def seller(self, user_message_receiver):
+        return SellerFactory(user=user_message_receiver)
+
+    @pytest.fixture
+    def buyer(self, user_message_sender):
+        return BuyerFactory(user=user_message_sender)
+
+    @pytest.fixture
+    def chat_room(self, buyer, seller):
+        return ChatRoomFactory(buyer=buyer, seller=seller)
+
+    @pytest.fixture
+    def message(self, chat_room, user_message_sender):
+        return MessageFactory(chat_room=chat_room, user_id=user_message_sender.user_id)
+
+    def test_set_message_read(self, client, user_message_receiver, message):
+        force_login(client, user_message_receiver)
+        assert Message.objects.filter(is_read=False).count() == 2
+        response = client.patch('/chats/messages/read', data={'message_uuid': message.uuid})
+        assert response.status_code == 200
+        assert Message.objects.filter(is_read=False).count() == 0
