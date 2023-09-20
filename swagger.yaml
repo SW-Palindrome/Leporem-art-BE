@@ -22,6 +22,8 @@ tags:
     description: 판매자 관리
   - name: items
     description: 작품 관리
+  - name: notifications
+    description: 알림 관리
 
 paths:
   /users/signup/kakao:
@@ -272,13 +274,15 @@ paths:
         - users
       summary: 토큰 재발급
       description: 토큰 재발급입니다.
-      parameters:
-        - in: header
-          name: refresh_token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                refresh_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6IkFQUExFIiwiZW1haWwiOiIwMDAzMTkuNDA0N2MzMGQ0MDQ2NDRmOTlmMTVmZWZiODQxYmIwOGIuMDIzOSIsImV4cCI6MTcxMDU2Mzg2NywiaWF0IjoxNjk1MDExODY3fQ.wfILCBkBOQQMHGFwRaguKkhfV50lyNREMUYq0CSxkLY
           required: true
-          schema:
-            type: string
-          description: refresh_token value
       security:
         - leporemartTokenAuth: []
       responses:
@@ -518,3 +522,107 @@ paths:
                 EmptyPage:
                   value:
                     message: EmptyPage
+
+  /notifications/register:
+    post:
+      tags:
+        - notifications
+      summary: 푸시 알림 기기 등록
+      description: 푸시 알림 기기를 등록합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                device_token:
+                  type: string
+                  example: fyBSTdnGQ9CBZviM_X3M4o:APA91bFoROw8QK6Q5Twu6AFVHWgf1CSLPdJgiRbaJpCKd_YqcWI6s07WmrDZE_ZPdDUq0R_P8IvvqCWsuJ21rrqwkiZoifV7CZWSvwfykgxdeu3tw1QJP5buat9FpAFDDJfhQZ_3qs9u
+        required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 푸시 알림 기기 등록 성공
+          content:
+            application/json:
+              example:
+                message: success
+        '400':
+          description: 푸시 알림 기기 등록 실패
+          content:
+            application/json:
+              example:
+                message: failed
+
+  /notifications/specific:
+    get:
+      tags:
+        - notifications
+      summary: 싱글 유저 푸시 알림
+      description: 싱글 유저에게 푸시 알림을 보냅니다.
+      parameters:
+        - name: token
+          in: query
+          schema:
+            type: string
+        - name: title
+          in: query
+          schema:
+            type: string
+        - name: body
+          in: query
+          schema:
+            type: string
+        - name: deep_link
+          in: query
+          schema:
+            type: string
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 싱글 유저 푸시 알림 성공
+          content:
+            application/json:
+              example:
+                message: projects/leporem-art-fe/messages/0:1695102051595023%9ae2ab299ae2ab29
+
+  /notifications/multiple:
+    get:
+      tags:
+        - notifications
+      summary: 멀티 유저 푸시 알림
+      description: 멀티 유저들에게 푸시 알림을 보냅니다.
+      parameters:
+        - name: tokens
+          in: query
+          schema:
+            type: string
+          description: 토큰들을 ,로 구분하여 보내주세요.
+        - name: title
+          in: query
+          schema:
+            type: string
+        - name: body
+          in: query
+          schema:
+            type: string
+        - name: deep_link
+          in: query
+          schema:
+            type: string
+      security:
+        - leporemartTokenAuth: [ ]
+      responses:
+        '200':
+          description: 멀티 유저 푸시 알림 성공
+          content:
+            application/json:
+              example:
+                message: succeeded tokens
+        '400':
+          description: 멀티 유저 푸시 알림 실패
+          content:
+            application/json:
+              example:
+                message: failed tokens
