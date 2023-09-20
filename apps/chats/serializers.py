@@ -28,6 +28,7 @@ class BuyerChatRoomListSerializer(serializers.Serializer):
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='seller.user.profile_image')
     last_message = MessageSerializer()
+    unread_count = serializers.IntegerField()
     uuid = serializers.UUIDField()
 
 
@@ -46,6 +47,7 @@ class SellerChatRoomListSerializer(serializers.Serializer):
     opponent_user_id = serializers.IntegerField()
     opponent_profile_image = serializers.ImageField(source='buyer.user.profile_image')
     last_message = MessageSerializer()
+    unread_count = serializers.IntegerField()
     uuid = serializers.UUIDField()
 
 
@@ -76,5 +78,6 @@ class MessageCreateSerializer(serializers.Serializer):
         return attrs
 
 
-class ChatRoomMessageListView(serializers.Serializer):
-    messages = MessageSerializer(many=True)
+class MessageReadSerializer(serializers.Serializer):
+    chat_room_uuid = serializers.UUIDField()
+    message_uuid = serializers.UUIDField()

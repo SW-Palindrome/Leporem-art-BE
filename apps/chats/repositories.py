@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import transaction
-from django.db.models import F, Max, Prefetch
+from django.db.models import Count, F, Max, Prefetch, Q
 from django.utils import timezone
 
 from apps.chats.models import ChatRoom, Message
@@ -25,6 +25,9 @@ class ChatRoomRepository:
                 max_write_datetime=Max('messages__write_datetime'),
                 opponent_nickname=F('seller__user__nickname'),
                 opponent_user_id=F('seller__user_id'),
+                unread_count=Count(
+                    'messages', filter=Q(messages__is_read=False, messages__user_id=F('seller__user_id'))
+                ),
             )
             .order_by('-max_write_datetime')
         )
@@ -38,6 +41,9 @@ class ChatRoomRepository:
                 max_write_datetime=Max('messages__write_datetime'),
                 opponent_nickname=F('buyer__user__nickname'),
                 opponent_user_id=F('buyer__user_id'),
+                unread_count=Count(
+                    'messages', filter=Q(messages__is_read=False, messages__user_id=F('buyer__user_id'))
+                ),
             )
             .order_by('-max_write_datetime')
         )
@@ -127,3 +133,22 @@ class MessageRepository:
             chat_room__uuid=chat_room_uuid,
             write_datetime__lt=write_datetime,
         ).order_by('-write_datetime')
+
+    def read(self, user_id, chat_room_uuid, message_uuid):
+        """메세지 읽음 처리
+
+        :param
+            user_id: 읽은 유저의 user_id (메세지를 보내지 않은 대상의 user_id)
+            chat_room_uuid: 읽은 메세지가 속한 채팅방의 uuid
+            message_uuid: 읽은 메세지의 uuid
+        """
+        message = Message.objects.get(uuid=message_uuid)
+        Message.objects.filter(
+            chat_room__uuid=chat_room_uuid,
+            write_datetime__lte=message.write_datetime,
+        ).exclude(
+            user_id=user_id,
+        ).update(is_read=True)
+
+    def get_chat_room_by_message_uuid(self, message_uuid):
+        return ChatRoom.objects.get(messages__uuid=message_uuid)

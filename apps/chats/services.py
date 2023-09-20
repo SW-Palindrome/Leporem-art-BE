@@ -63,3 +63,9 @@ class MessageService:
                     order_id=message,
                     message_uuid=message_uuid,
                 )
+
+    def read(self, user_id, chat_room_uuid, message_uuid):
+        chat_room = MessageRepository().get_chat_room_by_message_uuid(message_uuid)
+        if chat_room.uuid != chat_room_uuid or user_id not in [chat_room.buyer.user_id, chat_room.seller.user_id]:
+            raise ValueError('채팅방에 참여하지 않은 유저입니다.')
+        MessageRepository().read(user_id=user_id, chat_room_uuid=chat_room_uuid, message_uuid=message_uuid)
