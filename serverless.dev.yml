@@ -34,6 +34,7 @@ functions:
 custom:
   pythonRequirements:
     dockerizePip: true
+    layer: true
 
   customDomain:
     domainName: dev.leporem.art
