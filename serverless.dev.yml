@@ -30,13 +30,10 @@ functions:
       subnetIds:
         - subnet-07ef708add89fd9e6
         - subnet-0179d5879df06c46a
-    layers:
-      - Ref: PythonRequirementsLambdaLayer
 
 custom:
   pythonRequirements:
     dockerizePip: true
-    layer: true
     poetryWithoutGroups: dev
 
   customDomain:
