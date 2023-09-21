@@ -14,9 +14,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import boto3
-import firebase_admin
 import pymysql
-from firebase_admin import credentials
 
 pymysql.install_as_MySQLdb()
 
@@ -183,5 +181,5 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
 }
 
-# Firebase Admin SDK setup
 FIREBASE_CONFIG = {}
+FIREBASE_MESSAGE_SEND_URL = ''

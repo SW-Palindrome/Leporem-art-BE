@@ -26,3 +26,9 @@ DATABASES = {
         'PORT': json_db['PORT'],
     }
 }
+
+param_firebase = ssm.get_parameter(Name='/leporem_art/settings/base/FIREBASE_CONFIG', WithDecryption=True)['Parameter'][
+    'Value'
+]
+FIREBASE_CONFIG = json.loads(param_firebase)
+FIREBASE_MESSAGE_SEND_URL = f'https://fcm.googleapis.com/v1/projects/{FIREBASE_CONFIG["project_id"]}/messages:send'
