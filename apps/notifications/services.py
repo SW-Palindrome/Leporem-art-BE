@@ -1,4 +1,7 @@
-from firebase_admin import messaging
+import requests
+from django.conf import settings
+from google.auth.transport import requests as auth_requests
+from google.oauth2 import service_account
 
 from apps.notifications.repositories import DeviceRepository
 
@@ -9,29 +12,30 @@ class NotificationService:
         device_repository.register(user, fcm_token)
 
     def send_to_specific_device(self, token, title, body, deep_link):
-        registration_token = token
-        message = messaging.Message(
-            notification=messaging.Notification(
-                title=title,
-                body=body,
-            ),
-            token=registration_token,
-            data={
-                "url": deep_link,
+        credentials = service_account.Credentials.from_service_account_info(
+            settings.FIREBASE_CONFIG, scopes=['https://www.googleapis.com/auth/cloud-platform']
+        )
+        credentials.refresh(auth_requests.Request())
+        response = requests.post(
+            settings.FIREBASE_MESSAGE_SEND_URL,
+            json={
+                'validate_only': False,
+                'message': {
+                    'data': {
+                        "url": deep_link,
+                    },
+                    'notification': {
+                        'title': title,
+                        'body': body,
+                    },
+                    'token': token,
+                    'webpush': {},
+                    'fcm_options': {},
+                },
+            },
+            headers={
+                'Authorization': f'Bearer {credentials.token}',
             },
         )
-        return message
-
-    def send_to_multiple_devices(self, tokens, title, body, deep_link):
-        registration_tokens = list(tokens)
-        message = messaging.MulticastMessage(
-            notification=messaging.Notification(
-                title=title,
-                body=body,
-            ),
-            tokens=registration_tokens,
-            data={
-                "url": deep_link,
-            },
-        )
-        return message
+        if not response.ok:
+            raise Exception('Failed to send notification to specific device.')

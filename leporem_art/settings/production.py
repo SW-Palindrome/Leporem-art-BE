@@ -60,5 +60,4 @@ param_firebase = ssm.get_parameter(Name='/leporem_art/settings/base/FIREBASE_CON
     'Value'
 ]
 FIREBASE_CONFIG = json.loads(param_firebase)
-cred = credentials.Certificate(FIREBASE_CONFIG)
-firebase_admin.initialize_app(cred)
+FIREBASE_MESSAGE_SEND_URL = f'https://fcm.googleapis.com/v1/projects/{FIREBASE_CONFIG["project_id"]}/messages:send'
