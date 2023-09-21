@@ -37,6 +37,16 @@ custom:
   pythonRequirements:
     dockerizePip: true
     layer: true
+    noDeploy:
+      - pytest
+      - black
+      - flake8
+      - isort
+      - django-extensions
+      - notebook
+      - pre-commit
+      - pytest-django
+      - factory-boy
 
   customDomain:
     domainName: dev.leporem.art
