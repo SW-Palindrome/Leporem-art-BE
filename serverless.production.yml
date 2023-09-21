@@ -38,16 +38,7 @@ custom:
   pythonRequirements:
     dockerizePip: true
     layer: true
-    noDeploy:
-      - pytest
-      - black
-      - flake8
-      - isort
-      - django-extensions
-      - notebook
-      - pre-commit
-      - pytest-django
-      - factory-boy
+    poetryWithoutGroups: dev
 
   customDomain:
     domainName: api.leporem.art
