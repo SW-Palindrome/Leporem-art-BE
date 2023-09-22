@@ -88,7 +88,7 @@ class MessageService:
 
         NotificationService().send(
             user=receiver,
-            title=f'{sender.nickname}님이 메시지를 보냈습니다.',
+            title=f'{sender.nickname}',
             body=message.message,
             deep_link=f'/chat/{chat_room.uuid}',
         )
