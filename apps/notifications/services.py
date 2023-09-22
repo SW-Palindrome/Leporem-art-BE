@@ -4,6 +4,7 @@ from google.auth.transport import requests as auth_requests
 from google.oauth2 import service_account
 
 from apps.notifications.repositories import DeviceRepository
+from apps.users.models import User
 
 
 class NotificationService:
@@ -39,3 +40,8 @@ class NotificationService:
         )
         if not response.ok:
             raise Exception('Failed to send notification to specific device.')
+
+    def send(self, user: User, title: str, body: str, deep_link: str):
+        devices = DeviceRepository().get_devices_by_user(user)
+        for device in devices:
+            self.send_to_specific_device(device.fcm_token, title, body, deep_link)
