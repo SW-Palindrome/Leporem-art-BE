@@ -28,7 +28,6 @@ class NotificationService:
                     'notification': {
                         'title': title,
                         'body': body,
-                        'image': settings.NOTIFICATION_IMAGE_URL,
                     },
                     'token': token,
                     'webpush': {},

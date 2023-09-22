@@ -183,5 +183,3 @@ JWT_AUTH = {
 
 FIREBASE_CONFIG = {}
 FIREBASE_MESSAGE_SEND_URL = ''
-
-NOTIFICATION_IMAGE_URL = 'https://leporem-art-media-prod.s3.ap-northeast-2.amazonaws.com/icons/공예쁨.png'
