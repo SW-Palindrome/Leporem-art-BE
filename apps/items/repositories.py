@@ -181,7 +181,7 @@ class ItemRepository:
                 liked_dates=liked_dates,
             )
             .order_by('-liked_dates')
-            .filter(is_liked=True)
+            .filter(is_liked=True, deleted_date__isnull=True)
         )
         return favorite_items
 
