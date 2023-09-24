@@ -1,5 +1,6 @@
 from apps.buyers.respositories import BuyerRepository
 from apps.items.repositories import ItemRepository
+from apps.notifications.services import NotificationService
 from apps.orders.exceptions import (
     IntegrityOrderIDException,
     InvalidOrderIDException,
@@ -30,7 +31,9 @@ class OrderService:
         if item.current_amount <= 0:
             raise NotEnoughProductException('재고가 없습니다.')
 
-        return OrderRepository().order(buyer_id, item_id)
+        order = OrderRepository().order(buyer_id, item_id)
+        self._send_notification(item.seller.user, order)
+        return order
 
     def start_delivery(self, seller_id, order_id):
         order = OrderRepository().get_order(order_id)
@@ -41,7 +44,9 @@ class OrderService:
         if order.order_status.status != OrderStatus.Status.ORDERED.value:
             raise InvalidOrderStatusException('주문 완료 상태에서만 배송이 가능합니다.')
 
-        return OrderRepository().start_delivery(order_id)
+        OrderRepository().start_delivery(order_id)
+        self._send_notification(order.buyer.user, order)
+        return order
 
     def complete_delivery(self, seller_id, order_id):
         order = OrderRepository().get_order(order_id)
@@ -52,7 +57,9 @@ class OrderService:
         if order.order_status.status != OrderStatus.Status.DELIVERY_STARTED.value:
             raise InvalidOrderStatusException('배송중 상태에서만 배송 완료가 가능합니다.')
 
-        return OrderRepository().complete_delivery(order_id)
+        OrderRepository().complete_delivery(order_id)
+        self._send_notification(order.buyer.user, order)
+        return order
 
     def cancel(self, user_id, order_id):
         order = OrderRepository().get_order(order_id)
@@ -65,7 +72,22 @@ class OrderService:
         ]:
             raise InvalidOrderStatusException('주문 완료 상태에서만 주문 취소가 가능합니다.')
 
-        return OrderRepository().cancel(order_id)
+        if order.item.seller.user_id == user_id:
+            receiver = order.buyer.user
+        else:
+            receiver = order.item.seller.user
+
+        OrderRepository().cancel(order_id)
+        self._send_notification(receiver, order)
+        return order
+
+    def _send_notification(self, receiver, order):
+        NotificationService().send(
+            user=receiver,
+            title='작품 주문 상태',
+            body=f'"{order.item.title}" 작품의 {order.order_status.get_body()}',
+            deep_link='/buyers/orders/my',
+        )
 
 
 class ReviewService:
