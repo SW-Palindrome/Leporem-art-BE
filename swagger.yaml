@@ -585,4 +585,4 @@ paths:
           content:
             application/json:
               example:
-                message: projects/leporem-art-fe/messages/0:1695102051595023%9ae2ab299ae2ab29
+                message: success
