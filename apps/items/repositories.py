@@ -130,6 +130,7 @@ class ItemRepository:
             Item.objects.order_by('-display_dt')
             .filter(
                 seller__user__inactive_datetime__isnull=True,
+                deleted_date__isnull=True,
             )
             .annotate(
                 nickname=F('seller__user__nickname'),
@@ -206,6 +207,7 @@ class ItemRepository:
         search_item = (
             Item.objects.filter(
                 seller__user__inactive_datetime__isnull=True,
+                deleted_date__isnull=True,
             )
             .order_by('-display_dt')
             .annotate(
