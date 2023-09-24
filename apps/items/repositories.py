@@ -227,6 +227,17 @@ class ItemRepository:
         ).get(item_id=item_id)
         return detailed_item
 
+    @transaction.atomic
+    def delete(self, seller_id, item_id):
+        try:
+            item = Seller.objects.get(seller_id=seller_id).items.get(item_id=item_id)
+        except Item.DoesNotExist:
+            raise PermissionDenied
+
+        item.deleted_date = timezone.now()
+        item.save()
+        return item
+
 
 class LikeRepository:
     def get_like(self, item_id, buyer_id):
