@@ -122,3 +122,7 @@ class SellerService:
     def change_temperature(self, seller_id, number):
         seller_repository = SellerRepository()
         seller_repository.change_temperature(seller_id, number)
+
+    def delete_item(self, seller_id, item_id):
+        item_repository = ItemRepository()
+        item_repository.delete(seller_id, item_id)
