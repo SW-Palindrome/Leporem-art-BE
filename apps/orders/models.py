@@ -18,6 +18,16 @@ class OrderStatus(TimeStampedModel):
     order_status_id = models.AutoField(primary_key=True)
     status = models.CharField(max_length=10)
 
+    def get_body(self):
+        if self.status == self.Status.ORDERED.value:
+            return '주문이 완료되었습니다.'
+        elif self.status == self.Status.DELIVERY_STARTED.value:
+            return '배송이 시작되었습니다.'
+        elif self.status == self.Status.DELIVERED.value:
+            return '배송이 완료되었습니다.'
+        elif self.status == self.Status.CANCELED.value:
+            return '주문이 취소되었습니다.'
+
 
 class Order(TimeStampedModel):
     order_id = models.AutoField(primary_key=True)
