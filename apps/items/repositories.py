@@ -277,7 +277,12 @@ class ViewedItemRepository:
                 price=F('item__price'),
                 is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer=buyer)),
             )
-            .filter(buyer=buyer, deleted_date__isnull=True, viewed_date=Subquery(recently_viewed_subquery))
+            .filter(
+                buyer=buyer,
+                deleted_date__isnull=True,
+                viewed_date=Subquery(recently_viewed_subquery),
+                item__deleted_date__isnull=True,
+            )
             .order_by('-viewed_date')
         )[:50]
         return viewed_items
