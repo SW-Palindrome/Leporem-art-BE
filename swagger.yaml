@@ -585,44 +585,4 @@ paths:
           content:
             application/json:
               example:
-                message: projects/leporem-art-fe/messages/0:1695102051595023%9ae2ab299ae2ab29
-
-  /notifications/multiple:
-    get:
-      tags:
-        - notifications
-      summary: 멀티 유저 푸시 알림
-      description: 멀티 유저들에게 푸시 알림을 보냅니다.
-      parameters:
-        - name: tokens
-          in: query
-          schema:
-            type: string
-          description: 토큰들을 ,로 구분하여 보내주세요.
-        - name: title
-          in: query
-          schema:
-            type: string
-        - name: body
-          in: query
-          schema:
-            type: string
-        - name: deep_link
-          in: query
-          schema:
-            type: string
-      security:
-        - leporemartTokenAuth: [ ]
-      responses:
-        '200':
-          description: 멀티 유저 푸시 알림 성공
-          content:
-            application/json:
-              example:
-                message: succeeded tokens
-        '400':
-          description: 멀티 유저 푸시 알림 실패
-          content:
-            application/json:
-              example:
-                message: failed tokens
+                message: success
