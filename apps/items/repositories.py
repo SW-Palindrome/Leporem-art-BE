@@ -130,6 +130,7 @@ class ItemRepository:
             Item.objects.order_by('-display_dt')
             .filter(
                 seller__user__inactive_datetime__isnull=True,
+                deleted_date__isnull=True,
             )
             .annotate(
                 nickname=F('seller__user__nickname'),
@@ -180,7 +181,7 @@ class ItemRepository:
                 liked_dates=liked_dates,
             )
             .order_by('-liked_dates')
-            .filter(is_liked=True)
+            .filter(is_liked=True, deleted_date__isnull=True)
         )
         return favorite_items
 
@@ -206,6 +207,7 @@ class ItemRepository:
         search_item = (
             Item.objects.filter(
                 seller__user__inactive_datetime__isnull=True,
+                deleted_date__isnull=True,
             )
             .order_by('-display_dt')
             .annotate(
@@ -226,6 +228,17 @@ class ItemRepository:
             buyer_id=Subquery(like_subquery.values('buyer_id')[:1]),
         ).get(item_id=item_id)
         return detailed_item
+
+    @transaction.atomic
+    def delete(self, seller_id, item_id):
+        try:
+            item = Seller.objects.get(seller_id=seller_id).items.get(item_id=item_id)
+        except Item.DoesNotExist:
+            raise PermissionDenied
+
+        item.deleted_date = timezone.now()
+        item.save()
+        return item
 
 
 class LikeRepository:
@@ -264,7 +277,12 @@ class ViewedItemRepository:
                 price=F('item__price'),
                 is_liked=Exists(Like.objects.filter(item=OuterRef('item_id'), buyer=buyer)),
             )
-            .filter(buyer=buyer, deleted_date__isnull=True, viewed_date=Subquery(recently_viewed_subquery))
+            .filter(
+                buyer=buyer,
+                deleted_date__isnull=True,
+                viewed_date=Subquery(recently_viewed_subquery),
+                item__deleted_date__isnull=True,
+            )
             .order_by('-viewed_date')
         )[:50]
         return viewed_items

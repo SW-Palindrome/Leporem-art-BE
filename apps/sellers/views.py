@@ -109,6 +109,14 @@ class SellerItemView(APIView):
             )
             return Response({'message': 'success'})
 
+    def delete(self, request, *args, **kwargs):
+        seller_service = SellerService()
+        seller_service.delete_item(
+            seller_id=request.user.seller.seller_id,
+            item_id=kwargs['item_id'],
+        )
+        return Response({'message': 'success'}, status=200)
+
 
 class SellerMyInfoView(APIView):
     permission_classes = [IsSeller]
