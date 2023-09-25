@@ -45,6 +45,7 @@ class OrderService:
             raise InvalidOrderStatusException('주문 완료 상태에서만 배송이 가능합니다.')
 
         OrderRepository().start_delivery(order_id)
+        order.refresh_from_db()
         self._send_notification(order.buyer.user, order)
         return order
 
@@ -58,6 +59,7 @@ class OrderService:
             raise InvalidOrderStatusException('배송중 상태에서만 배송 완료가 가능합니다.')
 
         OrderRepository().complete_delivery(order_id)
+        order.refresh_from_db()
         self._send_notification(order.buyer.user, order)
         return order
 
@@ -78,6 +80,7 @@ class OrderService:
             receiver = order.item.seller.user
 
         OrderRepository().cancel(order_id)
+        order.refresh_from_db()
         self._send_notification(receiver, order)
         return order
 
