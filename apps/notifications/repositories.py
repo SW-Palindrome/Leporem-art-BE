@@ -9,3 +9,12 @@ class DeviceRepository:
 
     def get_devices_by_user(self, user):
         return Device.objects.filter(user=user)
+
+    def get_devices_by_token(self, fcm_token):
+        return Device.objects.filter(fcm_token=fcm_token)
+
+    def get_devices(self, user, fcm_token):
+        return Device.objects.filter(user=user, fcm_token=fcm_token)
+
+    def delete_device(self, fcm_token):
+        return Device.objects.filter(fcm_token=fcm_token).delete()
