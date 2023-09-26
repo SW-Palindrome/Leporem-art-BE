@@ -47,7 +47,7 @@ class NotificationService:
             },
         )
         # FCM Token 중복 시 404 응답
-        if not response.status_code not in {200, 404}:
+        if response.status_code not in {200, 404}:
             logger.error(f'Failed to send notification to {token} with status code {response.status_code}')
 
     def send(self, user: User, title: str, body: str, deep_link: str):
