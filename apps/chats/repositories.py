@@ -150,5 +150,13 @@ class MessageRepository:
             user_id=user_id,
         ).update(is_read=True)
 
+    def read_my_message(self, user_id, chat_room_uuid, message_uuid):
+        message = Message.objects.get(uuid=message_uuid)
+        Message.objects.filter(
+            chat_room__uuid=chat_room_uuid,
+            write_datetime__lte=message.write_datetime,
+            user_id=user_id,
+        ).update(is_read=True)
+
     def get_chat_room_by_message_uuid(self, message_uuid):
         return ChatRoom.objects.get(messages__uuid=message_uuid)
