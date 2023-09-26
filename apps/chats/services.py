@@ -95,6 +95,6 @@ class MessageService:
         NotificationService().send(
             user=receiver,
             title=f'{sender.nickname}',
-            body=message.message,
+            body=message.message_display,
             deep_link=f'/chat/{chat_room.uuid}',
         )

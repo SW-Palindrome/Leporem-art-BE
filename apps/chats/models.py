@@ -50,3 +50,14 @@ class Message(TimeStampedModel):
             self.Type.ORDER.value: self.text,
         }
         return type_message_map[self.type]
+
+    @property
+    def message_display(self):
+        type_message_map = {
+            self.Type.TEXT.value: self.text,
+            self.Type.IMAGE.value: '[사진]' if self.image else None,
+            self.Type.ITEM_SHARE.value: '[작품 공유]',
+            self.Type.ITEM_INQUIRY.value: '[작품 문의]',
+            self.Type.ORDER.value: '[주문 신청]',
+        }
+        return type_message_map[self.type]
