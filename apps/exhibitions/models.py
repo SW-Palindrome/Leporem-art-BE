@@ -30,3 +30,9 @@ class ExhibitionItemImage(TimeStampedModel):
     exhibition_image_id = models.AutoField(primary_key=True)
     exhibition_item = models.ForeignKey(ExhibitionItem, on_delete=models.CASCADE, related_name='exhibition_images')
     image = models.FileField(upload_to='exhibitions/exhibition_item_image/')
+
+
+class ExhibitionItemSound(TimeStampedModel):
+    exhibition_sound_id = models.AutoField(primary_key=True)
+    exhibition_item = models.ForeignKey(ExhibitionItem, on_delete=models.CASCADE, related_name='exhibition_sounds')
+    sound = models.FileField(upload_to='exhibitions/exhibition_item_sound/')
