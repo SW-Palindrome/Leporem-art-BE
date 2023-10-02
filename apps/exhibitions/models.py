@@ -14,3 +14,13 @@ class Exhibition(TimeStampedModel):
     end_date = models.DateTimeField()
     color = models.CharField(max_length=10)
     font = models.CharField(max_length=50)
+
+
+class ExhibitionItem(TimeStampedModel):
+    exhibition_item_id = models.AutoField(primary_key=True)
+    exhibition = models.ForeignKey(Exhibition, on_delete=models.CASCADE, related_name='exhibition_items')
+    title = models.CharField(max_length=46)
+    description = models.CharField(max_length=255)
+    template = models.IntegerField()
+    is_sale = models.BooleanField()
+    position = models.IntegerField()
