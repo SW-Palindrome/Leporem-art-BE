@@ -24,3 +24,9 @@ class ExhibitionItem(TimeStampedModel):
     template = models.IntegerField()
     is_sale = models.BooleanField()
     position = models.IntegerField()
+
+
+class ExhibitionItemImage(TimeStampedModel):
+    exhibition_image_id = models.AutoField(primary_key=True)
+    exhibition_item = models.ForeignKey(ExhibitionItem, on_delete=models.CASCADE, related_name='exhibition_images')
+    image = models.FileField(upload_to='exhibitions/exhibition_item_image/')
