@@ -9,11 +9,12 @@ class Exhibition(TimeStampedModel):
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
     title = models.CharField(max_length=46)
     biography = models.CharField(max_length=255)
-    image = models.FileField(upload_to='exhibitions/exhibition_cover_image/')
+    cover_image = models.FileField(upload_to='exhibitions/exhibition_cover_image/')
+    artist_image = models.FileField(upload_to='exhibitions/exhibition_artist_image/')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    color = models.CharField(max_length=10)
-    font = models.CharField(max_length=50)
+    background_color = models.CharField(max_length=10)
+    font_family = models.CharField(max_length=50)
 
 
 class ExhibitionItem(TimeStampedModel):
