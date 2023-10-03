@@ -22,18 +22,18 @@ class ExhibitionItem(TimeStampedModel):
     exhibition = models.ForeignKey(Exhibition, on_delete=models.CASCADE, related_name='exhibition_items')
     title = models.CharField(max_length=46)
     description = models.CharField(max_length=255)
-    template = models.IntegerField()
+    template = models.PositiveIntegerField()
     is_sale = models.BooleanField()
     position = models.IntegerField()
     background_color = models.CharField(max_length=10)
     font_family = models.CharField(max_length=50)
+    is_custom = models.BooleanField(default=False)
 
 
 class ExhibitionItemImage(TimeStampedModel):
     exhibition_image_id = models.AutoField(primary_key=True)
     exhibition_item = models.ForeignKey(ExhibitionItem, on_delete=models.CASCADE, related_name='exhibition_images')
     image = models.FileField(upload_to='exhibitions/exhibition_item_image/')
-    is_custom = models.BooleanField()
 
 
 class ExhibitionItemSound(TimeStampedModel):
