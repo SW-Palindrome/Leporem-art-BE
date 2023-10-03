@@ -25,6 +25,9 @@ class ExhibitionItem(TimeStampedModel):
     template = models.IntegerField()
     is_sale = models.BooleanField()
     position = models.IntegerField()
+    background_color = models.CharField(max_length=10)
+    font_family = models.CharField(max_length=50)
+    custom_image = models.FileField(upload_to='exhibitions/exhibition_item_custom_image/')
 
 
 class ExhibitionItemImage(TimeStampedModel):
