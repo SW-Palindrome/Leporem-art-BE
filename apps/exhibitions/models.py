@@ -27,13 +27,13 @@ class ExhibitionItem(TimeStampedModel):
     position = models.IntegerField()
     background_color = models.CharField(max_length=10)
     font_family = models.CharField(max_length=50)
-    custom_image = models.FileField(upload_to='exhibitions/exhibition_item_custom_image/')
 
 
 class ExhibitionItemImage(TimeStampedModel):
     exhibition_image_id = models.AutoField(primary_key=True)
     exhibition_item = models.ForeignKey(ExhibitionItem, on_delete=models.CASCADE, related_name='exhibition_images')
     image = models.FileField(upload_to='exhibitions/exhibition_item_image/')
+    is_custom = models.BooleanField()
 
 
 class ExhibitionItemSound(TimeStampedModel):
