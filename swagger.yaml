@@ -586,3 +586,28 @@ paths:
             application/json:
               example:
                 message: success
+
+  /buyers/exhibitions:
+    get:
+      tags:
+        - buyers
+      summary: 구매자 기획전 목록 조회
+      description: 구매자 기획전 목록을 조회합니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 구매자 기획전 목록 조회 성공
+          content:
+            application/json:
+              example:
+                [
+                  {
+                    exhibition_id: 1,
+                    cover_image: "https://leporem-art-media-dev.s3.amazonaws.com/exhibitions/exhibition_image/1.jpg",
+                    title: "",
+                    artist_name: "",
+                    start_date: "",
+                    end_date: ""
+                  }
+                ]
