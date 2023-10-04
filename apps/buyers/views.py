@@ -1,3 +1,5 @@
+import random
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -41,4 +43,5 @@ class BuyerExhibitionView(APIView):
         exhibition_repository = ExhibitionRepository()
         exhibitions = exhibition_repository.get_exhibitions()
         data = self.serializer_class(exhibitions, many=True).data
+        random.shuffle(data)
         return Response(data, status=200)
