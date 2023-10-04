@@ -1,3 +1,5 @@
+from typing import Optional
+
 from apps.deliveries.models import DeliveryCompany, DeliveryInfo
 
 
@@ -9,3 +11,9 @@ class DeliveryRepository:
             delivery_company=delivery_company,
             invoice_number=invoice_number,
         )
+
+    def get_delivery_info(self, order_id: int) -> Optional[DeliveryInfo]:
+        try:
+            return DeliveryInfo.objects.get(order_id=order_id)
+        except DeliveryInfo.DoesNotExist:
+            return None
