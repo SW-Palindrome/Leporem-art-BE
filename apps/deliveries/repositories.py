@@ -1,4 +1,4 @@
-from apps.delivery.models import DeliveryCompany, DeliveryInfo
+from apps.deliveries.models import DeliveryCompany, DeliveryInfo
 
 
 class DeliveryRepository:

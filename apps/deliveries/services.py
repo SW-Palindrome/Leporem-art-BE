@@ -1,4 +1,4 @@
-from apps.delivery.repositories import DeliveryRepository
+from apps.deliveries.repositories import DeliveryRepository
 from apps.orders.repositories import OrderRepository
 
 

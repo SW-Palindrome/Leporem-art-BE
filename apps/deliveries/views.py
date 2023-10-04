@@ -2,8 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.delivery.serializers import RegisterDeliveryInfoSerializer
-from apps.delivery.services import DeliveryService
+from apps.deliveries.serializers import RegisterDeliveryInfoSerializer
+from apps.deliveries.services import DeliveryService
 from apps.users.permissions import IsSeller
 
 
