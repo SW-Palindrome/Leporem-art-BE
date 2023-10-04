@@ -19,6 +19,8 @@ class Item(TimeStampedModel):
     height = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     display_dt = models.DateTimeField(null=True)
     deleted_date = models.DateTimeField(null=True)
+    start_date = models.DateTimeField(null=True, default=None)
+    end_date = models.DateTimeField(null=True, default=None)
 
     @property
     def thumbnail_image(self):
