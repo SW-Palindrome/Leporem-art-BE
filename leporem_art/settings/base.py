@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'apps.buyers',
     'apps.chats',
+    'apps.delivery',
     'apps.orders',
     'apps.users',
     'apps.sellers',
