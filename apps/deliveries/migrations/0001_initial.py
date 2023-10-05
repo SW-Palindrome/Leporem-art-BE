@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.PROTECT,
                         related_name='delivery_infos',
-                        to='delivery.deliverycompany',
+                        to='deliveries.deliverycompany',
                     ),
                 ),
                 (
