@@ -24,9 +24,26 @@ class RegisterDeliveryInfoView(APIView):
         return Response({'delivery_info_id': delivery_info.delivery_info_id}, status=status.HTTP_201_CREATED)
 
 
+class DeliveryInfoView(APIView):
+    permission_classes = [IsSeller]
+
+    def get(self, request, order_id):
+        delivery_info = DeliveryService().get_delivery_info(user_id=request.user.user_id, order_id=order_id)
+        if delivery_info is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {
+                'delivery_company': delivery_info.delivery_company.name,
+                'invoice_number': delivery_info.invoice_number,
+            }
+        )
+
+
 class DeliveryInfoTrackingUrlView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, order_id):
-        tracking_url = DeliveryService().get_tracking_url(user_id=request.user, order_id=order_id)
+        tracking_url = DeliveryService().get_tracking_url(user_id=request.user.user_id, order_id=order_id)
+        if tracking_url is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         return Response({'delivery_tracking_url': tracking_url})
