@@ -24,6 +24,8 @@ tags:
     description: 작품 관리
   - name: notifications
     description: 알림 관리
+  - name: exhibitions
+    description: 전시 관리
 
 paths:
   /users/signup/kakao:
@@ -582,6 +584,37 @@ paths:
       responses:
         '200':
           description: 싱글 유저 푸시 알림 성공
+          content:
+            application/json:
+              example:
+                message: success
+
+  /exhibitions/register:
+    post:
+      tags:
+        - exhibitions
+      summary: 전시 등록
+      description: 전시를 등록합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                nickname:
+                  type: string
+                  example: 옥지얌
+                start_date:
+                  type: string
+                  example: 2023-10-05 10:00
+                end_date:
+                  type: string
+                  example: 2023-10-12 10:00
+        required: True
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 전시 등록 성공
           content:
             application/json:
               example:
