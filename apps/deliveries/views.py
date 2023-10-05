@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -21,3 +22,11 @@ class RegisterDeliveryInfoView(APIView):
             invoice_number=serializer.validated_data['invoice_number'],
         )
         return Response({'delivery_info_id': delivery_info.delivery_info_id}, status=status.HTTP_201_CREATED)
+
+
+class DeliveryInfoTrackingUrlView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, order_id):
+        tracking_url = DeliveryService().get_tracking_url(user_id=request.user, order_id=order_id)
+        return Response({'delivery_tracking_url': tracking_url})
