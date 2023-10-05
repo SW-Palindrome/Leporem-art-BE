@@ -16,6 +16,7 @@ class Exhibition(TimeStampedModel):
     background_color = models.CharField(max_length=10)
     font_family = models.CharField(max_length=50)
     artist_name = models.CharField(max_length=100, default=None)
+    is_template = models.BooleanField(default=False)
 
 
 class ExhibitionItem(TimeStampedModel):
