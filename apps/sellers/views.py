@@ -10,6 +10,7 @@ from apps.sellers.filters import SellerMyOrderFilterBackend
 from apps.sellers.repositories import SellerRepository
 from apps.sellers.serializers import (
     DescriptionSerializer,
+    SellerExhibitionIntroductionSerializer,
     SellerInfoSerializer,
     SellerItemSerializer,
     SellerMyInfoSerializer,
@@ -183,3 +184,21 @@ class SellerControlAmountView(APIView):
             return Response({"message": "success"}, status=200)
         except ItemException as e:
             return Response({"error": str(e)}, status=400)
+
+
+class SellerExhibitionIntroductionView(APIView):
+    permission_classes = [IsSeller]
+    serializer_class = SellerExhibitionIntroductionSerializer
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            seller_service = SellerService()
+            seller_service.modify_exhibition_introduction(
+                seller_id=request.user.seller.seller_id,
+                exhibition_id=kwargs['exhibition_id'],
+                cover_image=serializer.validated_data['cover_image'],
+                title=serializer.validated_data['title'],
+                artist_name=serializer.validated_data['artist_name'],
+            )
+            return Response({'message': 'success'}, status=200)
