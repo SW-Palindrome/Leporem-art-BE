@@ -17,10 +17,13 @@ class ExhibitionRepository:
         )
         return exhibition
 
-    def register_artist_info(self, exhibition_id, biography, artist_image):
+    def register_artist_info(self, exhibition_id, biography, artist_image, font_family, background_color):
         exhibition = Exhibition.objects.get(exhibition_id=exhibition_id)
         exhibition.biography = biography
         artist_image.name = create_random_filename(artist_image.name)
         exhibition.artist_image = artist_image
+        exhibition.font_family = font_family
+        exhibition.background_color = background_color
+        exhibition.is_template = True
         exhibition.save()
         return exhibition

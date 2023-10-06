@@ -39,6 +39,7 @@ class TestExhibitionRepository:
             start_date=date(2023, 10, 1),
             end_date=date(2023, 10, 8),
             artist_name=seller.user.nickname,
+            is_template=False,
         )
         biography = '바이오그래피'
         artist_image = SimpleUploadedFile(
@@ -46,14 +47,25 @@ class TestExhibitionRepository:
             content=b'artist_image',
         )
         artist_image.name = 'artist_image.jpg'
+        font_family = 'Pretandard'
+        background_color = '#ffffff'
         sut = ExhibitionRepository()
 
-        result = sut.register_artist_info(exhibition.exhibition_id, biography, artist_image)
+        result = sut.register_artist_info(
+            exhibition.exhibition_id,
+            biography,
+            artist_image,
+            font_family,
+            background_color,
+        )
 
         assert result == Exhibition.objects.get(
             exhibition_id=exhibition.exhibition_id,
             start_date=date(2023, 10, 1),
             end_date=date(2023, 10, 8),
             biography='바이오그래피',
+            is_template=True,
+            font_family='Pretandard',
+            background_color='#ffffff',
         )
         assert result.artist_image.name != 'artist_image.jpg'
