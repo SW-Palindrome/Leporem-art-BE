@@ -62,3 +62,9 @@ class SellerMyOrderSerializer(serializers.Serializer):
 class TransactionSerializer(serializers.Serializer):
     total_transactions = serializers.IntegerField()
     total_rate = serializers.FloatField()
+
+
+class SellerExhibitionIntroductionSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=46)
+    cover_image = serializers.ImageField()
+    artist_name = serializers.CharField(max_length=100)
