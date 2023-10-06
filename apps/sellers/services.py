@@ -3,6 +3,7 @@ from typing import Optional
 
 from jinja2 import Template
 
+from apps.exhibitions.repositories import ExhibitionRepository
 from apps.items.models import Item
 from apps.items.repositories import ItemRepository
 from apps.sellers.models import Seller
@@ -126,3 +127,14 @@ class SellerService:
     def delete_item(self, seller_id, item_id):
         item_repository = ItemRepository()
         item_repository.delete(seller_id, item_id)
+
+    def modify_exhibition_introduction(self, seller_id, exhibition_id, cover_image, title, artist_name):
+        exhibition_repository = ExhibitionRepository()
+        cover_image.name = create_random_filename(cover_image.name)
+        exhibition_repository.modify_introduction(
+            seller_id=seller_id,
+            exhibition_id=exhibition_id,
+            cover_image=cover_image,
+            title=title,
+            artist_name=artist_name,
+        )
