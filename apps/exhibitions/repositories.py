@@ -13,6 +13,7 @@ class ExhibitionRepository:
             seller=seller,
             start_date=start_date,
             end_date=end_date,
+            artist_name=seller.user.nickname,
         )
         return exhibition
 
