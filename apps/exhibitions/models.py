@@ -6,7 +6,7 @@ from apps.sellers.models import Seller
 
 class Exhibition(TimeStampedModel):
     exhibition_id = models.AutoField(primary_key=True)
-    seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
+    seller = models.ForeignKey(Seller, on_delete=models.PROTECT, related_name='exhibitions')
     title = models.CharField(max_length=46)
     biography = models.CharField(max_length=255)
     cover_image = models.FileField(upload_to='exhibitions/exhibition_cover_image/')
