@@ -30,3 +30,6 @@ class ExhibitionRepository:
         exhibition.save()
 
         return exhibition
+
+    def get_introduction(self, exhibition_id):
+        return Exhibition.objects.get(exhibition_id=exhibition_id)
