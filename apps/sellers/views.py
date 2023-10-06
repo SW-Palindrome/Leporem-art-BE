@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.exhibitions.repositories import ExhibitionRepository
 from apps.items.exceptions import ItemException
 from apps.orders.repositories import OrderRepository
 from apps.sellers.filters import SellerMyOrderFilterBackend
@@ -189,6 +190,11 @@ class SellerControlAmountView(APIView):
 class SellerExhibitionIntroductionView(APIView):
     permission_classes = [IsSeller]
     serializer_class = SellerExhibitionIntroductionSerializer
+
+    def get(self, request, *args, **kwargs):
+        exhibition = ExhibitionRepository().get_introduction(kwargs['exhibition_id'])
+        data = self.serializer_class(exhibition).data
+        return Response(data, status=200)
 
     def patch(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
