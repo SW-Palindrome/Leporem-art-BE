@@ -27,3 +27,14 @@ class ExhibitionRepository:
         exhibition.is_template = True
         exhibition.save()
         return exhibition
+
+    def register_custom_artist_info(self, exhibition_id, artist_image):
+        exhibition = Exhibition.objects.get(exhibition_id=exhibition_id)
+        artist_image.name = create_random_filename(artist_image.name)
+        exhibition.artist_image = artist_image
+        exhibition.biography = ''
+        exhibition.font_family = ''
+        exhibition.background_color = ''
+        exhibition.is_template = False
+        exhibition.save()
+        return exhibition
