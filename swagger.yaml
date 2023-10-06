@@ -639,3 +639,32 @@ paths:
                   cover_image: "https://leporem-art-media-dev.s3.amazonaws.com/exhibitions/exhibition_cover_image/a5f97d38-083a-489f-b811-4e7ba2b29d7d.jpeg",
                   artist_name: "Yujeong Jeong"
                 }
+    patch:
+      tags:
+        - sellers
+      summary: 전시 소개 수정
+      description: 전시 소개를 수정합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  example: Bing Image Exhibition
+                cover_image:
+                  type: string
+                  example: 전시전 이미지.jpeg
+                artist_name:
+                  type: string
+                  example: Yujeong Jeong
+        required: True
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 전시 소개 수정 성공
+          content:
+            application/json:
+              example:
+                message: success
