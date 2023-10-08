@@ -48,3 +48,11 @@ param_firebase = ssm.get_parameter(Name='/leporem_art/settings/base/FIREBASE_CON
 ]
 FIREBASE_CONFIG = json.loads(param_firebase)
 FIREBASE_MESSAGE_SEND_URL = f'https://fcm.googleapis.com/v1/projects/{FIREBASE_CONFIG["project_id"]}/messages:send'
+
+# 배송 트래킹 설정 (스마트 택배 API)
+param_delivery_tracking = ssm.get_parameter(Name='/leporem_art/settings/base/delivery-tracking', WithDecryption=True)[
+    'Parameter'
+]['Value']
+DELIVERY_TRACKING_CONFIG = json.loads(param_delivery_tracking)
+SMART_DELIVERY_TRACKING_API_URL = DELIVERY_TRACKING_CONFIG['DELIVERY_TRACKING_BASE_URL']
+SMART_DELIVERY_TRACKING_API_KEY = DELIVERY_TRACKING_CONFIG['API_KEY']
