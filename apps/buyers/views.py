@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.buyers.serializers import (
-    BuyerExhibitionSerializer,
+    BuyerExhibitionsSerializer,
     BuyerInfoSerializer,
     BuyerMyOrderSerializer,
 )
@@ -35,12 +35,12 @@ class BuyerMyOrderView(APIView):
         return Response(data, status=200)
 
 
-class BuyerExhibitionView(APIView):
-    serializer_class = BuyerExhibitionSerializer
+class BuyerExhibitionsView(APIView):
+    serializer_class = BuyerExhibitionsSerializer
 
     def get(self, request):
         exhibition_repository = ExhibitionRepository()
-        exhibitions = exhibition_repository.get_exhibitions()
+        exhibitions = exhibition_repository.get_exhibitions_for_buyer()
         data = self.serializer_class(exhibitions, many=True).data
         random.shuffle(data)
         return Response(data, status=200)
