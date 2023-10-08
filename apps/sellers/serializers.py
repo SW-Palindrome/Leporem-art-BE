@@ -68,3 +68,12 @@ class SellerExhibitionIntroductionSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=46)
     cover_image = serializers.ImageField()
     artist_name = serializers.CharField(max_length=100)
+
+
+class SellerExhibitionsSerializer(serializers.Serializer):
+    exhibition_id = serializers.IntegerField()
+    title = serializers.CharField()
+    cover_image = serializers.ImageField()
+    artist_name = serializers.CharField()
+    start_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()
