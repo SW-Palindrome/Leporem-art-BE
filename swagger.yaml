@@ -603,11 +603,11 @@ paths:
               example:
                 [
                   {
-                    exhibition_id: 1,
-                    cover_image: "https://leporem-art-media-dev.s3.amazonaws.com/exhibitions/exhibition_image/1.jpg",
-                    title: "",
-                    artist_name: "",
-                    start_date: "",
-                    end_date: ""
+                    exhibition_id: 2,
+                    cover_image: "exhibitions/exhibition_cover_image/a5f97d38-083a-489f-b811-4e7ba2b29d7d.jpeg",
+                    title: "Bing Image Exhibition",
+                    artist_name: "Yujeong Jeong",
+                    start_date: "2023-10-05T10:00:00Z",
+                    end_date: "2023-10-12T10:00:00Z"
                   }
                 ]
