@@ -18,7 +18,7 @@ class BuyerMyOrderSerializer(serializers.Serializer):
     is_reviewed = serializers.BooleanField()
 
 
-class BuyerExhibitionSerializer(serializers.Serializer):
+class BuyerExhibitionsSerializer(serializers.Serializer):
     exhibition_id = serializers.IntegerField()
     cover_image = serializers.CharField()
     title = serializers.CharField()
