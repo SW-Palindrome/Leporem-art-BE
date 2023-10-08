@@ -12,6 +12,7 @@ from apps.sellers.repositories import SellerRepository
 from apps.sellers.serializers import (
     DescriptionSerializer,
     SellerExhibitionIntroductionSerializer,
+    SellerExhibitionsSerializer,
     SellerInfoSerializer,
     SellerItemSerializer,
     SellerMyInfoSerializer,
@@ -208,3 +209,13 @@ class SellerExhibitionIntroductionView(APIView):
                 artist_name=serializer.validated_data['artist_name'],
             )
             return Response({'message': 'success'}, status=200)
+
+
+class SellerExhibitionsView(APIView):
+    permission_classes = [IsSeller]
+    serializer_class = SellerExhibitionsSerializer
+
+    def get(self, request):
+        exhibitions = ExhibitionRepository().get_exhibitions_for_seller(request.user.seller.seller_id)
+        data = self.serializer_class(exhibitions, many=True).data
+        return Response(data, status=200)
