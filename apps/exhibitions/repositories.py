@@ -1,5 +1,6 @@
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from django.utils import timezone
 
 from apps.exhibitions.models import Exhibition
 from apps.sellers.models import Seller
@@ -33,3 +34,10 @@ class ExhibitionRepository:
 
     def get_introduction(self, exhibition_id):
         return Exhibition.objects.get(exhibition_id=exhibition_id)
+
+    def get_exhibitions_for_buyer(self):
+        today = timezone.now().date()
+        return Exhibition.objects.filter(
+            start_date__lte=today,
+            end_date__gte=today,
+        )

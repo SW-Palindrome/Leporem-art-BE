@@ -668,3 +668,28 @@ paths:
             application/json:
               example:
                 message: success
+
+  /buyers/exhibitions:
+    get:
+      tags:
+        - buyers
+      summary: 구매자 기획전 목록 조회
+      description: 구매자 기획전 목록을 조회합니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 구매자 기획전 목록 조회 성공
+          content:
+            application/json:
+              example:
+                [
+                  {
+                    exhibition_id: 2,
+                    cover_image: "exhibitions/exhibition_cover_image/a5f97d38-083a-489f-b811-4e7ba2b29d7d.jpeg",
+                    title: "Bing Image Exhibition",
+                    artist_name: "Yujeong Jeong",
+                    start_date: "2023-10-05T10:00:00Z",
+                    end_date: "2023-10-12T10:00:00Z"
+                  }
+                ]
