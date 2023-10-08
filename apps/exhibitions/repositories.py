@@ -41,3 +41,7 @@ class ExhibitionRepository:
             start_date__lte=today,
             end_date__gte=today,
         )
+
+    def get_exhibitions_for_seller(self, seller_id):
+        seller = Seller.objects.get(seller_id=seller_id)
+        return Exhibition.objects.filter(seller=seller).order_by('-start_date')
