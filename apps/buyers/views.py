@@ -36,7 +36,6 @@ class BuyerMyOrderView(APIView):
 
 
 class BuyerExhibitionView(APIView):
-    # permission_classes = [IsAuthenticated]
     serializer_class = BuyerExhibitionSerializer
 
     def get(self, request):
