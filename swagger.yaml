@@ -656,7 +656,7 @@ paths:
       security:
         - leporemartTokenAuth: []
       responses:
-        '201':
+        '200':
           description: 전시전 작가 정보 등록 성공
           content:
             application/json:

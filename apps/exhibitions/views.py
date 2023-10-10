@@ -43,7 +43,7 @@ class ExhibitionArtistView(APIView):
                 font_family=serializer.validated_data.get('font_family'),
                 background_color=serializer.validated_data.get('background_color'),
             )
-        return Response({'message': 'success'}, status=201)
+        return Response({'message': 'success'}, status=200)
 
     def get_object(self):
         return ExhibitionRepository().get_exhibition(self.kwargs['exhibition_id'])
