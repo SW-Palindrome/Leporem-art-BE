@@ -1,8 +1,12 @@
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.exhibitions.repositories import ExhibitionRepository
-from apps.exhibitions.serializers import ExhibitionSerializer
+from apps.exhibitions.serializers import (
+    ExhibitionArtistRegisterSerializer,
+    ExhibitionSerializer,
+)
 from apps.exhibitions.services import ExhibitionService
 from apps.users.permissions import IsExhibitionOwner, IsStaff
 
@@ -24,10 +28,12 @@ class ExhibitionView(APIView):
 
 class ExhibitionArtistView(APIView):
     permission_classes = [IsExhibitionOwner]
+    serializer_class = ExhibitionArtistRegisterSerializer
+    parser_classes = [MultiPartParser]
 
     def post(self, request, exhibition_id):
         self.check_object_permissions(request, self.get_object())
-        serializer = ExhibitionSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             ExhibitionService().register_artist_info(
                 exhibition_id=exhibition_id,

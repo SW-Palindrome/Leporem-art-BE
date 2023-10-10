@@ -10,9 +10,9 @@ class ExhibitionSerializer(serializers.Serializer):
 class ExhibitionArtistRegisterSerializer(serializers.Serializer):
     is_template = serializers.BooleanField()
     artist_image = serializers.ImageField()
-    biography = serializers.CharField(max_length=255, allow_null=True)
-    font_family = serializers.CharField(max_length=50, allow_null=True)
-    background_color = serializers.CharField(max_length=10, allow_null=True)
+    biography = serializers.CharField(max_length=255, allow_null=True, required=False)
+    font_family = serializers.CharField(max_length=50, allow_null=True, required=False)
+    background_color = serializers.CharField(max_length=10, allow_null=True, required=False)
 
     def validate(self, attrs):
         if attrs['is_template'] and not all(
