@@ -1,6 +1,7 @@
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from apps.chats.models import ChatRoom
+from apps.exhibitions.models import Exhibition
 
 
 class IsStaff(BasePermission):
@@ -23,3 +24,8 @@ class IsSeller(BasePermission):
 class IsInChatRoom(IsAuthenticated):
     def has_object_permission(self, request, view, obj: ChatRoom):
         return bool(obj.buyer.user_id == request.user.user_id or obj.seller.user_id == request.user.user_id)
+
+
+class IsExhibitionOwner(IsAuthenticated):
+    def has_object_permission(self, request, view, obj: Exhibition):
+        return bool(obj.seller.user_id == request.user.user_id)

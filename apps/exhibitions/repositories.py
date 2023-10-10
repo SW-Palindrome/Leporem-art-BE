@@ -38,3 +38,6 @@ class ExhibitionRepository:
         exhibition.is_template = False
         exhibition.save()
         return exhibition
+
+    def get_exhibition(self, exhibition_id):
+        return Exhibition.objects.get(exhibition_id=exhibition_id)
