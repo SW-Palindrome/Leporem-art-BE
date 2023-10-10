@@ -26,6 +26,7 @@ class ExhibitionRepository:
         except Exhibition.DoesNotExist:
             raise PermissionDenied
 
+        cover_image.name = create_random_filename(cover_image.name)
         exhibition.cover_image = cover_image
         exhibition.title = title
         exhibition.artist_name = artist_name
