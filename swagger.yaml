@@ -662,3 +662,109 @@ paths:
             application/json:
               example:
                 message: success
+
+  /sellers/exhibition-intro/<str:exhibition_id>:
+    get:
+      tags:
+        - sellers
+      summary: 기획전 소개 조회
+      description: 기획전 소개를 조회합니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 전시 소개 조회 성공
+          content:
+            application/json:
+              example:
+                {
+                  title: "Bing Image Exhibition",
+                  cover_image: "https://leporem-art-media-dev.s3.amazonaws.com/exhibitions/exhibition_cover_image/a5f97d38-083a-489f-b811-4e7ba2b29d7d.jpeg",
+                  artist_name: "Yujeong Jeong"
+                }
+    patch:
+      tags:
+        - sellers
+      summary: 기획전 소개 수정
+      description: 기획전 소개를 수정합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  example: Bing Image Exhibition
+                cover_image:
+                  type: string
+                  example: 전시전 이미지.jpeg
+                artist_name:
+                  type: string
+                  example: Yujeong Jeong
+        required: True
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 기획전 소개 수정 성공
+          content:
+            application/json:
+              example:
+                message: success
+
+  /buyers/exhibitions:
+    get:
+      tags:
+        - buyers
+      summary: 구매자 기획전 목록 조회
+      description: 무작위 순서로 구매자 기획전 목록을 조회합니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 구매자 기획전 목록 조회 성공
+          content:
+            application/json:
+              example:
+                [
+                  {
+                    exhibition_id: 2,
+                    cover_image: "exhibitions/exhibition_cover_image/a5f97d38-083a-489f-b811-4e7ba2b29d7d.jpeg",
+                    title: "Bing Image Exhibition",
+                    artist_name: "Yujeong Jeong",
+                    start_date: "2023-10-05T10:00:00Z",
+                    end_date: "2023-10-12T10:00:00Z"
+                  }
+                ]
+  /sellers/exhibitions:
+    get:
+      tags:
+        - sellers
+      summary: 판매자 기획전 목록 조회
+      description: 최신순으로 판매자 기획전 목록을 조회합니다.
+      security:
+          - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 판매자 기획전 목록 조회 성공
+          content:
+            application/json:
+              example:
+                [
+                  {
+                    exhibition_id: 3,
+                    title: "Disney Image Exhibition",
+                    cover_image: "https://leporem-art-media-dev.s3.amazonaws.com/exhibitions/exhibition_cover_image/86c3cc52-cffa-41b7-b133-6e26319b7934.jpeg",
+                    artist_name: "Yujeong Jeong",
+                    start_date: "2023-10-08T11:00:00Z",
+                    end_date: "2023-10-15T11:00:00Z"
+                  },
+                  {
+                    exhibition_id: 2,
+                    title: "Bing Image Exhibition",
+                    cover_image: "https://leporem-art-media-dev.s3.amazonaws.com/exhibitions/exhibition_cover_image/a5f97d38-083a-489f-b811-4e7ba2b29d7d.jpeg",
+                    artist_name: "Yujeong Jeong",
+                    start_date: "2023-10-05T10:00:00Z",
+                    end_date: "2023-10-12T10:00:00Z"
+                  }
+                ]

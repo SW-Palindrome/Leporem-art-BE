@@ -4,12 +4,15 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.exhibitions.repositories import ExhibitionRepository
 from apps.items.exceptions import ItemException
 from apps.orders.repositories import OrderRepository
 from apps.sellers.filters import SellerMyOrderFilterBackend
 from apps.sellers.repositories import SellerRepository
 from apps.sellers.serializers import (
     DescriptionSerializer,
+    SellerExhibitionIntroductionSerializer,
+    SellerExhibitionsSerializer,
     SellerInfoSerializer,
     SellerItemSerializer,
     SellerMyInfoSerializer,
@@ -183,3 +186,36 @@ class SellerControlAmountView(APIView):
             return Response({"message": "success"}, status=200)
         except ItemException as e:
             return Response({"error": str(e)}, status=400)
+
+
+class SellerExhibitionIntroductionView(APIView):
+    permission_classes = [IsSeller]
+    serializer_class = SellerExhibitionIntroductionSerializer
+
+    def get(self, request, *args, **kwargs):
+        exhibition = ExhibitionRepository().get_introduction(kwargs['exhibition_id'])
+        data = self.serializer_class(exhibition).data
+        return Response(data, status=200)
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            seller_service = SellerService()
+            seller_service.modify_exhibition_introduction(
+                seller_id=request.user.seller.seller_id,
+                exhibition_id=kwargs['exhibition_id'],
+                cover_image=serializer.validated_data['cover_image'],
+                title=serializer.validated_data['title'],
+                artist_name=serializer.validated_data['artist_name'],
+            )
+            return Response({'message': 'success'}, status=200)
+
+
+class SellerExhibitionsView(APIView):
+    permission_classes = [IsSeller]
+    serializer_class = SellerExhibitionsSerializer
+
+    def get(self, request):
+        exhibitions = ExhibitionRepository().get_exhibitions_for_seller(request.user.seller.seller_id)
+        data = self.serializer_class(exhibitions, many=True).data
+        return Response(data, status=200)

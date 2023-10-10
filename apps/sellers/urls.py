@@ -3,6 +3,8 @@ from django.urls import path
 from apps.sellers.views import (
     SellerControlAmountView,
     SellerDescriptionView,
+    SellerExhibitionIntroductionView,
+    SellerExhibitionsView,
     SellerInfoView,
     SellerItemView,
     SellerMyInfoView,
@@ -23,4 +25,6 @@ urlpatterns = [
     path('orders/my', SellerMyOrderView.as_view()),
     path('current-amount', SellerControlAmountView.as_view()),
     path('shorts/upload-url', SellerUploadShortsUrlView.as_view()),
+    path('exhibition-intro/<str:exhibition_id>', SellerExhibitionIntroductionView.as_view()),
+    path('exhibitions', SellerExhibitionsView.as_view()),
 ]

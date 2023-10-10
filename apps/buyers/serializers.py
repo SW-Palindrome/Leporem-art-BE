@@ -16,3 +16,12 @@ class BuyerMyOrderSerializer(serializers.Serializer):
     ordered_datetime = serializers.DateTimeField()
     order_status = serializers.CharField(source='get_order_status_display')
     is_reviewed = serializers.BooleanField()
+
+
+class BuyerExhibitionsSerializer(serializers.Serializer):
+    exhibition_id = serializers.IntegerField()
+    cover_image = serializers.CharField()
+    title = serializers.CharField()
+    artist_name = serializers.CharField()
+    start_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()

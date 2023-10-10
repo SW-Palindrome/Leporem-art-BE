@@ -1,8 +1,15 @@
+import random
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.buyers.serializers import BuyerInfoSerializer, BuyerMyOrderSerializer
+from apps.buyers.serializers import (
+    BuyerExhibitionsSerializer,
+    BuyerInfoSerializer,
+    BuyerMyOrderSerializer,
+)
+from apps.exhibitions.repositories import ExhibitionRepository
 from apps.orders.repositories import OrderRepository
 from apps.users.repositories import UserRepository
 
@@ -25,4 +32,15 @@ class BuyerMyOrderView(APIView):
         order_repository = OrderRepository()
         orders = order_repository.get_order_list_by_buyer(self.request.user.buyer.buyer_id)
         data = self.serializer_class(orders, many=True).data
+        return Response(data, status=200)
+
+
+class BuyerExhibitionsView(APIView):
+    serializer_class = BuyerExhibitionsSerializer
+
+    def get(self, request):
+        exhibition_repository = ExhibitionRepository()
+        exhibitions = exhibition_repository.get_exhibitions_for_buyer()
+        data = self.serializer_class(exhibitions, many=True).data
+        random.shuffle(data)
         return Response(data, status=200)
