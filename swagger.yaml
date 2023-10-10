@@ -663,12 +663,12 @@ paths:
               example:
                 message: success
 
-  /sellers/exhibition-intro/<str:exhibition_id>:
+  /exhibitions/introduction/{exhibition_id}:
     get:
       tags:
-        - sellers
-      summary: 기획전 소개 조회
-      description: 기획전 소개를 조회합니다.
+        - exhibitions
+      summary: 전시전 소개 조회
+      description: 전시전 소개를 조회합니다.
       security:
         - leporemartTokenAuth: []
       responses:
@@ -684,9 +684,9 @@ paths:
                 }
     patch:
       tags:
-        - sellers
-      summary: 기획전 소개 수정
-      description: 기획전 소개를 수정합니다.
+        - exhibitions
+      summary: 전시전 소개 수정
+      description: 전시전 소개를 수정합니다.
       requestBody:
         content:
           application/json:
@@ -712,17 +712,17 @@ paths:
               example:
                 message: success
 
-  /buyers/exhibitions:
+  /exhibitions/buyer:
     get:
       tags:
-        - buyers
-      summary: 구매자 기획전 목록 조회
-      description: 무작위 순서로 구매자 기획전 목록을 조회합니다.
+        - exhibitions
+      summary: 구매자 전시전 목록 조회
+      description: 무작위 순서로 구매자 전시전 목록을 조회합니다.
       security:
         - leporemartTokenAuth: []
       responses:
         '200':
-          description: 구매자 기획전 목록 조회 성공
+          description: 구매자 전시전 목록 조회 성공
           content:
             application/json:
               example:
@@ -736,17 +736,17 @@ paths:
                     end_date: "2023-10-12T10:00:00Z"
                   }
                 ]
-  /sellers/exhibitions:
+  /exhibitions/seller:
     get:
       tags:
-        - sellers
-      summary: 판매자 기획전 목록 조회
-      description: 최신순으로 판매자 기획전 목록을 조회합니다.
+        - exhibitions
+      summary: 판매자 전시전 목록 조회
+      description: 최신순으로 판매자 기획전 전시전 조회합니다.
       security:
           - leporemartTokenAuth: []
       responses:
         '200':
-          description: 판매자 기획전 목록 조회 성공
+          description: 판매자 전시전 목록 조회 성공
           content:
             application/json:
               example:
