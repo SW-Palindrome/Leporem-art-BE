@@ -619,3 +619,46 @@ paths:
             application/json:
               example:
                 message: success
+
+  /exhibitions/{exhibiton_id}/artist-info:
+    put:
+      tags:
+        - exhibitions
+      summary: 전시전 작가 정보 등록
+      description: 전시전 작가 정보를 등록 및 수정합니다. 항상 201로 멱등성을 유지합니다.
+      parameters:
+        - name: exhibition_id
+          in: path
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                is_template:
+                  type: boolean
+                  example: true
+                artist_image:
+                  type: string
+                  format: binary
+                  description: 작가 사진 or 작가 소개 사진 파일
+                biography:
+                  type: string
+                  description: 작가 소개 (is_template이 true인 경우에만 입력)
+                font_family:
+                  type: string
+                  description: 폰트 (is_template이 true인 경우에만 입력)
+                background_color:
+                  type: string
+                  description: 배경색 (is_template이 true인 경우에만 입력)
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 전시전 작가 정보 등록 성공
+          content:
+            application/json:
+              example:
+                message: success

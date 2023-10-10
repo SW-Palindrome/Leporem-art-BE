@@ -31,7 +31,7 @@ class ExhibitionArtistView(APIView):
     serializer_class = ExhibitionArtistRegisterSerializer
     parser_classes = [MultiPartParser]
 
-    def post(self, request, exhibition_id):
+    def put(self, request, exhibition_id):
         self.check_object_permissions(request, self.get_object())
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
