@@ -1,6 +1,7 @@
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
+from apps.items.models import Item
 from apps.sellers.models import Seller
 
 
@@ -22,6 +23,7 @@ class Exhibition(TimeStampedModel):
 class ExhibitionItem(TimeStampedModel):
     exhibition_item_id = models.AutoField(primary_key=True)
     exhibition = models.ForeignKey(Exhibition, on_delete=models.CASCADE, related_name='exhibition_items')
+    item = models.ForeignKey(Item, on_delete=models.PROTECT, related_name='exhibition_item', default=None)
     title = models.CharField(max_length=46)
     description = models.CharField(max_length=255)
     template = models.PositiveIntegerField()
