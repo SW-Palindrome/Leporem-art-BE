@@ -7,6 +7,12 @@ class ExhibitionSerializer(serializers.Serializer):
     end_date = serializers.DateTimeField()
 
 
+class ExhibitionIntroductionSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=46)
+    cover_image = serializers.ImageField()
+    artist_name = serializers.CharField(max_length=100)
+
+
 class ExhibitionArtistRegisterSerializer(serializers.Serializer):
     is_template = serializers.BooleanField()
     artist_image = serializers.ImageField()
@@ -20,3 +26,12 @@ class ExhibitionArtistRegisterSerializer(serializers.Serializer):
         ):
             raise serializers.ValidationError('템플릿을 사용할 경우, biography, font_family, background_color는 필수값입니다.')
         return attrs
+
+
+class ExhibitionsSerializer(serializers.Serializer):
+    exhibition_id = serializers.IntegerField()
+    title = serializers.CharField()
+    cover_image = serializers.ImageField()
+    artist_name = serializers.CharField()
+    start_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()
