@@ -33,6 +33,14 @@ class ExhibitionItem(TimeStampedModel):
     font_family = models.CharField(max_length=50)
     is_custom = models.BooleanField(default=False)
 
+    @property
+    def images(self):
+        return [image.image for image in self.exhibition_images.all()]
+
+    @property
+    def sounds(self):
+        return [sound.sound for sound in self.exhibition_sounds.all()]
+
 
 class ExhibitionItemImage(TimeStampedModel):
     exhibition_image_id = models.AutoField(primary_key=True)

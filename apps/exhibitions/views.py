@@ -2,12 +2,14 @@ import random
 
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.exhibitions.repositories import ExhibitionRepository
 from apps.exhibitions.serializers import (
     ExhibitionArtistRegisterSerializer,
+    ExhibitionDetailSerializer,
     ExhibitionIntroductionSerializer,
     ExhibitionSerializer,
     ExhibitionsSerializer,
@@ -101,4 +103,15 @@ class SellerExhibitionsView(APIView):
         exhibition_repository = ExhibitionRepository()
         exhibitions = exhibition_repository.get_exhibitions_for_seller(request.user.seller.seller_id)
         data = self.serializer_class(exhibitions, many=True).data
+        return Response(data, status=200)
+
+
+class ExhibitionDetailView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = ExhibitionDetailSerializer
+
+    def get(self, request, exhibition_id):
+        exhibition_repository = ExhibitionRepository()
+        exhibition = exhibition_repository.get_exhibition(exhibition_id)
+        data = self.serializer_class(exhibition).data
         return Response(data, status=200)
