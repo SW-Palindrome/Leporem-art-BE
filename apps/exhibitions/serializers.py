@@ -1,3 +1,4 @@
+import pytz
 from rest_framework import serializers
 
 
@@ -42,8 +43,8 @@ class ExhibitionDetailInfoSerializer(serializers.Serializer):
     cover_image = serializers.ImageField()
     artist_name = serializers.CharField()
     biography = serializers.CharField()
-    start_date = serializers.DateTimeField()
-    end_date = serializers.DateTimeField()
+    start_date = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
+    end_date = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
 
 
 class ExhibitionArtistInfoSerializer(serializers.Serializer):
@@ -66,10 +67,3 @@ class ExhibitionItemInfoSerializer(serializers.Serializer):
     is_custom = serializers.BooleanField()
     images = serializers.ListField(child=serializers.ImageField())
     sounds = serializers.ListField(child=serializers.FileField())
-
-
-class ExhibitionDetailSerializer(serializers.Serializer):
-    exhibition_id = serializers.IntegerField()
-    detail_info = ExhibitionDetailInfoSerializer(source='*')
-    artist_info = ExhibitionArtistInfoSerializer(source='*')
-    item_infos = ExhibitionItemInfoSerializer(source='exhibition_items', many=True)

@@ -8,9 +8,11 @@ from rest_framework.views import APIView
 
 from apps.exhibitions.repositories import ExhibitionRepository
 from apps.exhibitions.serializers import (
+    ExhibitionArtistInfoSerializer,
     ExhibitionArtistRegisterSerializer,
-    ExhibitionDetailSerializer,
+    ExhibitionDetailInfoSerializer,
     ExhibitionIntroductionSerializer,
+    ExhibitionItemInfoSerializer,
     ExhibitionSerializer,
     ExhibitionsSerializer,
 )
@@ -61,13 +63,14 @@ class ExhibitionIntroductionView(APIView):
 
 
 class ExhibitionArtistView(APIView):
-    permission_classes = [IsExhibitionOwner]
-    serializer_class = ExhibitionArtistRegisterSerializer
+    permission_classes = [AllowAny]
+    put_serializer_class = ExhibitionArtistRegisterSerializer
+    get_serializer_class = ExhibitionArtistInfoSerializer
     parser_classes = [MultiPartParser]
 
     def put(self, request, exhibition_id):
-        self.check_object_permissions(request, self.get_object())
-        serializer = self.serializer_class(data=request.data)
+        IsExhibitionOwner().has_object_permission(request, self, self.get_object())
+        serializer = self.put_serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             ExhibitionService().register_artist_info(
                 exhibition_id=exhibition_id,
@@ -78,6 +81,11 @@ class ExhibitionArtistView(APIView):
                 background_color=serializer.validated_data.get('background_color'),
             )
         return Response({'message': 'success'}, status=200)
+
+    def get(self, request, exhibition_id):
+        exhibition = ExhibitionRepository().get_exhibition(exhibition_id)
+        data = self.get_serializer_class(exhibition).data
+        return Response(data, status=200)
 
     def get_object(self):
         return ExhibitionRepository().get_exhibition(self.kwargs['exhibition_id'])
@@ -106,12 +114,23 @@ class SellerExhibitionsView(APIView):
         return Response(data, status=200)
 
 
-class ExhibitionDetailView(APIView):
+class ExhibitionInfoView(APIView):
     permission_classes = [AllowAny]
-    serializer_class = ExhibitionDetailSerializer
+    serializer_class = ExhibitionDetailInfoSerializer
 
     def get(self, request, exhibition_id):
         exhibition_repository = ExhibitionRepository()
         exhibition = exhibition_repository.get_exhibition(exhibition_id)
         data = self.serializer_class(exhibition).data
+        return Response(data, status=200)
+
+
+class ExhibitionItemsInfoView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = ExhibitionItemInfoSerializer
+
+    def get(self, request, exhibition_id):
+        exhibition_repository = ExhibitionRepository()
+        exhibition = exhibition_repository.get_exhibition(exhibition_id)
+        data = self.serializer_class(exhibition.exhibition_items, many=True).data
         return Response(data, status=200)
