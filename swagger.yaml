@@ -620,6 +620,40 @@ paths:
               example:
                 message: success
 
+  /exhibitions/{exhibition_id}/info:
+    get:
+      tags:
+        - exhibitions
+      summary: 전시 정보 조회
+      parameters:
+        - name: exhibition_id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 전시 정보 조회 성공
+          content:
+            application/json:
+              schema:
+                properties:
+                  title:
+                    type: string
+                  cover_image:
+                    type: string
+                    example: "https://leporem-art-media-dev.s3.amazonaws.com/exhibitions/exhibition_cover_image/a5f97"
+                  artist_name:
+                    type: string
+                  biography:
+                    type: string
+                  start_date:
+                    type: string
+                    example: "2021-10-05 10:00"
+                  end_date:
+                    type: string
+                    example: "2021-10-12 10:00"
+
   /exhibitions/{exhibiton_id}/artist-info:
     put:
       tags:
@@ -662,6 +696,92 @@ paths:
             application/json:
               example:
                 message: success
+
+    get:
+      tags:
+        - exhibitions
+      summary: 전시전 작가 정보 조회
+      parameters:
+        - name: exhibition_id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+          '200':
+            description: 전시전 작가 정보 조회 성공
+            content:
+              application/json:
+                schema:
+                  properties:
+                    artist_image:
+                      type: string
+                      example: https://leporem-art-media-dev.s3.amazonaws.com/exhibitions/artist_image/1d2b2b9e-9b0a-4b0e-9b0a-4b0e9b0a4b0e.jpeg
+                    is_template:
+                      type: boolean
+                      example: true
+                    biography:
+                      type: string
+                      example: "안녕하세요. 저는 작가입니다."
+                    font_family:
+                      type: string
+                      example: "Pretendard Variable"
+                    background_color:
+                      type: string
+                      example: "#FFFFFF"
+
+  /exhibitions/{exhibition_id}/items-info:
+    get:
+      tags:
+        - exhibitions
+      summary: 전시전 작품 정보 조회
+      parameters:
+        - name: exhibition_id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 전시전 작품 정보 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    exhibition_item_id:
+                      type: integer
+                    item_id:
+                      type: integer
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    template:
+                      type: integer
+                    is_sale:
+                      type: boolean
+                    background_color:
+                      type: string
+                      example: "FFFFFFF"
+                    font_family:
+                      type: string
+                      example: "Pretendard Variable"
+                    is_custom:
+                      type: boolean
+                    images:
+                      type: array
+                      items:
+                        type: string
+                        example: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/1d2b2b9e-9b0a-4b0e-9b0a-4b0e9b0a4b0e.jpeg"
+                    sounds:
+                      type: array
+                      items:
+                        type: string
+                        example: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_sound/1d2b2b9e-9b0a-4b0e-9b0a-4b0e9b0a4b0e.mp3"
+
+
 
   /exhibitions/introduction/{exhibition_id}:
     get:
