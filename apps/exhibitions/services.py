@@ -86,6 +86,8 @@ class ExhibitionItemService:
             is_sale=is_sale,
         )
 
+        images = [exhibition_image.image.open() for exhibition_image in exhibition_item.exhibition_images.all()]
+
         if is_sale:
             item = ItemRepository().register(
                 seller_id=seller_id,
