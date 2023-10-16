@@ -783,7 +783,7 @@ paths:
 
 
 
-  /exhibitions/introduction/{exhibition_id}:
+  /exhibitions/{exhibition_id}/introduction:
     get:
       tags:
         - exhibitions
