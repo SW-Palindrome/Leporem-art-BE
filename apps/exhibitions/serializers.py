@@ -35,3 +35,20 @@ class ExhibitionsSerializer(serializers.Serializer):
     artist_name = serializers.CharField()
     start_date = serializers.DateTimeField()
     end_date = serializers.DateTimeField()
+
+
+class ExhibitionItemSerializer(serializers.Serializer):
+    is_custom = serializers.BooleanField()
+    template = serializers.IntegerField(required=False)
+    title = serializers.CharField(required=False)
+    description = serializers.CharField(required=False)
+    images = serializers.ListField(child=serializers.ImageField())
+    sound = serializers.CharField(required=False)
+    position = serializers.IntegerField()
+    background_color = serializers.CharField(required=False)
+    font_family = serializers.CharField(required=False)
+    is_sale = serializers.BooleanField()
+    shorts_url = serializers.CharField(required=False)
+    categories = serializers.ListField(child=serializers.IntegerField(), required=False)
+    price = serializers.IntegerField(required=False)
+    max_amount = serializers.IntegerField(required=False)
