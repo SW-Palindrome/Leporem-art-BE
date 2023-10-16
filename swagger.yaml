@@ -669,6 +669,13 @@ paths:
         - exhibitions
       summary: 전시전 소개 조회
       description: 전시전 소개를 조회합니다.
+      parameters:
+        - name: exhibition_id
+          in: path
+          description: 전시 ID
+          required: true
+          schema:
+            type: integer
       security:
         - leporemartTokenAuth: []
       responses:
@@ -768,3 +775,95 @@ paths:
                     end_date: "2023-10-12T10:00:00Z"
                   }
                 ]
+  /exhibitions/{int:exhibition_id}/register-item:
+    post:
+      tags:
+        - exhibitions
+      summary: 전시전 작품 등록
+      description: 전시전에 작품을 등록합니다.
+      parameters:
+        - name: exhibition_id
+          in: path
+          description: 전시 ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                is_custom:
+                  type: boolean
+                  example: true
+                  required: True
+                template:
+                  type: integer
+                  example: 1
+                title:
+                  type: string
+                  example: "생명의 세계"
+                  required: True
+                description:
+                    type: string
+                    example: "도자에서 느껴지는 생명을 표현하였습니다. 그릇에서도 식물이 자라나듯 화이팅!!"
+                    required: True
+                images:
+                  type: array
+                  items:
+                    type: file
+                    format: binary
+                  example:
+                    - hi.jpg
+                    - hello.png
+                  required: True
+                sound:
+                  type: string
+                  example: "exhibitions/exhibition_item_sound/SellBuyMusic - C. Hunter - Possum And Taters.mp3"
+                position:
+                  type: integer
+                  example: 1
+                  required: True
+                background_color:
+                  type: string
+                  example: "#E8F2DB"
+                font_family:
+                  type: string
+                  example: "전주공예명조체"
+                is_sale:
+                  type: boolean
+                  example: true
+                  required: True
+                categories:
+                  type: array
+                  items:
+                    type: string
+                    format: int
+                  example:
+                    - 1
+                    - 5
+                price:
+                  type: integer
+                  example: 23000
+                max_amount:
+                  type: integer
+                  example: 30
+                shorts_url:
+                  type: string
+                  example: "items/item_shorts/0348f9bb-a42b-4fa8-99af-d7792172e06e.mp4"
+              required:
+                - is_custom
+                - title
+                - description
+                - images
+                - position
+                - is_sale
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 전시전 작품 등록 성공
+          content:
+            application/json:
+              example:
+                message: success
