@@ -72,7 +72,7 @@ class MessageService:
                     text=message,
                     message_uuid=message_uuid,
                 )
-        # self._send_notification(message=message)
+        self._send_notification(message=message)
         return message
 
     def read(self, user_id, chat_room_uuid, message_uuid):
