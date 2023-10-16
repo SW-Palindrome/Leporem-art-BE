@@ -96,9 +96,6 @@ class ExhibitionItemRepository:
         font_family,
         is_sale,
     ):
-        if template and (template < 1 or template > 9):
-            raise ValueError('template 번호는 1~9 사이의 값이어야 합니다.')
-
         exhibition = Exhibition.objects.get(exhibition_id=exhibition_id)
         exhibition_item = ExhibitionItem.objects.create(
             exhibition=exhibition,
