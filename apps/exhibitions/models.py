@@ -36,6 +36,14 @@ class ExhibitionItem(TimeStampedModel):
     class Meta:
         unique_together = ('exhibition', 'position')
 
+    @property
+    def images(self):
+        return [image.image for image in self.exhibition_images.all()]
+
+    @property
+    def sounds(self):
+        return [sound.sound for sound in self.exhibition_sounds.all()]
+
 
 class ExhibitionItemImage(TimeStampedModel):
     exhibition_image_id = models.AutoField(primary_key=True)

@@ -1,3 +1,4 @@
+import pytz
 from rest_framework import serializers
 
 
@@ -35,6 +36,37 @@ class ExhibitionsSerializer(serializers.Serializer):
     artist_name = serializers.CharField()
     start_date = serializers.DateTimeField()
     end_date = serializers.DateTimeField()
+
+
+class ExhibitionDetailInfoSerializer(serializers.Serializer):
+    title = serializers.CharField()
+    cover_image = serializers.ImageField()
+    artist_name = serializers.CharField()
+    biography = serializers.CharField()
+    start_date = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
+    end_date = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
+
+
+class ExhibitionArtistInfoSerializer(serializers.Serializer):
+    artist_image = serializers.ImageField()
+    is_template = serializers.BooleanField()
+    biography = serializers.CharField()
+    font_family = serializers.CharField()
+    background_color = serializers.CharField()
+
+
+class ExhibitionItemInfoSerializer(serializers.Serializer):
+    exhibition_item_id = serializers.IntegerField()
+    item_id = serializers.IntegerField()
+    title = serializers.CharField()
+    description = serializers.CharField()
+    template = serializers.IntegerField()
+    is_sale = serializers.BooleanField()
+    background_color = serializers.CharField()
+    font_family = serializers.CharField()
+    is_custom = serializers.BooleanField()
+    images = serializers.ListField(child=serializers.ImageField())
+    sounds = serializers.ListField(child=serializers.FileField())
 
 
 class ExhibitionItemSerializer(serializers.Serializer):
