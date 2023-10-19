@@ -21,7 +21,7 @@ class OrderService:
             raise OrderPermissionException('주문자 혹은 판매자가 아닙니다.')
         return order
 
-    def order(self, buyer_id, item_id):
+    def order(self, buyer_id, item_id, name, address, phone_number, zipcode):
         item = ItemRepository().get_item(item_id)
         buyer = BuyerRepository().get_buyer(buyer_id)
 
@@ -31,7 +31,7 @@ class OrderService:
         if item.current_amount <= 0:
             raise NotEnoughProductException('재고가 없습니다.')
 
-        order = OrderRepository().order(buyer_id, item_id)
+        order = OrderRepository().order(buyer_id, item_id, name, address, phone_number, zipcode)
         self._send_notification(item.seller.user, order)
         return order
 
