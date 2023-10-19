@@ -38,11 +38,19 @@ class OrderRegisterView(APIView):
         order_service = OrderService()
         try:
             order = order_service.order(
-                buyer_id=request.user.buyer.buyer_id, item_id=serializer.validated_data['item_id']
+                buyer_id=request.user.buyer.buyer_id,
+                item_id=serializer.validated_data['item_id'],
+                name=serializer.validated_data['name'],
+                address=serializer.validated_data['address'],
+                phone_number=serializer.validated_data['phone_number'],
+                zipcode=serializer.validated_data['zipcode'],
             )
         except OrderException as e:
             return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
         return Response({'order_id': order.order_id}, status=HTTP_201_CREATED)
+
+
+# phone_number = phonenumbers.parse(student_phone_number, 'KR')
 
 
 class OrderDeliveryStartView(APIView):
