@@ -50,9 +50,6 @@ class OrderRegisterView(APIView):
         return Response({'order_id': order.order_id}, status=HTTP_201_CREATED)
 
 
-# phone_number = phonenumbers.parse(student_phone_number, 'KR')
-
-
 class OrderDeliveryStartView(APIView):
     permission_classes = [IsAuthenticated]
 
