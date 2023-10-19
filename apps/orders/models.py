@@ -39,7 +39,7 @@ class Order(TimeStampedModel):
     ordered_datetime = models.DateTimeField()
     name = models.CharField(max_length=20, default='Unknown Name')
     address = models.CharField(max_length=255, default='Unknown Address')
-    phone_number = PhoneNumberField(default='01000000000')
+    phone_number = PhoneNumberField(default='01000000000', region='KR')
     zipcode = models.CharField(max_length=10, default='00000')
 
     def get_order_status_display(self):
