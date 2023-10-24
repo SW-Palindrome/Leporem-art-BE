@@ -6,6 +6,7 @@ from apps.orders.views import (
     OrderDeliveryStartView,
     OrderInfoView,
     OrderRegisterView,
+    OrderRegisterViewV1,
     ReviewRegisterView,
 )
 
@@ -16,4 +17,5 @@ urlpatterns = [
     path('<int:order_id>/delivery-complete', OrderDeliveryCompleteView.as_view()),
     path('<int:order_id>/cancel', OrderCancelView.as_view()),
     path('review', ReviewRegisterView.as_view()),
+    path('v1/register', OrderRegisterViewV1.as_view()),
 ]

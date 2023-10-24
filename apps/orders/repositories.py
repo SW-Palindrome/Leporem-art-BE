@@ -80,6 +80,30 @@ class OrderRepository:
             .order_by('-ordered_datetime')
         )
 
+    @transaction.atomic
+    def order_v1(self, buyer_id, item_id, name, address, detail_address, phone_number, zipcode):
+        item = Item.objects.get(item_id=item_id)
+        order_status = OrderStatus.objects.get(status=OrderStatus.Status.ORDERED.value)
+        order = Order.objects.create(
+            buyer_id=buyer_id,
+            item=item,
+            order_status=order_status,
+            price=item.price,
+            ordered_datetime=timezone.now(),
+            name=name,
+            address=address,
+            detail_address=detail_address,
+            phone_number=phone_number,
+            zipcode=zipcode,
+        )
+        OrderHistory.objects.create(
+            order=order,
+            order_status=order_status,
+        )
+        item.current_amount -= 1
+        item.save()
+        return order
+
 
 class ReviewRepository:
     @transaction.atomic

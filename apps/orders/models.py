@@ -37,10 +37,11 @@ class Order(TimeStampedModel):
     order_status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT)
     price = models.IntegerField()
     ordered_datetime = models.DateTimeField()
-    name = models.CharField(max_length=20, default='Unknown Name')
-    address = models.CharField(max_length=255, default='Unknown Address')
-    phone_number = PhoneNumberField(default='01000000000')
-    zipcode = models.CharField(max_length=10, default='00000')
+    name = models.CharField(max_length=20, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    detail_address = models.CharField(max_length=255, blank=True)
+    phone_number = PhoneNumberField(region='KR', blank=True)
+    zipcode = models.CharField(max_length=10, blank=True)
 
     def get_order_status_display(self):
         return self.order_status.status

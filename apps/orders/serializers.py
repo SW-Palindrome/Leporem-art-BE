@@ -1,3 +1,4 @@
+from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
 
@@ -20,3 +21,12 @@ class ReviewSerializer(serializers.Serializer):
     order_id = serializers.IntegerField()
     rating = serializers.IntegerField()
     comment = serializers.CharField(required=False)
+
+
+class OrderSerializerV1(serializers.Serializer):
+    item_id = serializers.IntegerField()
+    name = serializers.CharField()
+    address = serializers.CharField()
+    detail_address = serializers.CharField()
+    phone_number = PhoneNumberField(region='KR')
+    zipcode = serializers.CharField()
