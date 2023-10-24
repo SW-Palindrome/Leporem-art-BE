@@ -980,6 +980,38 @@ paths:
                   value:
                     message: 재고가 부족합니다.
 
+  /buyers/orders/my:
+    get:
+      tags:
+        - buyers
+      summary: 구매자 주문 목록 조회
+      description: 구매자 주문 목록을 조회합니다.
+      security:
+          - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 구매자 주문 목록 조회 성공
+          content:
+            application/json:
+              example:
+                [
+                  {
+                    "order_id": 26,
+                    "item_id": 6,
+                    "item_title": "작품1",
+                    "item_thumbnail_image": "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/b377df95-1307-490f-baae-7e3def0a7fb9.jpg",
+                    "price": 10000,
+                    "ordered_datetime": "2023-10-24T07:09:55.397999Z",
+                    "order_status": "주문완료",
+                    "is_reviewed": false,
+                    "name": "홍길동",
+                    "address": "서울특별시 강남구 테헤란로 427",
+                    "detail_address": "7층",
+                    "phone_number": "+821012345678",
+                    "zipcode": "12345"
+                  }
+                ]
+
   /sellers/orders/my:
     get:
       tags:
