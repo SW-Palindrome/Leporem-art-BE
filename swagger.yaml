@@ -980,7 +980,7 @@ paths:
                   value:
                     message: 재고가 부족합니다.
 
-  /orders/my:
+  /buyers/orders/my:
     get:
       tags:
         - buyers
