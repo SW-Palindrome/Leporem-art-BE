@@ -8,6 +8,7 @@ from apps.orders.repositories import OrderRepository
 from apps.orders.serializers import (
     OrderInfoSerializer,
     OrderSerializer,
+    OrderSerializerV1,
     ReviewSerializer,
 )
 from apps.orders.services import OrderService, ReviewService
@@ -38,12 +39,7 @@ class OrderRegisterView(APIView):
         order_service = OrderService()
         try:
             order = order_service.order(
-                buyer_id=request.user.buyer.buyer_id,
-                item_id=serializer.validated_data['item_id'],
-                name=serializer.validated_data['name'],
-                address=serializer.validated_data['address'],
-                phone_number=serializer.validated_data['phone_number'],
-                zipcode=serializer.validated_data['zipcode'],
+                buyer_id=request.user.buyer.buyer_id, item_id=serializer.validated_data['item_id']
             )
         except OrderException as e:
             return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
@@ -104,3 +100,25 @@ class ReviewRegisterView(APIView):
         except ReviewException as e:
             return Response({"message": str(e)}, status=400)
         return Response({"message": "success"}, status=201)
+
+
+class OrderRegisterViewV1(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializerV1
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        order_service = OrderService()
+        try:
+            order = order_service.order_v1(
+                buyer_id=request.user.buyer.buyer_id,
+                item_id=serializer.validated_data['item_id'],
+                name=serializer.validated_data['name'],
+                address=serializer.validated_data['address'],
+                phone_number=serializer.validated_data['phone_number'],
+                zipcode=serializer.validated_data['zipcode'],
+            )
+        except OrderException as e:
+            return Response({'message': str(e)}, status=HTTP_400_BAD_REQUEST)
+        return Response({'order_id': order.order_id}, status=HTTP_201_CREATED)
