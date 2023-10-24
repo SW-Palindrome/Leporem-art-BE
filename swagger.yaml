@@ -1004,10 +1004,10 @@ paths:
                         "ordered_datetime": "2023-10-02T02:30:18.872108Z",
                         "order_status": "배송중",
                         "buyer": "ghdwnstlr",
-                        "buyer_name": "Unknown Name",
-                        "address": "Unknown Address",
-                        "detail_address": "",
-                        "zipcode": "00000",
-                        "phone_number": "01000000000"
+                        "buyer_name": "홍길동",
+                        "address": "서울특별시 강남구 테헤란로 427",
+                        "detail_address": "7층",
+                        "zipcode": "12345",
+                        "phone_number": "+921012345678"
                       }
                     ]
