@@ -27,5 +27,6 @@ class OrderSerializerV1(serializers.Serializer):
     item_id = serializers.IntegerField()
     name = serializers.CharField()
     address = serializers.CharField()
+    detail_address = serializers.CharField()
     phone_number = PhoneNumberField(region='KR')
     zipcode = serializers.CharField()
