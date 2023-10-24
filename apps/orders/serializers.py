@@ -15,13 +15,17 @@ class OrderInfoSerializer(serializers.Serializer):
 
 class OrderSerializer(serializers.Serializer):
     item_id = serializers.IntegerField()
-    name = serializers.CharField()
-    address = serializers.CharField()
-    phone_number = PhoneNumberField(region='KR')
-    zipcode = serializers.CharField()
 
 
 class ReviewSerializer(serializers.Serializer):
     order_id = serializers.IntegerField()
     rating = serializers.IntegerField()
     comment = serializers.CharField(required=False)
+
+
+class OrderSerializerV1(serializers.Serializer):
+    item_id = serializers.IntegerField()
+    name = serializers.CharField()
+    address = serializers.CharField()
+    phone_number = PhoneNumberField(region='KR')
+    zipcode = serializers.CharField()
