@@ -81,7 +81,7 @@ class OrderRepository:
         )
 
     @transaction.atomic
-    def order_v1(self, buyer_id, item_id, name, address, phone_number, zipcode):
+    def order_v1(self, buyer_id, item_id, name, address, detail_address, phone_number, zipcode):
         item = Item.objects.get(item_id=item_id)
         order_status = OrderStatus.objects.get(status=OrderStatus.Status.ORDERED.value)
         order = Order.objects.create(
@@ -92,6 +92,7 @@ class OrderRepository:
             ordered_datetime=timezone.now(),
             name=name,
             address=address,
+            detail_address=detail_address,
             phone_number=phone_number,
             zipcode=zipcode,
         )
