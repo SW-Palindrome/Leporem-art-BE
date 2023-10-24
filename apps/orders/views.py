@@ -116,6 +116,7 @@ class OrderRegisterViewV1(APIView):
                 item_id=serializer.validated_data['item_id'],
                 name=serializer.validated_data['name'],
                 address=serializer.validated_data['address'],
+                detail_address=serializer.validated_data['detail_address'],
                 phone_number=serializer.validated_data['phone_number'],
                 zipcode=serializer.validated_data['zipcode'],
             )
