@@ -16,3 +16,8 @@ class BuyerMyOrderSerializer(serializers.Serializer):
     ordered_datetime = serializers.DateTimeField()
     order_status = serializers.CharField(source='get_order_status_display')
     is_reviewed = serializers.BooleanField()
+    name = serializers.CharField()
+    address = serializers.CharField()
+    detail_address = serializers.CharField()
+    phone_number = serializers.CharField()
+    zipcode = serializers.CharField()
