@@ -26,6 +26,8 @@ tags:
     description: 알림 관리
   - name: exhibitions
     description: 전시 관리
+  - name: orders
+    description: 주문 관리
 
 paths:
   /users/signup/kakao:
@@ -888,3 +890,92 @@ paths:
                     end_date: "2023-10-12T10:00:00Z"
                   }
                 ]
+
+  /orders/register:
+    post:
+      tags:
+        - orders
+      summary: 작품 주문
+      description: 작품을 주문합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                item_id:
+                  type: integer
+                  example: 6
+          required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 작품 주문 성공
+          content:
+            application/json:
+              example:
+                order_id: 25
+        '400':
+          description: 작품 주문 실패
+          content:
+            application/json:
+              examples:
+                self order:
+                  value:
+                    message: 자신의 작품은 주문할 수 없습니다.
+                out of stock:
+                  value:
+                    message: 재고가 부족합니다.
+
+  /orders/v1/register:
+    post:
+      tags:
+        - orders
+      summary: 작품 주문 v1
+      description: 작품을 주문합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                item_id:
+                  type: integer
+                  example: 6
+                name:
+                  type: string
+                  example: 홍길동
+                address:
+                  type:
+                    string
+                  example: 서울특별시 강남구 테헤란로 427
+                detail_address:
+                  type:
+                    string
+                  example: 7층, 소프트웨어마에스트로
+                zipcode:
+                  type: string
+                  example: 06159
+                phone_number:
+                  type: string
+                  example: 010-1234-5678
+          required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 작품 주문 성공
+          content:
+            application/json:
+              example:
+                order_id: 25
+        '400':
+          description: 작품 주문 실패
+          content:
+            application/json:
+              examples:
+                self order:
+                  value:
+                    message: 자신의 작품은 주문할 수 없습니다.
+                out of stock:
+                  value:
+                    message: 재고가 부족합니다.
