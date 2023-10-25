@@ -16,6 +16,7 @@ class ExhibitionRepository:
             start_date=start_date,
             end_date=end_date,
             artist_name=seller.user.nickname,
+            status=Exhibition.Status.CREATED,
         )
         return exhibition
 
@@ -30,6 +31,10 @@ class ExhibitionRepository:
         exhibition.cover_image = cover_image
         exhibition.title = title
         exhibition.artist_name = artist_name
+
+        if exhibition.status == Exhibition.Status.CREATED.value:
+            exhibition.status = Exhibition.Status.INTRODUCTION_WRITTEN.value
+
         exhibition.save()
 
         return exhibition
@@ -56,6 +61,10 @@ class ExhibitionRepository:
         exhibition.font_family = font_family
         exhibition.background_color = background_color
         exhibition.is_template = True
+
+        if exhibition.status == Exhibition.Status.INTRODUCTION_WRITTEN.value:
+            exhibition.status = Exhibition.Status.ARTIST_WRITTEN.value
+
         exhibition.save()
         return exhibition
 

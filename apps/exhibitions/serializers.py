@@ -43,6 +43,7 @@ class ExhibitionDetailInfoSerializer(serializers.Serializer):
     cover_image = serializers.ImageField()
     artist_name = serializers.CharField()
     biography = serializers.CharField()
+    status = serializers.CharField()
     start_date = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
     end_date = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
 

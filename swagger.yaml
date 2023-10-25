@@ -649,6 +649,9 @@ paths:
                     type: string
                   biography:
                     type: string
+                  status:
+                    type: string
+                    example: "작가 소개 작성 완료"
                   start_date:
                     type: string
                     example: "2021-10-05 10:00"
