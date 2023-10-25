@@ -3,7 +3,6 @@ import enum
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
-from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.buyers.models import Buyer
 from apps.items.models import Item
@@ -40,7 +39,7 @@ class Order(TimeStampedModel):
     name = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=255, blank=True)
     detail_address = models.CharField(max_length=255, blank=True)
-    phone_number = PhoneNumberField(region='KR', blank=True)
+    phone_number = models.CharField(max_length=15, blank=True)
     zipcode = models.CharField(max_length=10, blank=True)
 
     def get_order_status_display(self):
