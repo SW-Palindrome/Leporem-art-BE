@@ -26,6 +26,8 @@ tags:
     description: 알림 관리
   - name: exhibitions
     description: 전시 관리
+  - name: orders
+    description: 주문 관리
 
 paths:
   /users/signup/kakao:
@@ -647,6 +649,9 @@ paths:
                     type: string
                   biography:
                     type: string
+                  status:
+                    type: string
+                    example: "작가 소개 작성 완료"
                   start_date:
                     type: string
                     example: "2021-10-05 10:00"
@@ -1012,3 +1017,156 @@ paths:
                     "x-amz-signature": "2d63148b5cca764e9765b881c97eb02a97955d9f33e551c2597e8e6e0b1ae189"
                 }
               }
+
+  /orders/register:
+    post:
+      tags:
+        - orders
+      summary: 작품 주문
+      description: 작품을 주문합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                item_id:
+                  type: integer
+                  example: 6
+          required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 작품 주문 성공
+          content:
+            application/json:
+              example:
+                order_id: 25
+        '400':
+          description: 작품 주문 실패
+          content:
+            application/json:
+              examples:
+                self order:
+                  value:
+                    message: 자신의 작품은 주문할 수 없습니다.
+                out of stock:
+                  value:
+                    message: 재고가 부족합니다.
+
+  /orders/v1/register:
+    post:
+      tags:
+        - orders
+      summary: 작품 주문 v1
+      description: 작품을 주문합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                item_id:
+                  type: integer
+                  example: 6
+                name:
+                  type: string
+                  example: 홍길동
+                address:
+                  type:
+                    string
+                  example: 서울특별시 강남구 테헤란로 427
+                detail_address:
+                  type:
+                    string
+                  example: 7층, 소프트웨어마에스트로
+                zipcode:
+                  type: string
+                  example: 06159
+                phone_number:
+                  type: string
+                  example: 010-1234-5678
+          required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 작품 주문 성공
+          content:
+            application/json:
+              example:
+                order_id: 25
+        '400':
+          description: 작품 주문 실패
+          content:
+            application/json:
+              examples:
+                self order:
+                  value:
+                    message: 자신의 작품은 주문할 수 없습니다.
+                out of stock:
+                  value:
+                    message: 재고가 부족합니다.
+
+  /buyers/orders/my:
+    get:
+      tags:
+        - buyers
+      summary: 구매자 주문 목록 조회
+      description: 구매자 주문 목록을 조회합니다.
+      security:
+          - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 구매자 주문 목록 조회 성공
+          content:
+            application/json:
+              example:
+                [
+                  {
+                    "order_id": 26,
+                    "item_id": 6,
+                    "item_title": "작품1",
+                    "item_thumbnail_image": "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/b377df95-1307-490f-baae-7e3def0a7fb9.jpg",
+                    "price": 10000,
+                    "ordered_datetime": "2023-10-24T07:09:55.397999Z",
+                    "order_status": "주문완료",
+                    "is_reviewed": false,
+                    "name": "홍길동",
+                    "address": "서울특별시 강남구 테헤란로 427",
+                    "detail_address": "7층",
+                    "phone_number": "01012345678",
+                    "zipcode": "12345"
+                  }
+                ]
+
+  /sellers/orders/my:
+    get:
+      tags:
+        - sellers
+      summary: 판매자 주문 목록 조회
+      description: 판매자의 주문 목록을 조회합니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+            description: 판매자 주문 목록 조회 성공
+            content:
+                application/json:
+                  example:
+                    [
+                      {
+                        "order_id": 23,
+                        "item_id": 4,
+                        "item_title": "test1",
+                        "item_thumbnail_image": "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/cinamoroll.jpeg",
+                        "price": 25000,
+                        "ordered_datetime": "2023-10-02T02:30:18.872108Z",
+                        "order_status": "배송중",
+                        "buyer": "ghdwnstlr",
+                        "buyer_name": "홍길동",
+                        "address": "서울특별시 강남구 테헤란로 427",
+                        "detail_address": "7층",
+                        "zipcode": "12345",
+                        "phone_number": "01012345678"
+                      }
+                    ]

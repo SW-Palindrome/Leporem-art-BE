@@ -92,6 +92,20 @@ class OrderService:
             deep_link='/buyers/orders/my',
         )
 
+    def order_v1(self, buyer_id, item_id, name, address, detail_address, phone_number, zipcode):
+        item = ItemRepository().get_item(item_id)
+        buyer = BuyerRepository().get_buyer(buyer_id)
+
+        if item.seller.user_id == buyer.user_id:
+            raise SelfOrderException('자신의 상품은 주문할 수 없습니다.')
+
+        if item.current_amount <= 0:
+            raise NotEnoughProductException('재고가 없습니다.')
+
+        order = OrderRepository().order_v1(buyer_id, item_id, name, address, detail_address, phone_number, zipcode)
+        self._send_notification(item.seller.user, order)
+        return order
+
 
 class ReviewService:
     def register(self, order_id, rating, comment):

@@ -1,3 +1,5 @@
+import enum
+
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
@@ -6,6 +8,13 @@ from apps.sellers.models import Seller
 
 
 class Exhibition(TimeStampedModel):
+    class Status(enum.Enum):
+        # 생성 / 소개 작성 완료 / 작가 소개 작성 완료 / 작품 등록 완료
+        CREATED = '생성'
+        INTRODUCTION_WRITTEN = '소개 작성 완료'
+        ARTIST_WRITTEN = '작가 소개 작성 완료'
+        ITEM_REGISTERED = '작품 등록 완료'
+
     exhibition_id = models.AutoField(primary_key=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT, related_name='exhibitions')
     title = models.CharField(max_length=46)
@@ -18,6 +27,7 @@ class Exhibition(TimeStampedModel):
     font_family = models.CharField(max_length=50)
     artist_name = models.CharField(max_length=100, default=None)
     is_template = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, default=Status.CREATED.value)
 
 
 class ExhibitionItem(TimeStampedModel):
