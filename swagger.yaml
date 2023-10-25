@@ -788,12 +788,19 @@ paths:
 
 
 
-  /exhibitions/introduction/{exhibition_id}:
+  /exhibitions/{exhibition_id}/introduction:
     get:
       tags:
         - exhibitions
       summary: 전시전 소개 조회
       description: 전시전 소개를 조회합니다.
+      parameters:
+        - name: exhibition_id
+          in: path
+          description: 전시 ID
+          required: true
+          schema:
+            type: integer
       security:
         - leporemartTokenAuth: []
       responses:
@@ -893,6 +900,123 @@ paths:
                     end_date: "2023-10-12T10:00:00Z"
                   }
                 ]
+  /exhibitions/{int:exhibition_id}/register-item:
+    post:
+      tags:
+        - exhibitions
+      summary: 전시전 작품 등록
+      description: 전시전에 작품을 등록합니다.
+      parameters:
+        - name: exhibition_id
+          in: path
+          description: 전시 ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                is_custom:
+                  type: boolean
+                  example: true
+                  required: True
+                template:
+                  type: integer
+                  example: 1
+                title:
+                  type: string
+                  example: "생명의 세계"
+                  required: True
+                description:
+                    type: string
+                    example: "도자에서 느껴지는 생명을 표현하였습니다. 그릇에서도 식물이 자라나듯 화이팅!!"
+                    required: True
+                images:
+                  type: array
+                  items:
+                    type: file
+                    format: binary
+                  example:
+                    - hi.jpg
+                    - hello.png
+                  required: True
+                sound:
+                  type: string
+                  example: "exhibitions/exhibition_item_sound/SellBuyMusic - C. Hunter - Possum And Taters.mp3"
+                position:
+                  type: integer
+                  example: 1
+                  required: True
+                background_color:
+                  type: string
+                  example: "#E8F2DB"
+                font_family:
+                  type: string
+                  example: "전주공예명조체"
+                is_sale:
+                  type: boolean
+                  example: true
+                  required: True
+                categories:
+                  type: array
+                  items:
+                    type: string
+                    format: int
+                  example:
+                    - 1
+                    - 5
+                price:
+                  type: integer
+                  example: 23000
+                max_amount:
+                  type: integer
+                  example: 30
+                shorts_url:
+                  type: string
+                  example: "items/item_shorts/0348f9bb-a42b-4fa8-99af-d7792172e06e.mp4"
+              required:
+                - is_custom
+                - title
+                - description
+                - images
+                - position
+                - is_sale
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 전시전 작품 등록 성공
+          content:
+            application/json:
+              example:
+                message: success
+
+  /exhibitions/sound/upload-url:
+    get:
+      tags:
+        - exhibitions
+      summary: 전시전 음원 업로드 URL
+      description: 전시전 음원 업로드 URL을 받습니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 전시전 음원 업로드 URL 받기 성공
+          content:
+            application/json:
+              example: {
+                "url": "https://leporem-art-media-dev.s3.amazonaws.com/",
+                "fields": {
+                    "key": "exhibitions/exhibition_item_sound/53c7d8d6-cb69-41e9-bf92-31596b1db095.mp3",
+                    "x-amz-algorithm": "AWS4-HMAC-SHA256",
+                    "x-amz-credential": "AKIAQKJYH42DT63XEGVU/20231016/ap-northeast-2/s3/aws4_request",
+                    "x-amz-date": "20231016T055116Z",
+                    "policy": "eyJleHBpcmF0aW9uIjogIjIwMjMtMTAtMTZUMDU6NTY6MTZaIiwgImNvbmRpdGlvbnMiOiBbeyJidWNrZXQiOiAibGVwb3JlbS1hcnQtbWVkaWEtZGV2In0sIHsia2V5IjogImV4aGliaXRpb25zL2V4aGliaXRpb25faXRlbV9zb3VuZC81M2M3ZDhkNi1jYjY5LTQxZTktYmY5Mi0zMTU5NmIxZGIwOTUubXAzIn0sIHsieC1hbXotYWxnb3JpdGhtIjogIkFXUzQtSE1BQy1TSEEyNTYifSwgeyJ4LWFtei1jcmVkZW50aWFsIjogIkFLSUFRS0pZSDQyRFQ2M1hFR1ZVLzIwMjMxMDE2L2FwLW5vcnRoZWFzdC0yL3MzL2F3czRfcmVxdWVzdCJ9LCB7IngtYW16LWRhdGUiOiAiMjAyMzEwMTZUMDU1MTE2WiJ9XX0=",
+                    "x-amz-signature": "2d63148b5cca764e9765b881c97eb02a97955d9f33e551c2597e8e6e0b1ae189"
+                }
+              }
 
   /orders/register:
     post:

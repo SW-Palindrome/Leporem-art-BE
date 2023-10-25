@@ -13,10 +13,11 @@ from apps.exhibitions.serializers import (
     ExhibitionDetailInfoSerializer,
     ExhibitionIntroductionSerializer,
     ExhibitionItemInfoSerializer,
+    ExhibitionItemSerializer,
     ExhibitionSerializer,
     ExhibitionsSerializer,
 )
-from apps.exhibitions.services import ExhibitionService
+from apps.exhibitions.services import ExhibitionItemService, ExhibitionService
 from apps.users.permissions import IsExhibitionOwner, IsSeller, IsStaff
 
 
@@ -45,13 +46,13 @@ class ExhibitionIntroductionView(APIView):
         data = self.serializer_class(exhibition).data
         return Response(data, status=200)
 
-    def patch(self, request, *args, **kwargs):
+    def patch(self, request, exhibition_id):
         self.check_object_permissions(request, self.get_object())
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             ExhibitionRepository().modify_introduction(
                 seller_id=request.user.seller.seller_id,
-                exhibition_id=kwargs['exhibition_id'],
+                exhibition_id=exhibition_id,
                 cover_image=serializer.validated_data['cover_image'],
                 title=serializer.validated_data['title'],
                 artist_name=serializer.validated_data['artist_name'],
@@ -134,3 +135,40 @@ class ExhibitionItemsInfoView(APIView):
         exhibition = exhibition_repository.get_exhibition(exhibition_id)
         data = self.serializer_class(exhibition.exhibition_items, many=True).data
         return Response(data, status=200)
+
+
+class UploadSoundUrlView(APIView):
+    permission_classes = [IsExhibitionOwner]
+
+    def get(self, request):
+        extension = request.GET.get('extension', 'mp3')
+        return Response(ExhibitionItemService().get_presigned_url_to_post_sound(extension))
+
+
+class ExhibitionItemView(APIView):
+    permission_classes = [IsExhibitionOwner]
+    serializer_class = ExhibitionItemSerializer
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, exhibition_id):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            ExhibitionItemService().register(
+                exhibition_id=exhibition_id,
+                seller_id=request.user.seller.seller_id,
+                is_custom=serializer.validated_data['is_custom'],
+                template=serializer.validated_data.get('template'),
+                title=serializer.validated_data.get('title'),
+                description=serializer.validated_data.get('description'),
+                images=serializer.validated_data['images'],
+                sound=serializer.validated_data.get('sound'),
+                position=serializer.validated_data['position'],
+                background_color=serializer.validated_data.get('background_color'),
+                font_family=serializer.validated_data.get('font_family'),
+                is_sale=serializer.validated_data['is_sale'],
+                shorts_url=serializer.validated_data.get('shorts_url'),
+                categories=serializer.validated_data.get('categories', []),
+                price=serializer.validated_data.get('price'),
+                max_amount=serializer.validated_data.get('max_amount'),
+            )
+        return Response({'message': 'success'}, status=201)

@@ -2,7 +2,12 @@ from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.utils import timezone
 
-from apps.exhibitions.models import Exhibition
+from apps.exhibitions.models import (
+    Exhibition,
+    ExhibitionItem,
+    ExhibitionItemImage,
+    ExhibitionItemSound,
+)
 from apps.sellers.models import Seller
 from utils.files import create_random_filename
 
@@ -81,3 +86,45 @@ class ExhibitionRepository:
 
     def get_exhibition(self, exhibition_id):
         return Exhibition.objects.get(exhibition_id=exhibition_id)
+
+
+class ExhibitionItemRepository:
+    @transaction.atomic
+    def register(
+        self,
+        exhibition_id,
+        item,
+        is_custom,
+        template,
+        title,
+        description,
+        images,
+        sound,
+        position,
+        background_color,
+        font_family,
+        is_sale,
+    ):
+        exhibition = Exhibition.objects.get(exhibition_id=exhibition_id)
+        exhibition_item = ExhibitionItem.objects.create(
+            exhibition=exhibition,
+            item=item,
+            is_custom=is_custom,
+            template=template,
+            title=title,
+            description=description,
+            position=position,
+            background_color=background_color,
+            font_family=font_family,
+            is_sale=is_sale,
+        )
+        for image in images:
+            ExhibitionItemImage.objects.create(
+                exhibition_item=exhibition_item,
+                image=image,
+            )
+        ExhibitionItemSound.objects.create(
+            exhibition_item=exhibition_item,
+            sound=sound,
+        )
+        return exhibition_item
