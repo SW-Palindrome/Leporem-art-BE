@@ -1010,7 +1010,7 @@ paths:
                     "name": "홍길동",
                     "address": "서울특별시 강남구 테헤란로 427",
                     "detail_address": "7층",
-                    "phone_number": "+821012345678",
+                    "phone_number": "01012345678",
                     "zipcode": "12345"
                   }
                 ]
@@ -1043,6 +1043,6 @@ paths:
                         "address": "서울특별시 강남구 테헤란로 427",
                         "detail_address": "7층",
                         "zipcode": "12345",
-                        "phone_number": "+921012345678"
+                        "phone_number": "01012345678"
                       }
                     ]

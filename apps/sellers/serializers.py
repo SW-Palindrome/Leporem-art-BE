@@ -1,4 +1,3 @@
-from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
 
@@ -62,7 +61,7 @@ class SellerMyOrderSerializer(serializers.Serializer):
     address = serializers.CharField()
     detail_address = serializers.CharField()
     zipcode = serializers.CharField()
-    phone_number = PhoneNumberField(region='KR')
+    phone_number = serializers.CharField()
 
 
 class TransactionSerializer(serializers.Serializer):
