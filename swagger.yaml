@@ -785,8 +785,13 @@ paths:
                       items:
                         type: string
                         example: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_sound/1d2b2b9e-9b0a-4b0e-9b0a-4b0e9b0a4b0e.mp3"
-
-
+                    price:
+                      type: integer
+                    max_amount:
+                      type: integer
+                    shorts:
+                      type: string
+                      example: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_short/1d2b2b9e-9b0a-4b0e-9b0a-4b0e9b0a4b0e.jpeg"
 
   /exhibitions/{exhibition_id}/introduction:
     get:
