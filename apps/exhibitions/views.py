@@ -4,6 +4,7 @@ from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 
 from apps.exhibitions.repositories import ExhibitionRepository
@@ -180,4 +181,4 @@ class ExhibitionItemDetailView(APIView):
             exhibition_item_id=exhibition_item_id,
             user_id=self.request.user.user_id,
         )
-        return Response({'message': 'success'}, status=200)
+        return Response(status=HTTP_204_NO_CONTENT)
