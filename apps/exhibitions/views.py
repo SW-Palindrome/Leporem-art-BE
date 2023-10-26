@@ -4,6 +4,7 @@ from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 
 from apps.exhibitions.repositories import ExhibitionRepository
@@ -150,11 +151,11 @@ class ExhibitionItemView(APIView):
     serializer_class = ExhibitionItemSerializer
     parser_classes = [MultiPartParser]
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, exhibition_id):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             ExhibitionItemService().register(
-                exhibition_id=kwargs['exhibition_id'],
+                exhibition_id=exhibition_id,
                 seller_id=request.user.seller.seller_id,
                 is_custom=serializer.validated_data['is_custom'],
                 template=serializer.validated_data.get('template'),
@@ -194,3 +195,12 @@ class ExhibitionItemView(APIView):
                 current_amount=serializer.validated_data.get('amount'),
             )
             return Response({'message': 'success'}, status=200)
+
+
+class ExhibitionItemDetailView(APIView):
+    def delete(self, request, exhibition_item_id):
+        ExhibitionItemService().delete(
+            exhibition_item_id=exhibition_item_id,
+            user_id=self.request.user.user_id,
+        )
+        return Response(status=HTTP_204_NO_CONTENT)

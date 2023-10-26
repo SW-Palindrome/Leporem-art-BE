@@ -33,7 +33,7 @@ class Exhibition(TimeStampedModel):
 class ExhibitionItem(TimeStampedModel):
     exhibition_item_id = models.AutoField(primary_key=True)
     exhibition = models.ForeignKey(Exhibition, on_delete=models.CASCADE, related_name='exhibition_items')
-    item = models.ForeignKey(Item, on_delete=models.PROTECT, related_name='exhibition_item', default=None, null=True)
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, related_name='exhibition_item', default=None, null=True)
     title = models.CharField(max_length=46, null=True)
     description = models.CharField(max_length=255, null=True)
     template = models.PositiveIntegerField(null=True)
@@ -53,6 +53,18 @@ class ExhibitionItem(TimeStampedModel):
     @property
     def sounds(self):
         return [sound.sound for sound in self.exhibition_sounds.all()]
+
+    @property
+    def price(self):
+        return self.item.price if self.is_sale else None
+
+    @property
+    def max_amount(self):
+        return self.item.max_amount if self.is_sale else None
+
+    @property
+    def shorts(self):
+        return self.item.shorts if self.is_sale else None
 
 
 class ExhibitionItemImage(TimeStampedModel):

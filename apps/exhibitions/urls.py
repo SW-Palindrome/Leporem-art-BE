@@ -5,6 +5,7 @@ from apps.exhibitions.views import (
     ExhibitionArtistView,
     ExhibitionInfoView,
     ExhibitionIntroductionView,
+    ExhibitionItemDetailView,
     ExhibitionItemsInfoView,
     ExhibitionItemView,
     ExhibitionView,
@@ -22,5 +23,6 @@ urlpatterns = [
     path('seller', SellerExhibitionsView.as_view()),
     path('<int:exhibition_id>/item', ExhibitionItemView.as_view()),
     path('<int:exhibition_id>/item/<int:exhibition_item_id>', ExhibitionItemView.as_view()),
+    path('items/<int:exhibition_item_id>', ExhibitionItemDetailView.as_view()),
     path('sound/upload-url', UploadSoundUrlView.as_view()),
 ]
