@@ -172,3 +172,26 @@ class ExhibitionItemView(APIView):
                 max_amount=serializer.validated_data.get('max_amount'),
             )
         return Response({'message': 'success'}, status=201)
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            ExhibitionItemService().modify(
+                exhibition_id=kwargs['exhibition_id'],
+                exhibition_item_id=kwargs['exhibition_item_id'],
+                seller_id=request.user.seller.seller_id,
+                is_custom=serializer.validated_data['is_custom'],
+                template=serializer.validated_data.get('template'),
+                title=serializer.validated_data.get('title'),
+                description=serializer.validated_data.get('description'),
+                images=serializer.validated_data['images'],
+                sound=serializer.validated_data.get('sound'),
+                position=serializer.validated_data['position'],
+                background_color=serializer.validated_data.get('background_color'),
+                font_family=serializer.validated_data.get('font_family'),
+                is_sale=serializer.validated_data['is_sale'],
+                shorts_url=serializer.validated_data.get('shorts_url'),
+                price=serializer.validated_data.get('price'),
+                current_amount=serializer.validated_data.get('amount'),
+            )
+            return Response({'message': 'success'}, status=200)
