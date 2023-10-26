@@ -113,3 +113,73 @@ class ExhibitionItemService:
 
     def get_presigned_url_to_post_sound(self, extension='mp3'):
         return create_presigned_url(f'{ExhibitionItemSound.sound.field.upload_to}{str(uuid.uuid4())}.{extension}')
+
+    def modify(
+        self,
+        seller_id,
+        exhibition_id,
+        exhibition_item_id,
+        is_custom,
+        template,
+        title,
+        description,
+        images,
+        sound,
+        position,
+        background_color,
+        font_family,
+        is_sale,
+        shorts_url,
+        price,
+        current_amount,
+    ):
+        if is_custom and template:
+            raise ValueError('커스텀을 사용할 경우, template은 필수값이 아닙니다.')
+
+        if not is_custom and not all([template, title, description, background_color, font_family]):
+            raise ValueError('템플릿을 사용할 경우, template, title, description, background_color, font_family는 필수값입니다.')
+
+        if is_sale and not all([title, description, shorts_url, price, current_amount]):
+            print(is_sale, title, description, shorts_url, price, current_amount)
+            raise ValueError('판매할 경우, title, description, shorts_url, price, amount는 필수값입니다.')
+
+        if template and (template < 1 or template > 9):
+            raise ValueError('template 번호는 1~9 사이의 값이어야 합니다.')
+
+        for image in images:
+            image.name = create_random_filename(image.name)
+
+        exhibition_item = ExhibitionItemRepository().modify(
+            exhibition_id=exhibition_id,
+            exhibition_item_id=exhibition_item_id,
+            is_custom=is_custom,
+            template=template,
+            title=title,
+            description=description,
+            images=images,
+            sound=sound,
+            position=position,
+            background_color=background_color,
+            font_family=font_family,
+            is_sale=is_sale,
+        )
+
+        images = [exhibition_image.image.open() for exhibition_image in exhibition_item.exhibition_images.all()]
+
+        if is_sale:
+            ItemRepository().modify(
+                item_id=exhibition_item.item.item_id,
+                seller_id=seller_id,
+                price=price,
+                current_amount=current_amount,
+                title=title,
+                description=description,
+                shorts_url=shorts_url,
+                thumbnail_image=images[0],
+                images=images[1:],
+                categories=[],
+                colors=[],
+                width=None,
+                depth=None,
+                height=None,
+            )
