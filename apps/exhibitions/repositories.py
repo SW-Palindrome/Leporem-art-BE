@@ -128,3 +128,51 @@ class ExhibitionItemRepository:
             sound=sound,
         )
         return exhibition_item
+
+    @transaction.atomic
+    def modify(
+        self,
+        exhibition_id,
+        exhibition_item_id,
+        is_custom,
+        template,
+        title,
+        description,
+        images,
+        sound,
+        position,
+        background_color,
+        font_family,
+        is_sale,
+    ):
+        try:
+            exhibition_item = Exhibition.objects.get(exhibition_id=exhibition_id).exhibition_items.get(
+                exhibition_item_id=exhibition_item_id
+            )
+        except ExhibitionItem.DoesNotExist:
+            raise PermissionDenied
+
+        exhibition_item.is_custom = is_custom
+        exhibition_item.template = template
+        exhibition_item.title = title
+        exhibition_item.description = description
+        exhibition_item.position = position
+        exhibition_item.background_color = background_color
+        exhibition_item.font_family = font_family
+        exhibition_item.is_sale = is_sale
+        exhibition_item.save()
+
+        exhibition_item.exhibition_images.all().delete()
+        exhibition_item.exhibition_sounds.all().delete()
+
+        for image in images:
+            ExhibitionItemImage.objects.create(
+                exhibition_item=exhibition_item,
+                image=image,
+            )
+
+        ExhibitionItemSound.objects.create(
+            exhibition_item=exhibition_item,
+            sound=sound,
+        )
+        return exhibition_item
