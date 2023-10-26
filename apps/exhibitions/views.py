@@ -172,3 +172,12 @@ class ExhibitionItemView(APIView):
                 max_amount=serializer.validated_data.get('max_amount'),
             )
         return Response({'message': 'success'}, status=201)
+
+
+class ExhibitionItemDetailView(APIView):
+    def delete(self, request, exhibition_item_id):
+        ExhibitionItemService().delete(
+            exhibition_item_id=exhibition_item_id,
+            user_id=self.request.user.user_id,
+        )
+        return Response({'message': 'success'}, status=200)

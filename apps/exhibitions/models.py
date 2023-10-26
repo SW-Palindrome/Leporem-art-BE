@@ -33,7 +33,7 @@ class Exhibition(TimeStampedModel):
 class ExhibitionItem(TimeStampedModel):
     exhibition_item_id = models.AutoField(primary_key=True)
     exhibition = models.ForeignKey(Exhibition, on_delete=models.CASCADE, related_name='exhibition_items')
-    item = models.ForeignKey(Item, on_delete=models.PROTECT, related_name='exhibition_item', default=None, null=True)
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, related_name='exhibition_item', default=None, null=True)
     title = models.CharField(max_length=46, null=True)
     description = models.CharField(max_length=255, null=True)
     template = models.PositiveIntegerField(null=True)
