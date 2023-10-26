@@ -67,7 +67,7 @@ class ExhibitionItemInfoSerializer(serializers.Serializer):
     font_family = serializers.CharField()
     is_custom = serializers.BooleanField()
     images = serializers.ListField(child=serializers.ImageField())
-    sounds = serializers.ListField(child=serializers.FileField())
+    sound = serializers.FileField(allow_null=True)
     price = serializers.IntegerField(allow_null=True)
     max_amount = serializers.IntegerField(allow_null=True)
     shorts = serializers.FileField(allow_null=True)

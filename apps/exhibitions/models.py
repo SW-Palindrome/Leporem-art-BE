@@ -51,8 +51,8 @@ class ExhibitionItem(TimeStampedModel):
         return [image.image for image in self.exhibition_images.all()]
 
     @property
-    def sounds(self):
-        return [sound.sound for sound in self.exhibition_sounds.all()]
+    def sound(self):
+        return self.exhibition_sounds.first().sound if self.exhibition_sounds.exists() else None
 
     @property
     def price(self):
