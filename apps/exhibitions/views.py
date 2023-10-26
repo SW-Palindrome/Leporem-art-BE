@@ -150,11 +150,11 @@ class ExhibitionItemView(APIView):
     serializer_class = ExhibitionItemSerializer
     parser_classes = [MultiPartParser]
 
-    def post(self, request, exhibition_id):
+    def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             ExhibitionItemService().register(
-                exhibition_id=exhibition_id,
+                exhibition_id=kwargs['exhibition_id'],
                 seller_id=request.user.seller.seller_id,
                 is_custom=serializer.validated_data['is_custom'],
                 template=serializer.validated_data.get('template'),
@@ -167,9 +167,8 @@ class ExhibitionItemView(APIView):
                 font_family=serializer.validated_data.get('font_family'),
                 is_sale=serializer.validated_data['is_sale'],
                 shorts_url=serializer.validated_data.get('shorts_url'),
-                categories=serializer.validated_data.get('categories', []),
                 price=serializer.validated_data.get('price'),
-                max_amount=serializer.validated_data.get('max_amount'),
+                max_amount=serializer.validated_data.get('amount'),
             )
         return Response({'message': 'success'}, status=201)
 
