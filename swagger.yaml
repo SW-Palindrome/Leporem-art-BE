@@ -906,7 +906,7 @@ paths:
                   }
                 ]
 
-  /exhibitions/itesm/{int:exhibition_item_id}:
+  /exhibitions/items/{int:exhibition_item_id}:
     delete:
       tags:
         - exhibitions
