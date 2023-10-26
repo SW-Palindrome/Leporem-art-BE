@@ -85,6 +85,5 @@ class ExhibitionItemSerializer(serializers.Serializer):
     font_family = serializers.CharField(required=False)
     is_sale = serializers.BooleanField()
     shorts_url = serializers.CharField(required=False)
-    categories = serializers.ListField(child=serializers.IntegerField(), required=False)
     price = serializers.IntegerField(required=False)
-    max_amount = serializers.IntegerField(required=False)
+    amount = serializers.IntegerField(required=False)
