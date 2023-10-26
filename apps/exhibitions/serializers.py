@@ -68,6 +68,9 @@ class ExhibitionItemInfoSerializer(serializers.Serializer):
     is_custom = serializers.BooleanField()
     images = serializers.ListField(child=serializers.ImageField())
     sounds = serializers.ListField(child=serializers.FileField())
+    price = serializers.IntegerField(allow_null=True)
+    max_amount = serializers.IntegerField(allow_null=True)
+    shorts = serializers.FileField(allow_null=True)
 
 
 class ExhibitionItemSerializer(serializers.Serializer):
