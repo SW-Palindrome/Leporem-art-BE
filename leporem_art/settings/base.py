@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'apps.buyers',
     'apps.chats',
+    'apps.deliveries',
     'apps.orders',
     'apps.users',
     'apps.sellers',
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
     "dj_rest_auth",
     'rest_framework.authtoken',
     'apps.notifications',
+    'apps.exhibitions',
 ]
 
 MIDDLEWARE = [
@@ -183,3 +185,7 @@ JWT_AUTH = {
 
 FIREBASE_CONFIG = {}
 FIREBASE_MESSAGE_SEND_URL = ''
+
+# 배송 트래킹 설정 (스마트 택배 API)
+SMART_DELIVERY_TRACKING_API_URL = ''
+SMART_DELIVERY_TRACKING_API_KEY = ''
