@@ -196,11 +196,9 @@ class ExhibitionItemView(APIView):
             )
             return Response({'message': 'success'}, status=200)
 
-
-class ExhibitionItemDetailView(APIView):
-    def delete(self, request, exhibition_item_id):
+    def delete(self, request, *args, **kwargs):
         ExhibitionItemService().delete(
-            exhibition_item_id=exhibition_item_id,
+            exhibition_item_id=kwargs['exhibition_item_id'],
             user_id=self.request.user.user_id,
         )
         return Response(status=HTTP_204_NO_CONTENT)
