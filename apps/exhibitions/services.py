@@ -52,7 +52,6 @@ class ExhibitionItemService:
         font_family,
         is_sale,
         shorts_url,
-        categories,
         price,
         max_amount,
     ):
@@ -62,8 +61,8 @@ class ExhibitionItemService:
         if not is_custom and not all([template, title, description, background_color, font_family]):
             raise ValueError('템플릿을 사용할 경우, template, title, description, background_color, font_family는 필수값입니다.')
 
-        if is_sale and not all([title, description, shorts_url, categories, price, max_amount]):
-            raise ValueError('판매할 경우, title, description, shorts, categories, price, max_amount는 필수값입니다.')
+        if is_sale and not all([title, description, shorts_url, price, max_amount]):
+            raise ValueError('판매할 경우, title, description, shorts_url, price, amount는 필수값입니다.')
 
         if template and (template < 1 or template > 9):
             raise ValueError('template 번호는 1~9 사이의 값이어야 합니다.')
@@ -98,11 +97,11 @@ class ExhibitionItemService:
                 shorts_url=shorts_url,
                 thumbnail_image=images[0],
                 images=images[1:],
-                categories=categories,
+                categories=[],
                 colors=[],
-                width=0,
-                depth=0,
-                height=0,
+                width=None,
+                depth=None,
+                height=None,
             )
             exhibition = ExhibitionRepository().get_exhibition(exhibition_id)
             item.start_date = exhibition.start_date
