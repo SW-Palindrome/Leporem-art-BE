@@ -790,6 +790,8 @@ paths:
                     shorts:
                       type: string
                       example: "https://leporem-art-media-dev.s3.amazonaws.com/items/item_short/1d2b2b9e-9b0a-4b0e-9b0a-4b0e9b0a4b0e.jpeg"
+                    position:
+                      type: integer
 
   /exhibitions/{exhibition_id}/introduction:
     get:

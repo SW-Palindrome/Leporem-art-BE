@@ -71,6 +71,7 @@ class ExhibitionItemInfoSerializer(serializers.Serializer):
     price = serializers.IntegerField(allow_null=True)
     max_amount = serializers.IntegerField(allow_null=True)
     shorts = serializers.FileField(allow_null=True)
+    position = serializers.IntegerField()
 
 
 class ExhibitionItemSerializer(serializers.Serializer):
