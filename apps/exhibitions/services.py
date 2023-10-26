@@ -1,5 +1,7 @@
 import uuid
 
+from django.core.exceptions import PermissionDenied
+
 from apps.exhibitions.models import ExhibitionItemSound
 from apps.exhibitions.repositories import ExhibitionItemRepository, ExhibitionRepository
 from apps.items.repositories import ItemRepository
@@ -113,3 +115,9 @@ class ExhibitionItemService:
 
     def get_presigned_url_to_post_sound(self, extension='mp3'):
         return create_presigned_url(f'{ExhibitionItemSound.sound.field.upload_to}{str(uuid.uuid4())}.{extension}')
+
+    def delete(self, exhibition_item_id, user_id):
+        exhibition_item = ExhibitionItemRepository().get_exhibition_item(exhibition_item_id)
+        if not exhibition_item.exhibition.seller.user_id == user_id:
+            raise PermissionDenied('본인의 전시만 삭제할 수 있습니다.')
+        ExhibitionItemRepository().delete(exhibition_item_id)

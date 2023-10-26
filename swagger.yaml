@@ -905,6 +905,23 @@ paths:
                     end_date: "2023-10-12T10:00:00Z"
                   }
                 ]
+
+  /exhibitions/itesm/{int:exhibition_item_id}:
+    delete:
+      tags:
+        - exhibitions
+      summary: 전시전 작품 삭제
+      parameters:
+        - name: exhibition_item_id
+          in: path
+          description: 전시전 작품 ID
+          required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '204':
+          description: 전시전 작품 삭제 성공
+
   /exhibitions/{int:exhibition_id}/register-item:
     post:
       tags:

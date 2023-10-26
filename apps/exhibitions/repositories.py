@@ -128,3 +128,15 @@ class ExhibitionItemRepository:
             sound=sound,
         )
         return exhibition_item
+
+    @transaction.atomic
+    def delete(self, exhibition_item_id):
+        exhibition_item = ExhibitionItem.objects.get(exhibition_item_id=exhibition_item_id)
+        exhibition_item.exhibition_images.all().delete()
+        exhibition_item.exhibition_sounds.all().delete()
+        if exhibition_item.is_sale:
+            exhibition_item.item.delete()
+        exhibition_item.delete()
+
+    def get_exhibition_item(self, exhibition_item_id):
+        return ExhibitionItem.objects.get(exhibition_item_id=exhibition_item_id)
