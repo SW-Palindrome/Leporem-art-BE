@@ -18,7 +18,7 @@ from apps.items.services import ItemService, LikeService, ViewedItemService
 
 
 class FilterItemView(APIView):
-    permissions_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         buyer_id = request.user.buyer.buyer_id
@@ -67,7 +67,7 @@ class FilterItemView(APIView):
 
 
 class GuestItemView(APIView):
-    permissions_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request):
         page_number = request.GET.get('page', 1)
