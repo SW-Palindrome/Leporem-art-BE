@@ -965,18 +965,10 @@ paths:
                   type: boolean
                   example: true
                   required: True
-                categories:
-                  type: array
-                  items:
-                    type: string
-                    format: int
-                  example:
-                    - 1
-                    - 5
                 price:
                   type: integer
                   example: 23000
-                max_amount:
+                amount:
                   type: integer
                   example: 30
                 shorts_url:
