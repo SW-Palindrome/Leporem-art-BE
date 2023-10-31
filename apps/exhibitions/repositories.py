@@ -127,6 +127,12 @@ class ExhibitionItemRepository:
             exhibition_item=exhibition_item,
             sound=sound,
         )
+
+        if exhibition.status == Exhibition.Status.ARTIST_WRITTEN.value:
+            exhibition.status = Exhibition.Status.ITEM_REGISTERED.value
+
+        exhibition.save()
+
         return exhibition_item
 
     @transaction.atomic
