@@ -127,6 +127,12 @@ class ExhibitionItemRepository:
             exhibition_item=exhibition_item,
             sound=sound,
         )
+
+        if exhibition.status == Exhibition.Status.ARTIST_WRITTEN.value:
+            exhibition.status = Exhibition.Status.ITEM_REGISTERED.value
+
+        exhibition.save()
+
         return exhibition_item
 
     @transaction.atomic
@@ -185,6 +191,13 @@ class ExhibitionItemRepository:
         if exhibition_item.is_sale:
             exhibition_item.item.delete()
         exhibition_item.delete()
+
+        exhibition = Exhibition.objects.get(exhibition_id=exhibition_item.exhibition.exhibition_id)
+        item_count = exhibition.exhibition_items.count()
+        if item_count == 0 and exhibition.status == Exhibition.Status.ITEM_REGISTERED.value:
+            exhibition.status = Exhibition.Status.ARTIST_WRITTEN.value
+
+        exhibition.save()
 
     def get_exhibition_item(self, exhibition_item_id):
         return ExhibitionItem.objects.get(exhibition_item_id=exhibition_item_id)
