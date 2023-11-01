@@ -21,7 +21,7 @@ class ExhibitionRepository:
             start_date=start_date,
             end_date=end_date,
             artist_name=seller.user.nickname,
-            status=Exhibition.Status.CREATED,
+            status=Exhibition.Status.CREATED.value,
         )
         return exhibition
 
