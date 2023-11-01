@@ -1,13 +1,15 @@
 FROM python:3.10-slim
 
 ENV PIP_ROOT_USER_ACTION=ignore
-ENV ENV=dev
 
 WORKDIR /app
 
 COPY . .
 
 COPY ./deploy/nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY ./.ssl/fullchain.pem /etc/letsencrypt/live/leporem.art/fullchain.pem
+COPY ./.ssl/privkey.pem /etc/letsencrypt/live/leporem.art/privkey.pem
 
 RUN apt-get update && apt-get install nginx -y
 
