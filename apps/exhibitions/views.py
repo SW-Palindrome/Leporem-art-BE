@@ -29,7 +29,7 @@ class ExhibitionView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            ExhibitionRepository().register(
+            ExhibitionService().register(
                 nickname=serializer.validated_data['nickname'],
                 start_date=serializer.validated_data['start_date'],
                 end_date=serializer.validated_data['end_date'],
