@@ -4,8 +4,8 @@ from rest_framework import serializers
 
 class ExhibitionSerializer(serializers.Serializer):
     nickname = serializers.CharField(max_length=20)
-    start_date = serializers.DateTimeField()
-    end_date = serializers.DateTimeField()
+    start_date = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
+    end_date = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
 
 
 class ExhibitionIntroductionSerializer(serializers.Serializer):
