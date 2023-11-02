@@ -121,6 +121,8 @@ class ExhibitionItemService:
             exhibition_item.item = item
             exhibition_item.save()
 
+            SellerRepository().change_temperature(seller_id, 0.5)
+
     def get_presigned_url_to_post_sound(self, extension='mp3'):
         return create_presigned_url(f'{ExhibitionItemSound.sound.field.upload_to}{str(uuid.uuid4())}.{extension}')
 
@@ -197,6 +199,7 @@ class ExhibitionItemService:
             ItemRepository().delete(seller_id=seller_id, item_id=exhibition_item.item.item_id)
             exhibition_item.item = None
             exhibition_item.save()
+            SellerRepository().change_temperature(seller_id, -0.5)
         elif not exhibition_item.item and is_sale:
             item = ItemRepository().register(
                 seller_id=seller_id,
@@ -229,3 +232,5 @@ class ExhibitionItemService:
             )
         deleted_position = exhibition_item.position
         ExhibitionItemRepository().delete(exhibition_item_id, deleted_position)
+
+        SellerRepository().change_temperature(exhibition_item.exhibition.seller.seller_id, -0.5)
