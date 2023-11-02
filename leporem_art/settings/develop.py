@@ -95,7 +95,8 @@ LOGGING = {
         # watchtower. This limitation does not apply when running on production WSGI servers
         # (gunicorn, uwsgi, etc.), so we recommend that you set `propagate=True` below in your
         # production-specific Django settings file to receive Django system logs in CloudWatch.
-        'django.server': {'level': 'DEBUG', 'handlers': ['watchtower'], 'propagate': True},
+        'django.server': {'level': 'INFO', 'handlers': ['watchtower'], 'propagate': True},
+        'django.request': {'level': 'WARNING', 'handlers': ['watchtower'], 'propagate': True},
         # Add any other logger-specific configuration here.
     },
 }
