@@ -167,7 +167,7 @@ class ExhibitionItemService:
 
         images = [exhibition_image.image.open() for exhibition_image in exhibition_item.exhibition_images.all()]
 
-        if is_sale:
+        if exhibition_item.item and is_sale:
             ItemRepository().modify(
                 item_id=exhibition_item.item.item_id,
                 seller_id=seller_id,
@@ -184,6 +184,32 @@ class ExhibitionItemService:
                 depth=None,
                 height=None,
             )
+        elif exhibition_item.item and not is_sale:
+            ItemRepository().delete(seller_id=seller_id, item_id=exhibition_item.item.item_id)
+            exhibition_item.item = None
+            exhibition_item.save()
+        elif not exhibition_item.item and is_sale:
+            item = ItemRepository().register(
+                seller_id=seller_id,
+                price=price,
+                max_amount=current_amount,
+                title=title,
+                description=description,
+                shorts_url=shorts_url,
+                thumbnail_image=images[0],
+                images=images[1:],
+                categories=[],
+                colors=[],
+                width=None,
+                depth=None,
+                height=None,
+            )
+            exhibition = ExhibitionRepository().get_exhibition(exhibition_id=exhibition_id)
+            item.start_date = exhibition.start_date
+            item.end_date = exhibition.end_date
+            item.save()
+            exhibition_item.item = item
+            exhibition_item.save()
 
     def delete(self, exhibition_item_id, user_id):
         exhibition_item = ExhibitionItemRepository().get_exhibition_item(exhibition_item_id)
