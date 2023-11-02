@@ -1,5 +1,7 @@
 import os
 
+from boto3 import Session
+
 from .base import *
 
 AWS_STORAGE_BUCKET_NAME = 'leporem-art-media-dev'
@@ -56,3 +58,40 @@ param_delivery_tracking = ssm.get_parameter(Name='/leporem_art/settings/base/del
 DELIVERY_TRACKING_CONFIG = json.loads(param_delivery_tracking)
 SMART_DELIVERY_TRACKING_API_URL = DELIVERY_TRACKING_CONFIG['DELIVERY_TRACKING_BASE_URL']
 SMART_DELIVERY_TRACKING_API_KEY = DELIVERY_TRACKING_CONFIG['API_KEY']
+
+boto3_session = Session()
+
+
+AWS_LOG_GROUP = '/leporemart/api/dev'
+AWS_LOGGER_NAME = 'watchtower-logger'  # your logger
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'aws': {
+            # you can add specific format for aws here
+            # if you want to change format, you can read:
+            #    https://stackoverflow.com/questions/533048/how-to-log-source-file-name-and-line-number-in-python/44401529
+            'format': u"%(asctime)s [%(levelname)-8s] %(message)s [%(pathname)s:%(lineno)d]",
+            'datefmt': "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    'handlers': {
+        'watchtower': {
+            'level': 'DEBUG',
+            'class': 'watchtower.CloudWatchLogHandler',
+            'boto3_session': boto3_session,
+            'log_group': AWS_LOG_GROUP,
+            'formatter': 'aws',  # use custom format
+        },
+    },
+    'loggers': {
+        AWS_LOGGER_NAME: {
+            'level': 'DEBUG',
+            'handlers': ['watchtower'],
+            'propagate': False,
+        },
+        # add your other loggers here...
+    },
+}
