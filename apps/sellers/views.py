@@ -115,7 +115,7 @@ class SellerItemView(APIView):
             seller_id=request.user.seller.seller_id,
             item_id=kwargs['item_id'],
         )
-        return Response({'message': 'success'}, status=200)
+        return Response(status=204)
 
 
 class SellerMyInfoView(APIView):
