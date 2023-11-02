@@ -204,9 +204,8 @@ class ExhibitionItemService:
                 depth=None,
                 height=None,
             )
-            exhibition = ExhibitionRepository().get_exhibition(exhibition_id=exhibition_id)
-            item.start_date = exhibition.start_date
-            item.end_date = exhibition.end_date
+            item.start_date = exhibition_item.exhibition.start_date
+            item.end_date = exhibition_item.exhibition.end_date
             item.save()
             exhibition_item.item = item
             exhibition_item.save()
