@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.utils import timezone
+from pytz import timezone
 
 from apps.exhibitions.models import (
     Exhibition,
@@ -48,7 +50,7 @@ class ExhibitionRepository:
         return Exhibition.objects.get(exhibition_id=exhibition_id)
 
     def get_exhibitions_for_buyer(self):
-        today = timezone.now().date()
+        today = datetime.now(timezone('Asia/Seoul'))
         return Exhibition.objects.filter(
             start_date__lte=today,
             end_date__gte=today,
