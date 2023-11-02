@@ -212,7 +212,7 @@ class ExhibitionItemService:
 
     def delete(self, exhibition_item_id, user_id):
         exhibition_item = ExhibitionItemRepository().get_exhibition_item(exhibition_item_id)
-        if not exhibition_item.exhibition.seller.user == user_id:
+        if not exhibition_item.exhibition.seller.user_id == user_id:
             raise PermissionDenied('본인의 전시만 삭제할 수 있습니다.')
         if exhibition_item.item:
             ItemRepository().delete(
