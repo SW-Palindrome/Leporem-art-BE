@@ -218,4 +218,5 @@ class ExhibitionItemService:
             ItemRepository().delete(
                 seller_id=exhibition_item.exhibition.seller.seller_id, item_id=exhibition_item.item.item_id
             )
-        ExhibitionItemRepository().delete(exhibition_item_id)
+        deleted_position = exhibition_item.position
+        ExhibitionItemRepository().delete(exhibition_item_id, deleted_position)
