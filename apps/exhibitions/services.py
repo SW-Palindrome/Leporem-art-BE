@@ -5,10 +5,19 @@ from django.core.exceptions import PermissionDenied
 from apps.exhibitions.models import ExhibitionItemSound
 from apps.exhibitions.repositories import ExhibitionItemRepository, ExhibitionRepository
 from apps.items.repositories import ItemRepository
+from apps.sellers.repositories import SellerRepository
 from utils.files import create_presigned_url, create_random_filename
 
 
 class ExhibitionService:
+    def register(self, nickname, start_date, end_date):
+        exhibition = ExhibitionRepository().register(
+            nickname=nickname,
+            start_date=start_date,
+            end_date=end_date,
+        )
+        SellerRepository().change_temperature(exhibition.seller.seller_id, 5)
+
     def register_artist_info(
         self,
         exhibition_id,
@@ -112,6 +121,8 @@ class ExhibitionItemService:
             exhibition_item.item = item
             exhibition_item.save()
 
+            SellerRepository().change_temperature(seller_id, 0.5)
+
     def get_presigned_url_to_post_sound(self, extension='mp3'):
         return create_presigned_url(f'{ExhibitionItemSound.sound.field.upload_to}{str(uuid.uuid4())}.{extension}')
 
@@ -188,6 +199,7 @@ class ExhibitionItemService:
             ItemRepository().delete(seller_id=seller_id, item_id=exhibition_item.item.item_id)
             exhibition_item.item = None
             exhibition_item.save()
+            SellerRepository().change_temperature(seller_id, -0.5)
         elif not exhibition_item.item and is_sale:
             item = ItemRepository().register(
                 seller_id=seller_id,
@@ -209,6 +221,7 @@ class ExhibitionItemService:
             item.save()
             exhibition_item.item = item
             exhibition_item.save()
+            SellerRepository().change_temperature(seller_id, 0.5)
 
     def delete(self, exhibition_item_id, user_id):
         exhibition_item = ExhibitionItemRepository().get_exhibition_item(exhibition_item_id)
@@ -220,3 +233,5 @@ class ExhibitionItemService:
             )
         deleted_position = exhibition_item.position
         ExhibitionItemRepository().delete(exhibition_item_id, deleted_position)
+
+        SellerRepository().change_temperature(exhibition_item.exhibition.seller.seller_id, -0.5)

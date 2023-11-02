@@ -83,8 +83,6 @@ class SellerItemView(APIView):
                 categories=serializer.validated_data.get('categories', []),
                 colors=serializer.validated_data.get('colors', []),
             )
-            seller_service = SellerService()
-            seller_service.change_temperature(request.user.seller.seller_id, 0.5)
             return Response({'message': 'success'})
 
     def patch(self, request, *args, **kwargs):
