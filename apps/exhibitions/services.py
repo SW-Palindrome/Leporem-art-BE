@@ -216,6 +216,6 @@ class ExhibitionItemService:
             raise PermissionDenied('본인의 전시만 삭제할 수 있습니다.')
         if exhibition_item.item:
             ItemRepository().delete(
-                seller_id=exhibition_item.exhibition.seller.seller_id, item_id=exhibition_item.exhibition.item
+                seller_id=exhibition_item.exhibition.seller.seller_id, item_id=exhibition_item.item.item_id
             )
         ExhibitionItemRepository().delete(exhibition_item_id)
