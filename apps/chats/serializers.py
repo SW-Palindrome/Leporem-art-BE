@@ -1,3 +1,4 @@
+import pytz
 from rest_framework import serializers
 
 from apps.chats.models import Message
@@ -6,7 +7,7 @@ from apps.chats.models import Message
 class MessageSerializer(serializers.Serializer):
     message_id = serializers.IntegerField()
     user_id = serializers.IntegerField()
-    write_datetime = serializers.DateTimeField()
+    write_datetime = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
     is_read = serializers.BooleanField()
     message = serializers.CharField()
     uuid = serializers.UUIDField()
