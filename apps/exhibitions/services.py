@@ -221,6 +221,7 @@ class ExhibitionItemService:
             item.save()
             exhibition_item.item = item
             exhibition_item.save()
+            SellerRepository().change_temperature(seller_id, 0.5)
 
     def delete(self, exhibition_item_id, user_id):
         exhibition_item = ExhibitionItemRepository().get_exhibition_item(exhibition_item_id)
