@@ -1,6 +1,6 @@
 import os
 
-from boto3 import Session
+import boto3
 
 from .base import *
 
@@ -59,7 +59,7 @@ DELIVERY_TRACKING_CONFIG = json.loads(param_delivery_tracking)
 SMART_DELIVERY_TRACKING_API_URL = DELIVERY_TRACKING_CONFIG['DELIVERY_TRACKING_BASE_URL']
 SMART_DELIVERY_TRACKING_API_KEY = DELIVERY_TRACKING_CONFIG['API_KEY']
 
-boto3_session = Session()
+boto3_log_client = boto3.client('logs')
 
 
 AWS_LOG_GROUP = '/leporemart/api/dev'
@@ -81,7 +81,6 @@ LOGGING = {
         'watchtower': {
             'level': 'DEBUG',
             'class': 'watchtower.CloudWatchLogHandler',
-            'boto3_session': boto3_session,
             'log_group': AWS_LOG_GROUP,
             'formatter': 'aws',  # use custom format
         },
