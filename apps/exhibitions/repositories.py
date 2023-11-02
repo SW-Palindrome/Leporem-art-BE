@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from django.db.models import F
 from pytz import timezone
 
 from apps.exhibitions.models import (
@@ -186,7 +187,7 @@ class ExhibitionItemRepository:
         return exhibition_item
 
     @transaction.atomic
-    def delete(self, exhibition_item_id):
+    def delete(self, exhibition_item_id, deleted_position):
         exhibition_item = ExhibitionItem.objects.get(exhibition_item_id=exhibition_item_id)
         exhibition_item.exhibition_images.all().delete()
         exhibition_item.exhibition_sounds.all().delete()
@@ -200,6 +201,10 @@ class ExhibitionItemRepository:
             exhibition.status = Exhibition.Status.ARTIST_WRITTEN.value
 
         exhibition.save()
+
+        ExhibitionItem.objects.filter(position__gt=deleted_position, exhibition=exhibition.exhibition_id).update(
+            position=F('position') - 1
+        )
 
     def get_exhibition_item(self, exhibition_item_id):
         return ExhibitionItem.objects.get(exhibition_item_id=exhibition_item_id)
