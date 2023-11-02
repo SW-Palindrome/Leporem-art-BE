@@ -5,10 +5,19 @@ from django.core.exceptions import PermissionDenied
 from apps.exhibitions.models import ExhibitionItemSound
 from apps.exhibitions.repositories import ExhibitionItemRepository, ExhibitionRepository
 from apps.items.repositories import ItemRepository
+from apps.sellers.repositories import SellerRepository
 from utils.files import create_presigned_url, create_random_filename
 
 
 class ExhibitionService:
+    def register(self, nickname, start_date, end_date):
+        exhibition = ExhibitionRepository().register(
+            nickname=nickname,
+            start_date=start_date,
+            end_date=end_date,
+        )
+        SellerRepository().change_temperature(exhibition.seller.seller_id, 5)
+
     def register_artist_info(
         self,
         exhibition_id,
