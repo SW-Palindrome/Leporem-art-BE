@@ -7,6 +7,7 @@ from apps.chats.models import Message
 from apps.chats.repositories import ChatRoomRepository, MessageRepository
 from apps.notifications.services import NotificationService
 from apps.users.models import User
+from utils.files import create_presigned_url
 
 
 class ChatRoomService:
@@ -98,3 +99,6 @@ class MessageService:
             body=message.message_display,
             deep_link=f'/chat/{chat_room.uuid}',
         )
+
+    def get_presigned_url_to_post_image(self, extension='jpg'):
+        return create_presigned_url(f'{Message.image.field.upload_to}{str(uuid.uuid4())}.{extension}')
