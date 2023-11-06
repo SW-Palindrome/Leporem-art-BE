@@ -26,6 +26,7 @@ DATABASES = {
         'PASSWORD': json_db['PASSWORD'],
         'HOST': json_db['HOST'],
         'PORT': json_db['PORT'],
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
