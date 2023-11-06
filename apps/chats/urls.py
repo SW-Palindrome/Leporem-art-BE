@@ -6,6 +6,7 @@ from apps.chats.views import (
     MessageCreateView,
     MessageReadView,
     SellerChatRoomListView,
+    UploadImageUrlView,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path('messages', MessageCreateView.as_view()),
     path('messages/read', MessageReadView.as_view()),
     path('chat-rooms/<str:chat_room_uuid>/messages', ChatRoomMessageListView.as_view()),
+    path('image/upload-url', UploadImageUrlView.as_view()),
 ]
