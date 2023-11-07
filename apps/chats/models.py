@@ -36,7 +36,7 @@ class Message(TimeStampedModel):
     write_datetime = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
     text = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='chats/message_image', null=True)
+    image = models.ImageField(upload_to='chats/message_image/', null=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     type = models.CharField(max_length=20, choices=Type.choices)
 
