@@ -55,7 +55,7 @@ class SellerChatRoomListSerializer(serializers.Serializer):
 class BuyerChatRoomCreateSerializer(serializers.Serializer):
     seller_id = serializers.IntegerField()
     text = serializers.CharField(required=False)
-    image = serializers.ImageField(required=False)
+    image = serializers.CharField(required=False)
     chat_room_uuid = serializers.UUIDField(required=False)
     message_uuid = serializers.UUIDField(required=False)
     message_type = serializers.ChoiceField(choices=Message.Type, default=Message.Type.TEXT)
@@ -69,7 +69,7 @@ class BuyerChatRoomCreateSerializer(serializers.Serializer):
 class MessageCreateSerializer(serializers.Serializer):
     chat_room_uuid = serializers.UUIDField()
     text = serializers.CharField(required=False)
-    image = serializers.ImageField(required=False)
+    image = serializers.CharField(required=False)
     message_uuid = serializers.UUIDField(required=False)
     type = serializers.ChoiceField(choices=Message.Type, default=Message.Type.TEXT)
 
