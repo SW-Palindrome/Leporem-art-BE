@@ -39,6 +39,8 @@ class MessageService:
                     message_uuid=message_uuid,
                 )
             case Message.Type.IMAGE:
+                if message.startswith('https://'):
+                    message = message[message.find('/', 8) + 1 :]
                 message = message_repository.create_image(
                     chat_room_uuid=chat_room_uuid,
                     user_id=user_id,

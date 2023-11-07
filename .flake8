@@ -5,3 +5,5 @@ exclude =
     __pycache__,
     */settings/*,
 max-line-length = 120
+ignore =
+    E203
