@@ -117,3 +117,11 @@ class MessageReadView(APIView):
             message_uuid=serializer.validated_data['message_uuid'],
         )
         return Response(status=204)
+
+
+class UploadImageUrlView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        extension = request.GET.get('extension', 'jpg')
+        return Response(MessageService().get_presigned_url_to_post_image(extension))

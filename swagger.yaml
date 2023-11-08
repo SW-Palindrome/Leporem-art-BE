@@ -1414,3 +1414,28 @@ paths:
       responses:
         '204':
           description: 작품 삭제 성공
+
+  /chats/image/upload-url:
+    get:
+      tags:
+        - chats
+      summary: 채팅 이미지 업로드 URL
+      description: 채팅 이미지 업로드 URL을 받습니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 채팅 이미지 업로드 URL 받기 성공
+          content:
+            application/json:
+              example: {
+                "url": "https://leporem-art-media-dev.s3.amazonaws.com/",
+                "fields": {
+                    "key": "chats/message_image8c8e2c13-eb40-41bf-9515-8087371ce119.jpg",
+                    "x-amz-algorithm": "AWS4-HMAC-SHA256",
+                    "x-amz-credential": "AKIAQKJYH42DT63XEGVU/20231106/ap-northeast-2/s3/aws4_request",
+                    "x-amz-date": "20231106T061737Z",
+                    "policy": "eyJleHBpcmF0aW9uIjogIjIwMjMtMTEtMDZUMDY6MjI6MzdaIiwgImNvbmRpdGlvbnMiOiBbeyJidWNrZXQiOiAibGVwb3JlbS1hcnQtbWVkaWEtZGV2In0sIHsia2V5IjogImNoYXRzL21lc3NhZ2VfaW1hZ2U4YzhlMmMxMy1lYjQwLTQxYmYtOTUxNS04MDg3MzcxY2UxMTkuanBnIn0sIHsieC1hbXotYWxnb3JpdGhtIjogIkFXUzQtSE1BQy1TSEEyNTYifSwgeyJ4LWFtei1jcmVkZW50aWFsIjogIkFLSUFRS0pZSDQyRFQ2M1hFR1ZVLzIwMjMxMTA2L2FwLW5vcnRoZWFzdC0yL3MzL2F3czRfcmVxdWVzdCJ9LCB7IngtYW16LWRhdGUiOiAiMjAyMzExMDZUMDYxNzM3WiJ9XX0=",
+                    "x-amz-signature": "604c3dca8e204b68d33ff889d7ca7c715d9fb4ac55da23fa297693d5059fa0aa"
+                }
+            }
