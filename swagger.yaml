@@ -1439,3 +1439,120 @@ paths:
                     "x-amz-signature": "604c3dca8e204b68d33ff889d7ca7c715d9fb4ac55da23fa297693d5059fa0aa"
                 }
             }
+
+  /validate/nickname/{nickname}:
+    get:
+      tags:
+        - users
+      summary: 닉네임 검증
+      description: 닉네임 길이가 2~10, 대소문자 알파벳, 숫자, 한글, 언더스코어, 하이픈으로 이루어진 문자열인지 검증합니다.
+      parameters:
+        - name: nickname
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: 닉네임 검증 성공
+          content:
+            application/json:
+              example:
+                message: success
+        '400':
+          description: 닉네임 검증 실패
+          content:
+            application/json:
+              example:
+                message: invalid nickname
+
+  /nickname:
+    patch:
+      tags:
+        - users
+      summary: 닉네임 수정
+      description: 닉네임을 수정합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                nickname:
+                  type: string
+                  example: 꼬미
+        required: True
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 닉네임 수정 성공
+          content:
+            application/json:
+              example:
+                message: success
+        '400':
+          description: 닉네임 수정 실패
+          content:
+            application/json:
+              example:
+                message: change nickname failed
+
+  /profile-image:
+    patch:
+      tags:
+        - users
+      summary: 프로필 이미지 수정
+      description: 프로필 이미지를 수정합니다.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                profile_image:
+                  type: string
+                  format: binary
+                  description: 프로필 이미지 파일
+        required: True
+      responses:
+        '200':
+          description: 프로필 이미지 수정 성공
+          content:
+            application/json:
+              example:
+                message: success
+
+  /info/my:
+    get:
+      tags:
+        - users
+      summary: 내 정보 조회
+      description: 내 정보를 조회합니다.
+      security:
+        - LeporemartTokenAuth: []
+      responses:
+        '200':
+          description: 내 정보 조회 성공
+          content:
+            application/json:
+              example:
+                {
+                  "user_id": 1,
+                  "is_seller": 1,
+                  "nickname": "Seamoon"
+                }
+
+  /inactive:
+    post:
+      tags:
+        - users
+      summary: 회원 탈퇴
+      description: 회원을 탈퇴합니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 회원 탈퇴 성공
+          content:
+            application/json:
+              example:
+                message: success
