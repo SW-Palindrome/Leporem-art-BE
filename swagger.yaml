@@ -28,6 +28,10 @@ tags:
     description: 전시 관리
   - name: orders
     description: 주문 관리
+  - name: chats
+    description: 채팅 관리
+  - name: deliveries
+    description: 배송 관리
 
 paths:
   /users/signup/kakao:
@@ -526,6 +530,165 @@ paths:
                 EmptyPage:
                   value:
                     message: EmptyPage
+
+  /items/like:
+    get:
+      tags:
+        - items
+      summary: 회원 좋아요 작품 조회
+      description: 회원일 때, 좋아요한 작품을 조회합니다.
+      parameters:
+        - name: item_id
+          in: query
+          schema:
+            type: integer
+            required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 좋아요 작품 조회 성공
+          content:
+            application/json:
+              example:
+                {
+                  "message": "success",
+                }
+        '404':
+          description: 찜한 작품 조회 실패
+          content:
+            application/json:
+              example:
+                {
+                  "message": "ObjectDoesNotExist",
+                }
+    post:
+      tags:
+          - items
+      summary: 좋아요 작품 추가
+      description: 회원일 때, 좋아요한 작품을 등록합니다.
+      parameters:
+        - name: item_id
+          in: query
+          schema:
+            type: integer
+            required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 좋아요 작품 등록 성공
+          content:
+            application/json:
+              example:
+                {
+                  "message": "success",
+                }
+        '400':
+          description: 좋아요 작품 등록 실패
+          content:
+            application/json:
+              example:
+                {
+                  "message": "set like failed",
+                }
+    delete:
+      tags:
+          - items
+      summary: 좋아요 작품 삭제
+      description: 좋아요한 작품을 삭제합니다.
+      parameters:
+        - name: item_id
+          in: query
+          schema:
+            type: integer
+            required: true
+      security:
+          - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 좋아요 작품 삭제 성공
+          content:
+            application/json:
+              example:
+                {
+                  "message": "success",
+                }
+        '400':
+          description: 좋아요 작품 삭제 실패
+          content:
+            application/json:
+              example:
+              {
+                "message": "remove like failed",
+              }
+
+  /items/viewed:
+    get:
+      tags:
+        - items
+      summary: 회원 최근 본 작품 조회
+      description: 회원일 때, 최근 본 작품을 조회합니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 최근 본 작품 조회 성공
+          content:
+            application/json:
+            example:
+              {
+                "message": "success",
+              }
+    post:
+      tags:
+        - items
+      summary: 최근 본 작품 추가
+      description: 회원일 때, 최근 본 작품을 등록합니다.
+      security:
+        - leporemartTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                item_id:
+                  type: integer
+                  example: 1
+      responses:
+        '200':
+          description: 최근 본 작품 등록 성공
+          content:
+            application/json:
+              example:
+                {
+                  "message": "success",
+                }
+
+    delete:
+      tags:
+          - items
+      summary: 최근 본 작품 삭제
+      description: 회원일 때, 최근 본 작품을 삭제합니다.
+      security:
+        - leporemartTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                item_id:
+                  type: integer
+                  example: 1
+      responses:
+        '200':
+          description: 최근 본 작품 삭제 성공
+          content:
+            application/json:
+              example:
+                {
+                  "message": "success",
+                }
 
   /notifications/register:
     post:
@@ -1589,7 +1752,7 @@ paths:
           '204':
             description: 채팅 메시지 읽음 처리 성공
 
-  /chat-rooms/{string:chat_room_uuid}/messages:
+  /chats/chat-rooms/{string:chat_room_uuid}/messages:
     get:
       tags:
         - chats
@@ -2097,3 +2260,83 @@ paths:
                   value:
                     message: Review can only be submitted in the 'ORDERED' status.
 
+  /deliveries/register:
+    post:
+      tags:
+        - deliveries
+      summary: 배송 정보 등록
+      description: 배송 정보를 등록합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                order_id:
+                  type: integer
+                  example: 1
+                delivery_company:
+                  type: string
+                  example: "우체국택배"
+                invoice_number:
+                  type: string
+                  example: "1234567890"
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 배송 정보 등록 성공
+          content:
+            application/json:
+              example:
+                delivery_info_id: 1
+
+  /deliveries/orders/{int:order_id}/info:
+    get:
+      tags:
+        - deliveries
+      summary: 배송 정보 조회
+      description: 배송 정보를 조회합니다.
+      parameters:
+        - name: order_id
+          in: path
+          description: 주문 ID
+          required: true
+          schema:
+            type: integer
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 배송 정보 조회 성공
+          content:
+            application/json:
+              example:
+                {
+                  "delivery_company": "우체국택배",
+                  "invoice_number": "1234567890"
+                }
+
+  /deliveries/orders/{int:order_id}/tracking:
+    get:
+      tags:
+        - deliveries
+      summary: 배송 상태 조회
+      description: 배송 상태를 조회합니다.
+      parameters:
+        - name: order_id
+          in: path
+          description: 주문 ID
+          required: true
+          schema:
+            type: integer
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 배송 조회 성공
+          content:
+            application/json:
+              example:
+                {
+                  "delivery_tracking_url": "https://delivery-tracking-url.com"
+                }
