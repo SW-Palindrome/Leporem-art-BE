@@ -1556,3 +1556,195 @@ paths:
             application/json:
               example:
                 message: success
+
+  /sellers/register:
+    post:
+      tags:
+        - sellers
+      summary: 판매자 이메일 인증 요청
+      description: 판매자 이메일 인증 요청합니다.
+      security:
+        - leporemartTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: jjungyu12@dgu.ac.kr
+      responses:
+        '200':
+          description: 판매자 이메일 인증 성공
+          content:
+            application/json:
+              example:
+                message: success
+        '400':
+          description: 판매자 이메일 인증 실패
+          content:
+            application/json:
+              example:
+                email: [
+                  "This value does not match the required pattern."
+                ]
+
+  /sellers/verify:
+    post:
+      tags:
+        - sellers
+      summary: 판매자 이메일 인증코드 검증
+      description: 판매자 이메일 인증코드를 검증합니다.
+      security:
+          - leporemartTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                verify_code:
+                  type: string
+                  example: "823250"
+      responses:
+        '200':
+          description: 판매자 이메일 인증코드 검증 성공
+          content:
+            application/json:
+              example:
+                message: success
+        '400':
+          description: 판매자 이메일 인증코드 검증 실패
+          content:
+            application/json:
+                example:
+                  message: fail
+
+  /sellers/descriptions:
+    patch:
+      tags:
+        - sellers
+      summary: 판매자 소개 수정
+      description: 판매자 소개를 수정합니다.
+      security:
+        - leporemartTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  type: string
+                  example: "안녕하세요. 저는 작가입니다."
+      responses:
+        '200':
+          description: 판매자 소개 수정 성공
+          content:
+            application/json:
+              example:
+                message: success
+
+  /sellers/info:
+    get:
+      tags:
+        - sellers
+      summary: 판매자 내 정보 조회
+      description: 판매자 내 정보를 조회합니다.
+      security:
+          - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 판매자 내 정보 조회 성공
+          content:
+            application/json:
+              example:
+                {
+                    "nickname": "공예쁨",
+                    "profile_image": "https://leporem-art-media-dev.s3.amazonaws.com/user/profile_images/default.png",
+                    "total_transactions": 5,
+                    "retention_rate": 80,
+                    "item_count": 28,
+                    "temperature": 82.3,
+                    "description": "내 설명입니다."
+                }
+
+  /sellers/info/{nickname}:
+    get:
+      tags:
+        - sellers
+      summary: 판매자 정보 조회
+      description: 판매자 정보를 조회합니다.
+      parameters:
+        - name: nickname
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: 판매자 정보 조회 성공
+          content:
+            application/json:
+              example:
+                {
+                    "nickname": "공예쁨",
+                    "profile_image": "https://leporem-art-media-dev.s3.amazonaws.com/user/profile_images/default.png",
+                    "item_count": 22,
+                    "temperature": null,
+                    "description": null
+                }
+
+  /sellers/current-amount:
+    patch:
+      tags:
+        - sellers
+      summary: 판매자 현재 작품 수량 수정
+      description: 판매자 현재 작품 수량을 수정합니다.
+      security:
+        - leporemartTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                item_id:
+                  type: integer
+                  example: 1
+                action:
+                  type: integer
+                  example: 1
+                  description: |
+                    현재 작품 수량은 1~99로 제한합니다.
+                    1: 증가
+                    -1: 감소
+      responses:
+        '200':
+          description: 판매자 현재 작품 수량 수정 성공
+          content:
+            application/json:
+              example:
+                message: success
+
+  /sellers/shorts/upload-url:
+    get:
+      tags:
+        - sellers
+      summary: 작품 숏츠 업로드 URL
+      description: 작품 숏츠 업로드 URL을 받습니다.
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+          description: 전시전 음원 업로드 URL 받기 성공
+          content:
+            application/json:
+              example: {
+                "url": "https://leporem-art-media-dev.s3.amazonaws.com/",
+                "fields": {
+                    "key": "items/shorts/53c7d8d6-cb69-41e9-bf92-31596b1db095.mp4",
+                    "x-amz-algorithm": "AWS4-HMAC-SHA256",
+                    "x-amz-credential": "AKIAQKJYH42DT63XEGVU/20231016/ap-northeast-2/s3/aws4_request",
+                    "x-amz-date": "20231016T055116Z",
+                    "policy": "eyJleHBpcmF0aW9uIjogIjIwMjMtMTAtMTZUMDU6NTY6MTZaIiwgImNvbmRpdGlvbnMiOiBbeyJidWNrZXQiOiAibGVwb3JlbS1hcnQtbWVkaWEtZGV2In0sIHsia2V5IjogImV4aGliaXRpb25zL2V4aGliaXRpb25faXRlbV9zb3VuZC81M2M3ZDhkNi1jYjY5LTQxZTktYmY5Mi0zMTU5NmIxZGIwOTUubXAzIn0sIHsieC1hbXotYWxnb3JpdGhtIjogIkFXUzQtSE1BQy1TSEEyNTYifSwgeyJ4LWFtei1jcmVkZW50aWFsIjogIkFLSUFRS0pZSDQyRFQ2M1hFR1ZVLzIwMjMxMDE2L2FwLW5vcnRoZWFzdC0yL3MzL2F3czRfcmVxdWVzdCJ9LCB7IngtYW16LWRhdGUiOiAiMjAyMzEwMTZUMDU1MTE2WiJ9XX0=",
+                    "x-amz-signature": "2d63148b5cca764e9765b881c97eb02a97955d9f33e551c2597e8e6e0b1ae189"
+                }
+              }
