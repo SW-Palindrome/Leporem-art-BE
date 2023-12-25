@@ -1748,3 +1748,145 @@ paths:
                     "x-amz-signature": "2d63148b5cca764e9765b881c97eb02a97955d9f33e551c2597e8e6e0b1ae189"
                 }
               }
+
+  /orders/{order_id}:
+    get:
+      tags:
+        - orders
+      summary: 주문 상세 조회
+      description: 주문 상세를 조회합니다.
+      parameters:
+        - name: order_id
+          in: path
+          schema:
+              type: integer
+          required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '200':
+            description: 주문 상세 조회 성공
+            content:
+              application/json:
+                example:
+                    {
+                    "order_id": 26,
+                    "item_id": 6,
+                    "item_title": "작품1",
+                    "item_thumbnail_image": "https://leporem-art-media-dev.s3.amazonaws.com/items/item_image/b377df95-1307-490f-baae-7e3def0a7fb9.jpg",
+                    "price": 10000,
+                    "ordered_datetime": "2023-10-24T07:09:55.397999Z",
+                    "order_status": "주문완료",
+                    "seller_nickname": "공예쁨"
+                    }
+
+  /orders/{order_id}/delivery-start:
+    post:
+      tags:
+        - orders
+      summary: 주문된 상품 배송 시작
+      description: 주문된 상품 배송을 시작합니다.
+      parameters:
+        - name: order_id
+          in: path
+          schema:
+              type: integer
+          required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 주문된 상품 배송 시작 성공
+          content:
+            application/json:
+              example:
+                message: success
+
+  /orders/{order_id}/delivery-complete:
+    post:
+      tags:
+        - orders
+      summary: 주문된 상품 배송 완료
+      description: 주문된 상품 배송을 완료합니다.
+      parameters:
+        - name: order_id
+          in: path
+          schema:
+            type: integer
+          required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 주문된 상품 배송 완료 성공
+          content:
+            application/json:
+              example:
+                message: success
+
+  /orders/{order_id}/cancel:
+    post:
+      tags:
+        - orders
+      summary: 상품 주문 취소
+      description: 상품 주문을 취소합니다.
+      parameters:
+        - name: order_id
+          in: path
+          schema:
+            type: integer
+          required: true
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 상품 주문 취소 성공
+          content:
+            application/json:
+              example:
+                message: success
+
+  /orders/review:
+    post:
+      tags:
+        - orders
+      summary: 작품 리뷰 작성
+      description: 작품 리뷰를 작성합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                order_id:
+                  type: integer
+                  example: 1
+                rating:
+                  type: integer
+                  example: 5
+                comment:
+                  type: string
+                  example: "좋아요"
+      security:
+        - leporemartTokenAuth: []
+      responses:
+        '201':
+          description: 구매자 리뷰 작성 성공
+          content:
+            application/json:
+              example:
+                message: success
+        '400':
+          description: 구매자 리뷰 작성 실패
+          content:
+            application/json:
+              examples:
+                duplicate:
+                  value:
+                    message: Duplicate entry for order_id.
+                invalid order_id:
+                  value:
+                    message: Order does not exist.
+                invalid order_status:
+                  value:
+                    message: Review can only be submitted in the 'ORDERED' status.
+
