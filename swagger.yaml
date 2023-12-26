@@ -619,9 +619,9 @@ paths:
           content:
             application/json:
               example:
-              {
-                "message": "remove like failed",
-              }
+                {
+                  "message": "remove like failed",
+                }
 
   /items/viewed:
     get:
